@@ -1,0 +1,15 @@
+20251111	04:27:39	7398d66d-e6c4-4ee3-b126-467a2d9af420	Error: Not allowed by CORS
+20251111	18:16:49	65a40d08-9349-4d42-9cab-b87a6db6ad1a	ReferenceError: Cannot access 'employees' before initialization
+20251210	06:10:06	c5a213b7-a593-4ce8-8fa9-39545e45aceb	TypeError: Cannot read properties of undefined (reading 'username')
+20251210	07:37:01	c5b46488-ee8f-4f7c-97b4-deb68fa5ccd1	Error: ENOENT: no such file or directory, open '/Users/macbookpro/Desktop/work-local/node-js/nodejs-davegrey/models/users.json'
+20251229	14:51:56	cd368397-7a5a-48f8-98cf-b962616f4e91	TypeError: The "data" argument must be of type string or an instance of Buffer, TypedArray, or DataView. Received undefined
+20251229	14:52:45	0d2bdd3b-86d9-48f2-b9bb-9c48a8ec93bb	TypeError: The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received an instance of Object
+20251229	14:54:42	8c72492c-782a-48e1-aea0-61d81e3d26c5	TypeError: Cannot read properties of undefined (reading 'id')
+20251230	07:22:51	4611739c-8eec-452b-bb50-ba49494d0472	Error: data and hash arguments required
+20251231	07:58:26	bfadeae1-93ca-47fe-8a2a-93d2d4ffa527	TypeError: Cannot destructure property 'user' of 'req.body' as it is undefined.
+20251231	08:30:30	d2671bb7-5798-4036-be30-2f987e38762d	MulterError: File too large
+20251231	08:53:13	095e5e71-0a84-455b-8ed1-de5398a206f6	MulterError: File too large
+20251231	08:55:08	9dc59416-9e95-41cf-ac6e-d91d05314a1c	MulterError: File too large
+20260105	07:00:39	601719da-fba9-4ee4-bf16-da403eceb031	CastError: Cast to ObjectId failed for value "6953609ef56d97d38f8f9e1" (type string) at path "_id" for model "User"
+20260105	16:09:51	bcb157fb-1f98-4953-a37e-72f02b7cd844	TypeError: Cannot destructure property 'transformation' of 'req.body' as it is undefined.
+20260105	16:22:21	c7e57f10-52a4-4202-9e27-72b9a3da7aba	TypeError: Cannot destructure property 'transformation' of 'req.body' as it is undefined.
