@@ -11,7 +11,7 @@ const getCart = async (req, res) => {
     const Buyer = await User.findById(id);
     if (!Buyer) return res.status(404).json({ message: "User not found" });
 
-    const cartItems = await Cart.find({ buyer_id: id });
+    const cartItems = await Cart.find({ buyerId: id });
     if (!cartItems) return res.status(404).json({ message: "No items found in cart." });
     return res.json({ data: cartItems });
   } catch (error) {
@@ -19,6 +19,10 @@ const getCart = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+const addProductToCart = async (req, res)=> {
+  
+}
 
 export default {
   getCart

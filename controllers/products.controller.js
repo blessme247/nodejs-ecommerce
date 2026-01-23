@@ -1,7 +1,7 @@
 import Product from "../model/Product.js";
 import Seller from "../model/Seller.js";
-import ProductCategory from "../model/ProductCategory.js"
-import User from "../model/User.js"
+import ProductCategory from "../model/ProductCategory.js";
+import User from "../model/User.js";
 
 const getProducts = async (req, res) => {
   try {
@@ -109,32 +109,89 @@ const addProduct = async (req, res) => {
   try {
     const username = req.user;
     const foundUser = await User.findOne({ username }).exec();
-    const {name, price, description, quantityAvailable, categoryId} = req.body
+    const { name, price, description, quantityAvailable, categoryId } =
+      req.body;
 
-    if(quantityAvailable == 0 || typeof quantityAvailable !== "number") return res.status(400).json({message: `Invalid quantity`})
-    const foundCategory = await ProductCategory.findById(categoryId).exec()
-    if(!foundCategory) return res.status(400).json({message: `Invalid category`})
-    
+    if (quantityAvailable == 0 || typeof quantityAvailable !== "number")
+      return res.status(400).json({ message: `Invalid quantity` });
+    const foundCategory = await ProductCategory.findById(categoryId).exec();
+    if (!foundCategory)
+      return res.status(400).json({ message: `Invalid category` });
+
     const product = new Product({
-        name,
-        price,
-        description,
-        quantityAvailable,
-        categoryId,
-        sellerId: foundUser._id
-    })
+      name,
+      price,
+      description,
+      quantityAvailable,
+      categoryId,
+      sellerId: foundUser._id,
+    });
 
-    await product.save()
+    await product.save();
 
-    return res.status(201).json({ 'success': `New product added!` });
+    return res.status(201).json({ success: `New product added!` });
   } catch (error) {
-    console.log(error, 'error')
-     return res.status(500).json({ message: "Internal server error" });
+    console.log(error, "error");
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const updateProduct = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ message: "id parameter is required" });
+    }
+
+    const { name, price, description, quantityAvailable, categoryId } = req.body;
+    
+    if (!name && !price && !description && !quantityAvailable && !categoryId) {
+      return res.status(400).json({ 
+        message: "At least one field is required to update" 
+      });
+    }
+
+    const foundCategory = await ProductCategory.findById(categoryId).exec();
+    if (!foundCategory) return res.status(400).json({ message: `Invalid category` });
+
+    
+    const updateFields = {};
+    if (name !== undefined) updateFields.name = name;
+    if (price !== undefined) updateFields.price = price;
+    if (description !== undefined) updateFields.description = description;
+    if (quantityAvailable !== undefined) updateFields.quantityAvailable = quantityAvailable;
+    if (categoryId !== undefined) updateFields.categoryId = categoryId;
+
+    const product = await Product.findByIdAndUpdate(
+      id,
+      updateFields,
+      { 
+        new: true, 
+        runValidators: true
+      }
+    );
+
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    console.log(product, "product update result");
+    return res.json({
+      message: `Product ${product._id} updated!`,
+      product 
+    });
+
+  } catch (error) {
+    console.log(error, "error");
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
 export default {
   getProducts,
   getProductsBySellerId,
-  addProduct
+  addProduct,
+  updateProduct
 };
