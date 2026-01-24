@@ -6,14 +6,7 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-      roles: {
-        User: {
-            type: Number,
-            default: 2005
-        },
-        Editor: Number,
-        Admin: Number
-    },
+    roleId: {type: Schema.Types.ObjectId, ref: 'Role'},
     password: {
         type: String,
         required: true

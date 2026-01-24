@@ -8,10 +8,15 @@ const {
   deleteEmployee,
   getEmployee,
 } = employeesController;
-import roles from "../../config/rolesList.js";
+// import roles from "../../config/rolesList.js";
 import verifyRoles from "../../middleware/verifyRoles.js";
 import verifyJwt from "../../middleware/verifyJwt.js";
+import Role from "../../model/Role.js";
+import { roles } from "../../config/seedData.js";
 
+// const roleValues = Object.values(roles)
+const adminRole = roles.find(r => r.name === 'Admin')
+const sellerRole = roles.find(r => r.name === 'Seller')
 
 router.use(verifyJwt)
 
@@ -25,7 +30,7 @@ router
 router
   .route("/:id")
   .get(getEmployee)
-  .put(verifyRoles(roles.Admin, roles.Editor), updateEmployee)
-  .delete(verifyRoles(roles.Admin), deleteEmployee);
+  .put(verifyRoles(adminRole.name, sellerRole.name), updateEmployee)
+  .delete(verifyRoles(adminRole.name), deleteEmployee);
 
 export default router;

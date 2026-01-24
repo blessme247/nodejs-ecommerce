@@ -1,4 +1,5 @@
 import OrderStatus from "../model/OrderStatus.js"
+import Role from "../model/Role.js"
 
 const statuses = [
  { name: "Pending", code: 1, description: "Customer has placed order" },
@@ -8,11 +9,25 @@ const statuses = [
  { name: "Cancelled", code: 5, description: "Order has been cancelled" }
 ];
 
+export const roles = [
+ { name: "Seller" },
+ { name: "Buyer" },
+ { name: "Admin" }
+];
+
 export const seedStatuses = async ()=> {
     const count = OrderStatus.countDocuments()
     if (count === 0) {
         await OrderStatus.insertMany(statuses)
         console.log("order status initialized")
+    } 
+}
+
+export const seedRoles = async () => {
+const count = Role.countDocuments()
+    if (count === 0) {
+        await Role.insertMany(roles)
+        console.log("roles initialized")
     } 
 }
 

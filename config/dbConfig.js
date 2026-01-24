@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { seedStatuses } from "./seedData.js";
+import { seedRoles, seedStatuses } from "./seedData.js";
 
 const connectDB = async ()=> {
     try {
@@ -9,6 +9,7 @@ const connectDB = async ()=> {
         })
 
         await seedStatuses()
+        await seedRoles()
         
     } catch (error) {
         console.error(error, "DB connection error")
