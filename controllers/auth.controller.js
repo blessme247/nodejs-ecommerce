@@ -2,6 +2,7 @@
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import User from "../model/User.js"
+import Role from "../model/Role.js"
 
 
 const handleLogin = async (req, res) => {
@@ -9,11 +10,12 @@ const handleLogin = async (req, res) => {
     if (!user || !pwd) return res.status(400).json({ 'message': 'Username and password are required.' });
     
     const foundUser = await User.findOne({username: user}).exec()
-    if (!foundUser) return res.sendStatus(401); //Unauthorized 
+    if (!foundUser) return res.sendStatus(401).json({ message: "Unauthorized" }); //Unauthorized
+    const userRole = await Role.findById(foundUser.roleId).exec()
 
     const match = await bcrypt.compare(pwd, foundUser.password);
     if (match) {
-        const role = foundUser.roleId
+        const role = userRole.code
        
         const accessToken = jwt.sign(
             { 

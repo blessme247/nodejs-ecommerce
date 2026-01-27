@@ -23,14 +23,14 @@ router.use(verifyJwt)
 router
   .route("/")
   .get(getAllEmployees)
-  .post(verifyRoles(roles.Admin, roles.Editor), addEmployee);
+  .post(verifyRoles(adminRole.code, sellerRole.code), addEmployee);
 // .put( verifyRoles(roles.Admin, roles.Editor), updateEmployee)
 // .delete( verifyRoles(roles.Admin), deleteEmployee);
 
 router
   .route("/:id")
   .get(getEmployee)
-  .put(verifyRoles(adminRole.name, sellerRole.name), updateEmployee)
-  .delete(verifyRoles(adminRole.name), deleteEmployee);
+  .put(verifyRoles(adminRole.code, sellerRole.code), updateEmployee)
+  .delete(verifyRoles(adminRole.code), deleteEmployee);
 
 export default router;

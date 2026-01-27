@@ -5,7 +5,11 @@ const roleSchema = new Schema({
     name: {
         type: String,
         required: true
+    },
+    code: {
+        type: Number,
+        required: true
     }
 })
 
-export default mongoose.model('User', roleSchema)
+export default mongoose.model('Role', roleSchema)

@@ -76,7 +76,7 @@ const makeOrder = async (req, res) => {
         if(!foundProduct) return res.status(400).json({message: `Invalid product id for ${foundProduct.name}`})
         if(quantity == 0 || typeof quantity !== "number") return res.status(400).json({message: `Invalid quantity for ${foundProduct.name}`})
         if(foundProduct.quantityAvailable === 0) return res.status(400).json({message: `${foundProduct.name} is out of stock`})
-        if(foundProduct.quantityAvailable < quantity) return res.status(400).json({message: `Order quantity for ${foundProduct.name} exceeds available quantity`})
+        if(foundProduct.quantityAvailable < quantity) return res.status(400).json({message: `Order quantity for ${foundProduct.name} exceeds available quantity ${foundProduct.quantityAvailable}`})
 
         totalPrice += foundProduct.price 
         return {name: foundProduct.name, price: foundProduct.price, quantity, productId, sellerId: foundProduct.sellerId, statusId: pendingStatus._id}

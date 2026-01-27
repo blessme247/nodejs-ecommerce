@@ -10,9 +10,9 @@ const statuses = [
 ];
 
 export const roles = [
- { name: "Seller" },
- { name: "Buyer" },
- { name: "Admin" }
+ { name: "Seller", code: 251159 },
+ { name: "Buyer", code: 222519 },
+ { name: "Admin" , code: 141920 }
 ];
 
 export const seedStatuses = async ()=> {
