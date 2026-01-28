@@ -25,6 +25,9 @@ connectDB()
 
 app.use(logger)
 
+app.set('view engine', 'ejs');
+// app.set('views', path.join(__dirname, 'views'));
+
 // Handle options credentials check - before CORS!
 app.use(credentials)
 
@@ -43,35 +46,7 @@ app.use(express.static(path.join(__dirname, "/public")))
 app.use('/subdir', express.static(path.join(__dirname, "/public")))
 
 app.use('/', indexRouter)
-// app.use('/subdir', subdirRouter);
-// app.use("/auth", authRouter);
-// app.use("/register", registerRouter);
-// app.use("/refresh", refreshRouter)
-// app.use("/logout", logoutRouter)
 
-// app.use(verifyJwt)
-// app.use("/employees", employeesRouter);
-// app.use("/users", usersRouter);
-// app.use("/upload", uploadRouter)
-// app.use("/assets", assetsRouter)
-
-// chaining route handlers
-// const one = (req, res, next) => {
-//     console.log('one');
-//     next();
-// }
-
-// const two = (req, res, next) => {
-//     console.log('two');
-//     next();
-// }
-
-// const three = (req, res) => {
-//     console.log('three');
-//     res.send('Finished!');
-// }
-
-// app.get(['/', '/chain.html', '/chain'], [one, two, three]);
 
 // 404 catch-all route 
 app.use((req, res) => {
@@ -85,16 +60,6 @@ app.use((req, res) => {
     }
 });
 
-// app.all('*', (req, res)=> {
-//     res.status(404)
-//     if(req.accepts("html")){
-//         res.sendFile(path.join(__dirname, 'views', '404.html'))
-//     }else if(req.accepts("json")){
-//         res.json({"error": "404 Not found"})
-//     }else {
-//         res.type('txt').send( "404 Not found")
-//     }
-// })
 
 app.use(errorHandler)
 

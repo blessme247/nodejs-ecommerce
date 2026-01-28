@@ -4,6 +4,7 @@ import employeesRouter from "./employees.js"
 import usersRouter from "./users.js"
 import uploadRouter from "./upload.js"
 import assetsRouter from "./assets.js"
+import rolesRouter from "./roles.js"
 import path from "path"
 import { fileURLToPath } from 'url';
 import { dirname as pathDirname } from 'path';
@@ -19,8 +20,8 @@ const defaultRoutes = [
     route: authRouter,
   },
   {
-    path: '/employees',
-    route: employeesRouter,
+    path: '/roles',
+    route: rolesRouter,
   },
   {
     path: '/users',
