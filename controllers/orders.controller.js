@@ -5,21 +5,23 @@ import Product from "../model/Product.js";
 import User from "../model/User.js";
 import OrderStatus from "../model/OrderStatus.js";
 import Seller from "../model/Seller.js"
+import { handleError } from "../utils/handleError.js";
+import { handleSuccess } from "../utils/handleSuccess.js";
+import Buyer from "../model/Buyer.js"
 
-const getAllSellerOrders = async (req, res) => {
+export const getAllSellerOrders = async (req, res) => {
   try {
     const { id } = req.params;
 
     if (!id) {
-      return res.status(400).json({ message: "id parameter is required" });
+      return handleError(req, res, 400, "id parameter is required")
     }
     const seller = await Seller.findOne({userId: id}).exec();
-    if (!seller) return res.status(404).json({ message: "Seller not found" });
+    if (!seller) return handleError(req, res, 404, "seller not found")
 
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
-    const match = {}
     
     const pipeline = [
       {$match: {
@@ -47,17 +49,67 @@ const getAllSellerOrders = async (req, res) => {
 
     const { data, paginator } = paginateResponse(result, page, limit);
 
-    if (!data || data.length === 0)
-      return res.status(404).json({ message: "No order found." });
+    if (!data || data.length === 0) return handleError(req, res, 404, "orders not found")
 
-    return res.status(200).json({ data, paginator });
+    // return res.status(200).json({ data, paginator });
+    return handleSuccess(req, res, 200, {data, paginator, message, pageTitle: "Seller Orders", path: "shop/orders"})
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Internal server error" });
+    return handleError(req, res, 500, error?.message || "Internal server error")
   }
 };
 
-const makeOrder = async (req, res) => {
+export const getAllBuyerOrders = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return handleError(req, res, 400, "id parameter is required")
+    }
+    const buyer = await Buyer.findOne({userId: id}).exec();
+    if (!buyer) return handleError(req, res, 404, "buyer not found")
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    
+    const pipeline = [
+      {$match: {
+        buyerId:  buyer.userId
+      }},
+      {
+        $lookup: {
+          from: "orderstatus",
+          localField: "statusId", // Field in 'order item'
+          foreignField: "_id", // Field in 'order_statuses'
+          as: "status",
+        },
+      },
+      { $unwind: "$status" },
+      { $unset: ["_id", "__v", "sellerId"] },
+      {
+        $facet: {
+          data: [{ $skip: skip }, { $limit: limit }],
+          total: [{ $count: "count" }],
+        },
+      },
+    ];
+
+    const result = await Order.aggregate(pipeline);
+
+    const { data, paginator } = paginateResponse(result, page, limit);
+
+    if (!data || data.length === 0) return handleError(req, res, 404, "orders not found")
+
+    // return res.status(200).json({ data, paginator });
+    return handleSuccess(req, res, 200, {data, paginator, message, pageTitle: "Buyer Orders", path: "shop/orders"})
+  } catch (error) {
+    console.error(error);
+    return handleError(req, res, 500, error?.message || "Internal server error")
+  }
+};
+
+export const makeOrder = async (req, res) => {
   try {
     const username = req.user;
     const foundUser = await User.findOne({ username }).exec();
@@ -101,7 +153,7 @@ const makeOrder = async (req, res) => {
   }
 };
 
-const updateOrderStatus = async (req, res) => {
+export const updateOrderStatus = async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res.status(400).json({ message: "id parameter is required" });
@@ -133,9 +185,3 @@ const updateOrderStatus = async (req, res) => {
 };
 
 
-
-export default {
-  getAllSellerOrders,
-  makeOrder,
-  updateOrderStatus
-};

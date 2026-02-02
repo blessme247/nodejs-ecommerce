@@ -1,0 +1,42 @@
+
+  <header class="header">
+    <div class="header-container">
+      <a href="/products" class="logo">
+        <div class="logo-icon">E</div>
+        <span>EvoMart</span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="nav-desktop">
+        <a href="/products" class="nav-link <%= typeof page !== 'undefined' && page === 'products' ? 'active' : '' %>">Products</a>
+        <a href="/orders" class="nav-link <%= typeof page !== 'undefined' && page === 'orders' ? 'active' : '' %>">Orders</a>
+        <a href="#" class="nav-link">Categories</a>
+        <a href="#" class="nav-link">About</a>
+      </nav>
+
+      <!-- Desktop Auth Buttons -->
+      <div class="auth-buttons">
+        <a href="/signin" class="btn-outline">Sign In</a>
+        <a href="/signup" class="btn-primary">Sign Up</a>
+      </div>
+
+      <!-- Mobile Menu Toggle -->
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+        <span class="hamburger"></span>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <nav class="nav-mobile" id="mobileMenu">
+      <div class="nav-mobile-links">
+        <a href="/products" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'products' ? 'active' : '' %>">Products</a>
+        <a href="/orders" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'orders' ? 'active' : '' %>">Orders</a>
+        <a href="#" class="nav-mobile-link">Categories</a>
+        <a href="#" class="nav-mobile-link">About</a>
+      </div>
+      <div class="mobile-auth-buttons">
+        <a href="/signin" class="btn-outline">Sign In</a>
+        <a href="/signup" class="btn-primary">Sign Up</a>
+      </div>
+    </nav>
+  </header>

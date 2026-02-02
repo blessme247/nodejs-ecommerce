@@ -1,16 +1,18 @@
 import bcrypt from "bcrypt"
 import User from "../model/User.js"
 import Role from "../model/Role.js";
+import { handleError } from "../utils/handleError.js";
+import { handleSuccess } from "../utils/handleSuccess.js";
 
 const register = async (req, res) => {
     try {
         
  
     const { user, pwd, roleId } = req.body;
-    if (!user || !pwd) return res.status(400).json({ 'message': 'Username and password are required.' });
+    if (!user || !pwd) return handleError(req, res, 400, "Username and password are required");
   
     const duplicate = await User.findOne({username: user}).exec()
-    if (duplicate) return res.status(409).json({ 'message': ' Username already exists.' });
+    if (duplicate) return handleError(req, res, 409, "Username already exists");
 
     let role 
     if(!roleId){
@@ -28,9 +30,16 @@ const register = async (req, res) => {
        
         const result = await User.create(newUser)
         // console.log(result, 'result')
-        return res.status(201).json({ 'success': `New user ${result.username} created!` });
-    } catch (err) {
-       return res.status(500).json({ 'message': err.message });
+        const message = `New user ${result.username} created!`
+        return handleSuccess(req, res, 201, { message, pageTitle: "Login", path: "login"})
+        // return res.status(201).json({ message: `New user ${result.username} created!` });
+    } catch (error) {
+       return handleError(
+             req,
+             res,
+             500,
+             error?.message || "Internal server error",
+           );
     }
 }
 

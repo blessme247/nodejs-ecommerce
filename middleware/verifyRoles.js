@@ -1,12 +1,13 @@
+import { handleError } from "../utils/handleError";
+
  const verifyRoles = (...allowedRoles) => {
     return (req, res, next) => {
-        if (!req?.role) return res.sendStatus(401).json({ message: "Unauthorized" });
+        if (!req?.role) return handleError(req, res, 401, "Unathorized")
         const rolesArray = [...allowedRoles];
-        // const result = req.roles.map(role => rolesArray.includes(role)).find(val => val === true);
         const result = rolesArray.includes(req.role);
         if (!result) {
             console.log("Unauthorized access attempt detected");
-            return res.sendStatus(403).json({ message: "Forbidden" });
+            return handleError(req, res, 401, "Forbidden")
         }
         next();
     }

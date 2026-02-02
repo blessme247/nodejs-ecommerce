@@ -1,0 +1,82 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+
+    :root {
+      --primary: #425DF6;
+      --primary-dark: #2E44D9;
+      --primary-light: #E8EBFE;
+      --text-dark: #1A1A2E;
+      --text-gray: #6B7280;
+      --text-light: #9CA3AF;
+      --bg-white: #FFFFFF;
+      --bg-gray: #F9FAFB;
+      --border: #E5E7EB;
+      --success: #10B981;
+      --error: #EF4444;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+
+body {
+  font-family: "Montserrat", sans-serif;
+  min-height: 100vh;
+  color: var(--text-dark);
+      background-color: var(--bg-gray);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+}
+
+
+
+    .btn-outline {
+      padding: 0.625rem 1.25rem;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .btn-primary {
+      padding: 0.625rem 1.5rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 4px 12px rgba(66, 93, 246, 0.2);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(66, 93, 246, 0.3);
+    }
+
+    /* Main Content */
+    main {
+      min-height: calc(100vh - 72px);
+    }

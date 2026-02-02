@@ -2,8 +2,10 @@ import Product from "../model/Product.js";
 import Seller from "../model/Seller.js";
 import ProductCategory from "../model/ProductCategory.js";
 import User from "../model/User.js";
+import { handleError } from "../utils/handleError.js";
+import { handleSuccess } from "../utils/handleSuccess.js";
 
-const getProducts = async (req, res) => {
+export const getProducts = async (req, res) => {
   try {
     const { inStock, categoryId } = req.query;
     const page = parseInt(req.query.page) || 1;
@@ -32,17 +34,16 @@ const getProducts = async (req, res) => {
 
     const { data, paginator } = paginateResponse(result, page, limit);
 
-    if (!result || result.length === 0)
-      return res.status(404).json({ message: "No product found." });
+    if (!result || result.length === 0) return handleError(req, res, 404, "products not found")
 
-    return res.status(200).json({ data, paginator });
+    return handleSuccess(req, res, 200, {data, paginator, pageTitle: "Products", path: "shop/products"})
   } catch (error) {
     console.log(error, "error in catch block");
-    return res.status(500).json({ message: "Internal server error" });
+   return handleError(req, res, 500, error?.message || "Internal server error")
   }
 };
 
-const getProductsBySellerId = async (req, res) => {
+export const getProductsBySellerId = async (req, res) => {
   try {
     const { sellerId } = req.params;
     const { inStock, categoryId } = req.query;
@@ -105,7 +106,7 @@ const getProductsBySellerId = async (req, res) => {
   }
 };
 
-const addProduct = async (req, res) => {
+export const addProduct = async (req, res) => {
   try {
     const username = req.user;
     const foundUser = await User.findOne({ username }).exec();
@@ -136,7 +137,7 @@ const addProduct = async (req, res) => {
   }
 };
 
-const updateProduct = async (req, res) => {
+export const updateProduct = async (req, res) => {
   try {
     const id = req.params.id;
     if (!id) {
@@ -189,9 +190,3 @@ const updateProduct = async (req, res) => {
   }
 };
 
-export default {
-  getProducts,
-  getProductsBySellerId,
-  addProduct,
-  updateProduct
-};

@@ -1,20 +1,38 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
+const verifyJwt = (req, res, next) => {
+  const authHeader =
+    req.headers["authorization"] || req.headers["Authorization"];
+  // if (!authHeader?.startsWith("Bearer ")) return res.status(401).json({message: "Unathorized"})
+  if (authHeader?.startsWith("Bearer ")) {
+    const token = authHeader.split(" ")[1];
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) return res.status(403).json({ message: "Forbidden" }); // invalid token
+      req.user = decoded.UserInfo.username;
+      req.role = decoded.UserInfo.role;
+      next();
+    });
+  }
 
-const verifyJwt = (req, res, next)=> {
-    const authHeader = req.headers['authorization'] || req.headers['Authorization']
-    if (!authHeader?.startsWith("Bearer ")) return res.sendStatus(401).json({message: "Unathorized"})
-    const token = authHeader.split(" ")[1]
-    jwt.verify(
-        token, 
-        process.env.ACCESS_TOKEN_SECRET,
-        (err, decoded)=> {
-            if(err) return res.sendStatus(403).json({message: "Forbidden"}); // invalid token
-            req.user = decoded.UserInfo.username
-            req.role = decoded.UserInfo.role
-            next()
-        }
-    )
-}
+  const token = req.cookies?.accessToken;
+  if (!token) {
+    if (req.accepts("json")) {
+      return handleError(req, res, 401, "Unauthorized");
+    }
+    res.redirect("/login");
+  }
 
-export default verifyJwt
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      if (req.accepts("json")) {
+        return handleError(req, res, 403, "Forbidden");
+      }
+      return res.redirect("/login"); // invalid token
+    }
+    req.user = decoded.UserInfo.username;
+    req.role = decoded.UserInfo.role;
+    next();
+  });
+};
+
+export default verifyJwt;

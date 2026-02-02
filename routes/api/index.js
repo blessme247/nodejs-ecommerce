@@ -1,15 +1,14 @@
 import express from "express"
 import authRouter from "./auth.js"
-import employeesRouter from "./employees.js"
 import usersRouter from "./users.js"
 import uploadRouter from "./upload.js"
 import assetsRouter from "./assets.js"
 import rolesRouter from "./roles.js"
+import ordersRouter from "./orders.js"
+import productsRouter from "./products.js"
 import path from "path"
 import { fileURLToPath } from 'url';
 import { dirname as pathDirname } from 'path';
-// const httpStatus = require('http-status');
-// const cache = require('../../utils/cache');
 
 
 const router = express.Router();
@@ -26,6 +25,14 @@ const defaultRoutes = [
   {
     path: '/users',
     route: usersRouter,
+  },
+   {
+    path: '/orders',
+    route: ordersRouter,
+  },
+   {
+    path: '/products',
+    route: productsRouter,
   },
   {
     path: '/upload',
@@ -54,12 +61,24 @@ router.get(['/', '/index.html', '/index'], (req, res) => {
     res.sendFile(path.join(__dirname, '..', '..', 'views', 'index.html'));
 });
 
-router.get(['/new-page', 'new-page.html'], (req, res)=> {
-    res.sendFile(path.join(__dirname, '..', '..', 'views', 'new-page.html'))
+// render views 
+router.get("/signup", (req, res)=> {
+  res.render('auth/signup', {
+    pageTitle: "Sign Up",
+    path: ""
+  })
 })
 
-router.get(['/old-page', 'old-page.html'], (req, res)=> {
-    res.redirect(301, 'new-page.html') // 302 by default
+router.get("/signin", (req, res)=> {
+  res.render('auth/signin')
 })
+
+// router.get("/shop/orders", (req, res) => {
+//   res.render("shop/orders")
+// })
+
+// router.get("/shop/products", (req, res)=> {
+
+// })
 
 export default router;

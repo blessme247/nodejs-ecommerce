@@ -18,6 +18,10 @@ const orderItemsSchema = new Schema({
     orderId: {type: Schema.Types.ObjectId, ref: 'Order'},
     statusId: {type: Schema.Types.ObjectId, ref: 'OrderStatus'},
     // item_status (e.g., Preparing, Shipped, Delivered) — allows individual vendors to fulfill their part of a shared order independently. 
-});
+},
+{
+    timestamps: true
+}
+);
 
 export default mongoose.model('OrderItems', orderItemsSchema)

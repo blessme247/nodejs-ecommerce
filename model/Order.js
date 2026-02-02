@@ -8,6 +8,10 @@ const orderSchema = new Schema({
         required: true
     },
     statusId: {type: Schema.Types.ObjectId, ref: 'OrderStatus'},
-})
+},
+{
+    timestamps: true
+}
+)
 
 export default mongoose.model('Order', orderSchema)
