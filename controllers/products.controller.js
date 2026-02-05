@@ -34,12 +34,12 @@ export const getProducts = async (req, res) => {
 
     const { data, paginator } = paginateResponse(result, page, limit);
 
-    if (!result || result.length === 0) return handleError(req, res, 404, "products not found")
+    if (!result || result.length === 0) return handleError(req, res, 404, { message: "products not found" });
 
     return handleSuccess(req, res, 200, {data, paginator, pageTitle: "Products", path: "shop/products"})
   } catch (error) {
     console.log(error, "error in catch block");
-   return handleError(req, res, 500, error?.message || "Internal server error")
+   return handleError(req, res, 500, { message: error?.message || "Internal server error" })
   }
 };
 

@@ -11,11 +11,11 @@ const handleLogin = async (req, res) => {
       return handleError(req, res, 400, "Username and password are required");
 
     const foundUser = await User.findOne({ username: user }).exec();
-    if (!foundUser) return handleError(req, res, 401, "Unauthorized"); //Unauthorized
+    if (!foundUser) return handleError(req, res, 401, { message: "Unauthorized" }); //Unauthorized
     const userRole = await Role.findById(foundUser.roleId).exec();
 
     const match = await bcrypt.compare(pwd, foundUser.password);
-    if (!match) return res.status(401).json({ message: "Unauthorized" });
+    if (!match) return handleError(req, res, 401, { message: "Unauthorized" });
 
     const role = userRole.code;
 
@@ -57,7 +57,7 @@ const handleLogin = async (req, res) => {
       req,
       res,
       500,
-      error?.message || "Internal server error",
+      { message: error?.message || "Internal server error" },
     );
   }
 };

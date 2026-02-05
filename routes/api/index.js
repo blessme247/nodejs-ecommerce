@@ -65,12 +65,17 @@ router.get(['/', '/index.html', '/index'], (req, res) => {
 router.get("/signup", (req, res)=> {
   res.render('auth/signup', {
     pageTitle: "Sign Up",
-    path: ""
+    path: "",
+    errors: {}
   })
 })
 
 router.get("/signin", (req, res)=> {
-  res.render('auth/signin')
+  res.render('auth/signin', {
+    pageTitle: "Sign In",
+    path: "",
+    errors: {}
+  })
 })
 
 // router.get("/shop/orders", (req, res) => {

@@ -81,7 +81,7 @@
         </div>
       </div>
 
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label for="confirmPassword" class="form-label">Confirm Password</label>
         <div class="password-wrapper">
           <input 
@@ -95,7 +95,7 @@
           <button type="button" class="password-toggle" id="confirmPasswordToggle">👁️</button>
         </div>
         <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
-      </div>
+      </div> -->
 
       <div class="checkbox-wrapper">
         <input type="checkbox" id="terms" class="form-checkbox" required>
@@ -108,7 +108,7 @@
       <button type="submit" class="btn-submit">Create Account</button>
     </form>
 
-    <div class="divider">or sign up with</div>
+    <!-- <div class="divider">or sign up with</div>
 
     <div class="social-buttons">
       <button class="btn-social">
@@ -119,12 +119,91 @@
         <span class="btn-social-icon">📘</span>
         Sign up with Facebook
       </button>
-    </div>
+    </div> -->
 
     <div class="auth-footer">
       Already have an account? <a href="/signin" class="auth-link">Sign In</a>
     </div>
   </div>
 </div>
+
+<script>
+  const signupForm = document.getElementById('signupForm');
+  const firstNameInput = document.getElementById('firstName');
+  const lastNameInput = document.getElementById('lastName');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const confirmPasswordInput = document.getElementById('confirmPassword');
+  const termsCheckbox = document.getElementById('terms');
+  const successMessage = document.getElementById('successMessage');
+  
+  const passwordToggle = document.getElementById('passwordToggle');
+  const confirmPasswordToggle = document.getElementById('confirmPasswordToggle');
+  const strengthFill = document.getElementById('strengthFill');
+  const strengthText = document.getElementById('strengthText');
+
+
+  // Password strength calculation
+  function calculatePasswordStrength(password) {
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (password.length >= 12) strength++;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+    if (/\d/.test(password)) strength++;
+    if (/[^a-zA-Z0-9]/.test(password)) strength++;
+    return strength;
+  }
+
+  // Update password strength indicator
+  passwordInput.addEventListener('input', () => {
+    const password = passwordInput.value;
+    const strength = calculatePasswordStrength(password);
+    
+    strengthFill.className = 'strength-fill';
+    strengthText.className = 'strength-text';
+    
+    if (password.length === 0) {
+      strengthText.textContent = '-';
+    } else if (strength <= 2) {
+      strengthFill.classList.add('weak');
+      strengthText.classList.add('weak');
+      strengthText.textContent = 'Weak';
+    } else if (strength <= 3) {
+      strengthFill.classList.add('medium');
+      strengthText.classList.add('medium');
+      strengthText.textContent = 'Medium';
+    } else {
+      strengthFill.classList.add('strong');
+      strengthText.classList.add('strong');
+      strengthText.textContent = 'Strong';
+    }
+    
+    passwordInput.classList.remove('error');
+    document.getElementById('passwordError').classList.remove('show');
+  });
+
+  // Password toggle
+  passwordToggle.addEventListener('click', () => {
+    const type = passwordInput.type === 'password' ? 'text' : 'password';
+    passwordInput.type = type;
+    passwordToggle.textContent = type === 'password' ? '👁️' : '🙈';
+  });
+
+  // Clear errors on input
+  const inputs = [firstNameInput, lastNameInput, emailInput, passwordInput, confirmPasswordInput];
+  inputs.forEach(input => {
+    input.addEventListener('input', () => {
+      input.classList.remove('error');
+      const errorId = input.id + 'Error';
+      document.getElementById(errorId).classList.remove('show');
+    });
+  });
+
+  termsCheckbox.addEventListener('change', () => {
+    document.getElementById('termsError').classList.remove('show');
+  });
+
+
+</script>
 
  <%- include('../components/end.ejs') %>

@@ -8,7 +8,7 @@ const verifyJwt = (req, res, next) => {
   if (authHeader?.startsWith("Bearer ")) {
     const token = authHeader.split(" ")[1];
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-      if (err) return res.status(403).json({ message: "Forbidden" }); // invalid token
+      if (err) return handleError(req, res, 403, { message: "Forbidden" }); // invalid token
       req.user = decoded.UserInfo.username;
       req.role = decoded.UserInfo.role;
       next();
@@ -18,7 +18,7 @@ const verifyJwt = (req, res, next) => {
   const token = req.cookies?.accessToken;
   if (!token) {
     if (req.accepts("json")) {
-      return handleError(req, res, 401, "Unauthorized");
+      return handleError(req, res, 401,  { message: "Unauthorized" });
     }
     res.redirect("/login");
   }
@@ -26,7 +26,7 @@ const verifyJwt = (req, res, next) => {
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) {
       if (req.accepts("json")) {
-        return handleError(req, res, 403, "Forbidden");
+        return handleError(req, res, 403, { message: "Forbidden" });
       }
       return res.redirect("/login"); // invalid token
     }

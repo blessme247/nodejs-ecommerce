@@ -13,3 +13,16 @@
 20260105	07:00:39	601719da-fba9-4ee4-bf16-da403eceb031	CastError: Cast to ObjectId failed for value "6953609ef56d97d38f8f9e1" (type string) at path "_id" for model "User"
 20260105	16:09:51	bcb157fb-1f98-4953-a37e-72f02b7cd844	TypeError: Cannot destructure property 'transformation' of 'req.body' as it is undefined.
 20260105	16:22:21	c7e57f10-52a4-4202-9e27-72b9a3da7aba	TypeError: Cannot destructure property 'transformation' of 'req.body' as it is undefined.
+20260205	01:40:20	f4dab0c6-d073-4334-a7aa-3c30e0ef02fc	ReferenceError: /Users/macbookpro/Desktop/work-local/node-js/nodejs-shop/views/auth/signin.ejs:1
+ >> 1| <%- include('../components/head.ejs') %>
+    2|     <link rel="stylesheet" href="/css/auth.css">
+    3|     </head>
+    4| <body>
+
+/Users/macbookpro/Desktop/work-local/node-js/nodejs-shop/views/components/head.ejs:8
+    6|     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    7|     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ >> 8|     <title><%= pageTitle %></title>
+    9|     <link rel="stylesheet" href="/css/index.css">
+
+pageTitle is not defined

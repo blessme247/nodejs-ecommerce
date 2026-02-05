@@ -1,46 +1,56 @@
-import bcrypt from "bcrypt"
-import User from "../model/User.js"
+import bcrypt from "bcrypt";
+import User from "../model/User.js";
 import Role from "../model/Role.js";
 import { handleError } from "../utils/handleError.js";
 import { handleSuccess } from "../utils/handleSuccess.js";
 
 const register = async (req, res) => {
-    try {
-        
- 
-    const { user, pwd, roleId } = req.body;
-    if (!user || !pwd) return handleError(req, res, 400, "Username and password are required");
-  
-    const duplicate = await User.findOne({username: user}).exec()
-    if (duplicate) return handleError(req, res, 409, "Username already exists");
+  try {
+    const { firstName, lastName, email, pwd, roleId } = req.body;
+    if (!firstName || !lastName || !email || !pwd)
+      return handleError(req, res, 400, "All fields are required");
 
-    let role 
-    if(!roleId){
-        role = await Role.findOne({name: "Buyer"}).exec()
-    }else {
-        role = await Role.findById(roleId).exec()
-    }
-        
-        const hashedPwd = await bcrypt.hash(pwd, 10);
-        const newUser = { 
-            "username": user,
-             "password": hashedPwd,
-             "roleId": role._id
-             };
-       
-        const result = await User.create(newUser)
-        // console.log(result, 'result')
-        const message = `New user ${result.username} created!`
-        return handleSuccess(req, res, 201, { message, pageTitle: "Login", path: "login"})
-        // return res.status(201).json({ message: `New user ${result.username} created!` });
-    } catch (error) {
-       return handleError(
-             req,
-             res,
-             500,
-             error?.message || "Internal server error",
-           );
-    }
-}
+    const duplicate = await User.findOne({ email }).exec();
+    if (duplicate) return handleError(req, res, 409, "Email already exists");
 
-export default register 
+    let role;
+    if (!roleId) {
+      role = await Role.findOne({ name: "Buyer" }).exec();
+    } else {
+      role = await Role.findById(roleId).exec();
+    }
+    const username = email.split("@")[0];
+    const hashedPwd = await bcrypt.hash(pwd, 10);
+
+    const user = new User({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: hashedPwd,
+      roleId: role._id,
+      username: username,
+    });
+
+    const result = await user.save();
+    // console.log(result, 'result')
+    const message = `New user ${result.username} created!`;
+    return handleSuccess(req, res, 201, {
+      message,
+      pageTitle: "Login",
+      path: "login",
+    });
+    // return res.status(201).json({ message: `New user ${result.username} created!` });
+  } catch (error) {
+    if (error instanceof mongoose.Error) {
+      return handleError(req, res, 400, { errors: error.errors });
+    }
+    return handleError(
+      req,
+      res,
+      500,
+      { message: error?.message || "Internal server error" }
+    );
+  }
+};
+
+export default register;

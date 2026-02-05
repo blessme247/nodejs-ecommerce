@@ -8,8 +8,8 @@
 
       <!-- Desktop Navigation -->
       <nav class="nav-desktop">
-        <a href="/products" class="nav-link <%= typeof page !== 'undefined' && page === 'products' ? 'active' : '' %>">Products</a>
-        <a href="/orders" class="nav-link <%= typeof page !== 'undefined' && page === 'orders' ? 'active' : '' %>">Orders</a>
+        <a href="/products" class="nav-link <%= typeof path !== 'undefined' && path === 'products' ? 'active' : '' %>">Products</a>
+        <a href="/orders" class="nav-link <%= typeof path !== 'undefined' && path === 'orders' ? 'active' : '' %>">Orders</a>
         <a href="#" class="nav-link">Categories</a>
         <a href="#" class="nav-link">About</a>
       </nav>
@@ -29,8 +29,8 @@
     <!-- Mobile Navigation -->
     <nav class="nav-mobile" id="mobileMenu">
       <div class="nav-mobile-links">
-        <a href="/products" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'products' ? 'active' : '' %>">Products</a>
-        <a href="/orders" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'orders' ? 'active' : '' %>">Orders</a>
+        <a href="/products" class="nav-mobile-link <%= typeof path !== 'undefined' && path === 'products' ? 'active' : '' %>">Products</a>
+        <a href="/orders" class="nav-mobile-link <%= typeof path !== 'undefined' && path === 'orders' ? 'active' : '' %>">Orders</a>
         <a href="#" class="nav-mobile-link">Categories</a>
         <a href="#" class="nav-mobile-link">About</a>
       </div>

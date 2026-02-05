@@ -49,13 +49,13 @@ export const getAllSellerOrders = async (req, res) => {
 
     const { data, paginator } = paginateResponse(result, page, limit);
 
-    if (!data || data.length === 0) return handleError(req, res, 404, "orders not found")
+    if (!data || data.length === 0) return handleError(req, res, 404, { message: "orders not found" })
 
     // return res.status(200).json({ data, paginator });
     return handleSuccess(req, res, 200, {data, paginator, message, pageTitle: "Seller Orders", path: "shop/orders"})
   } catch (error) {
     console.error(error);
-    return handleError(req, res, 500, error?.message || "Internal server error")
+    return handleError(req, res, 500, { message: error?.message || "Internal server error" })
   }
 };
 
@@ -99,13 +99,13 @@ export const getAllBuyerOrders = async (req, res) => {
 
     const { data, paginator } = paginateResponse(result, page, limit);
 
-    if (!data || data.length === 0) return handleError(req, res, 404, "orders not found")
+    if (!data || data.length === 0) return handleError(req, res, 404, { message: "orders not found" })
 
     // return res.status(200).json({ data, paginator });
     return handleSuccess(req, res, 200, {data, paginator, message, pageTitle: "Buyer Orders", path: "shop/orders"})
   } catch (error) {
     console.error(error);
-    return handleError(req, res, 500, error?.message || "Internal server error")
+    return handleError(req, res, 500, { message: error?.message || "Internal server error" })
   }
 };
 
