@@ -12,7 +12,10 @@ const userSchema = new Schema({
     email: {type: String, required: true, unique: true},
     password: {
         type: String,
-        required: true
+        required: true,
+        minlength: 8,
+        uppercase: true,
+        lowercase: true
     },
     refreshToken:  String
 })

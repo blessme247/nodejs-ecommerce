@@ -8,10 +8,10 @@ const register = async (req, res) => {
   try {
     const { firstName, lastName, email, pwd, roleId } = req.body;
     if (!firstName || !lastName || !email || !pwd)
-      return handleError(req, res, 400, "All fields are required");
+      return handleError(req, res, 400, { message: "All fields are required" });
 
     const duplicate = await User.findOne({ email }).exec();
-    if (duplicate) return handleError(req, res, 409, "Email already exists");
+    if (duplicate) return handleError(req, res, 409, { message: "Email already exists" });
 
     let role;
     if (!roleId) {
@@ -36,11 +36,14 @@ const register = async (req, res) => {
     const message = `New user ${result.username} created!`;
     return handleSuccess(req, res, 201, {
       message,
-      pageTitle: "Login",
-      path: "login",
+      pageTitle: "Sign In",
+      path: "signin",
+    //   validationErrors: {},
+    //   errorMessage: ""
     });
     // return res.status(201).json({ message: `New user ${result.username} created!` });
   } catch (error) {
+    console.log(error, "error")
     if (error instanceof mongoose.Error) {
       return handleError(req, res, 400, { errors: error.errors });
     }

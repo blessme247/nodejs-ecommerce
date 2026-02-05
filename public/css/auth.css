@@ -115,7 +115,7 @@
     color: var(--error);
     font-size: 0.8125rem;
     margin-top: 0.5rem;
-    display: none;
+    /* display: none; */
   }
 
   .error-message.show {
@@ -348,6 +348,17 @@
     font-size: 0.875rem;
     text-align: center;
     display: none;
+  }
+
+  .errorTop-message {
+    background: #FEE2E2;
+    color: #B91C1C;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    text-align: center;
+    /* display: none; */
   }
 
   .success-message.show {

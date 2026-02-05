@@ -4,8 +4,8 @@ export const handleError = (req, res, statusCode, options) => {
         return res.status(statusCode).json({message})
     }
     const jsonResponse = {
-        ...(message && { message }),
-        ...(errors && { errors })
+        ...(message && { errorMessage: message }),
+        ...(errors && { validationErrors: errors })
     }
     return res.render(req.path, {
         ...jsonResponse,

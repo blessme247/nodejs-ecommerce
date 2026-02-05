@@ -66,7 +66,8 @@ router.get("/signup", (req, res)=> {
   res.render('auth/signup', {
     pageTitle: "Sign Up",
     path: "",
-    errors: {}
+    validationErrors: {},
+    errorMessage: ""
   })
 })
 
@@ -74,7 +75,8 @@ router.get("/signin", (req, res)=> {
   res.render('auth/signin', {
     pageTitle: "Sign In",
     path: "",
-    errors: {}
+    validationErrors: {},
+    errorMessage: ""
   })
 })
 

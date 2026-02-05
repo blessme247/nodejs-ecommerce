@@ -9,7 +9,7 @@ import { authRateLimiter } from "../../middleware/rateLimiter.js";
 router.use(authRateLimiter)
 // router.post('/', handleLogin);
 router.route("/login").post(handleLogin);
-router.route("/register").post(register)
+router.route("/signup").post(register)
 router.route("/refresh").post(refreshToken)
 router.route("/logout").post(logout)
 
