@@ -1,4 +1,4 @@
-import { handleError } from "../utils/handleError";
+import { handleError } from "../utils/handleError.js";
 
  const verifyRoles = (...allowedRoles) => {
     return (req, res, next) => {

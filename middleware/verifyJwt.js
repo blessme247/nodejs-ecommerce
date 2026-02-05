@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { handleError } from "../utils/handleError.js";
 
 const verifyJwt = (req, res, next) => {
   const authHeader =

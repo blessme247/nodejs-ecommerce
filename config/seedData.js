@@ -21,18 +21,18 @@ export const roles = [
 ];
 
 export const seedStatuses = async ()=> {
-    const count = OrderStatus.countDocuments()
+    const count = await OrderStatus.countDocuments({})
     if (count === 0) {
         await OrderStatus.insertMany(statuses)
-        console.log("order status initialized")
+        // console.log("order status initialized")
     } 
 }
 
 export const seedRoles = async () => {
-const count = Role.countDocuments()
+const count = await Role.countDocuments({})
     if (count === 0) {
         await Role.insertMany(roles)
-        console.log("roles initialized")
+        // console.log("roles initialized")
     } 
 }
 
