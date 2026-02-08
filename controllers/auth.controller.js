@@ -7,8 +7,7 @@ import { handleError } from "../utils/handleError.js";
 const handleLogin = async (req, res) => {
   try {
     const { user, pwd } = req.body;
-    if (!user || !pwd)
-      return handleError(req, res, 400, "Username and password are required");
+    if (!user || !pwd) return handleError(req, res, 400, "Username and password are required");
 
     const foundUser = await User.findOne({ username: user }).exec();
     if (!foundUser) return handleError(req, res, 401, { message: "Unauthorized" }); //Unauthorized
