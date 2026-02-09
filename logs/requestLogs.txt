@@ -310,3 +310,10 @@
 20260205	03:03:27	67f2f594-c3ca-4abc-8b39-0d2397089921	GET	/js/main.js	undefined
 20260205	03:08:50	529324cd-fbd1-44e1-8bbf-5b6a8aab62f0	POST	/auth/signup	http://localhost:3500
 20260205	03:08:51	7e17dd67-45f1-4ed1-bacd-a28d543af134	GET	/favicon.ico	undefined
+20260209	11:09:53	99841749-3949-4700-a7fc-dbc4980e467a	GET	/	undefined
+20260209	11:09:53	0b08d263-3f48-4135-b341-4fc3089133c3	GET	/css/style.css	undefined
+20260209	11:09:53	b8480e5d-f7cf-4d6c-bb07-73fc59ca0d2c	GET	/favicon.ico	undefined
+20260209	11:10:02	6e3c5507-78c3-43bd-a841-00275ef5d046	GET	/signup	undefined
+20260209	11:10:02	1d908023-1fca-4f78-8df7-ef6747ccb50e	GET	/css/index.css	undefined
+20260209	11:10:02	32c8f0b2-40ae-4e11-bb1c-18ab72f97de2	GET	/css/auth.css	undefined
+20260209	11:10:02	be49e491-eb2e-4ba9-a235-cc293586f4c9	GET	/js/main.js	undefined
