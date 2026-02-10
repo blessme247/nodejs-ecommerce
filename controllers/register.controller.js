@@ -5,21 +5,36 @@ import { handleError } from "../utils/handleError.js";
 import { handleSuccess } from "../utils/handleSuccess.js";
 
 const register = async (req, res) => {
+  const roles = await Role.find(
+    { name: { $not: { $regex: /^admin$/i } } },
+    { name: 1, _id: 1 },
+  ).exec();
   try {
-     const roles = await Role.find(
-            { name: { $not: { $regex: /^admin$/i } } },
-            { name: 1, _id: 1 },
-          ).exec();
-
     const { firstName, lastName, email, password, roleId } = req.body;
     if (!firstName || !lastName || !email || !password)
-      return handleError(req, res, 400, { message: "All fields are required", page: "auth/signup", pageTitle: "Sign Up", 
-    errors: { firstName: !firstName ? "First name is required" : "", lastName: !lastName ? "Last name is required" : "", email: !email ? "Email is required" : "", password: !password ? "Password is required" : "" }, 
-    data: roles
-  });
+      return handleError(req, res, 400, {
+        message: "All fields are required",
+        page: "auth/signup",
+        pageTitle: "Sign Up",
+        errors: {
+          firstName: !firstName ? "First name is required" : "",
+          lastName: !lastName ? "Last name is required" : "",
+          email: !email ? "Email is required" : "",
+          password: !password ? "Password is required" : "",
+        },
+        data: roles,
+        formValues: req.body,
+      });
 
     const duplicate = await User.findOne({ email }).exec();
-    if (duplicate) return handleError(req, res, 409, { message: "Email already exists", page: "auth/signup", pageTitle: "Sign Up",  data: roles  });
+    if (duplicate)
+      return handleError(req, res, 409, {
+        message: "Email already exists",
+        page: "auth/signup",
+        pageTitle: "Sign Up",
+        data: roles,
+        formValues: req.body,
+      });
 
     let role;
     if (!roleId) {
@@ -36,7 +51,7 @@ const register = async (req, res) => {
       email: email,
       password: hashedPassword,
       roleId: role._id,
-      username: username
+      username: username,
     });
 
     const result = await user.save();
@@ -47,20 +62,27 @@ const register = async (req, res) => {
       pageTitle: "Sign In",
       path: "auth/signin",
       errors: {},
-      errorMessage: ""
+      errorMessage: "",
     });
     // return res.status(201).json({ message: `New user ${result.username} created!` });
   } catch (error) {
-    console.log(error, "error")
+    console.log(error, "error");
     if (error instanceof mongoose.Error) {
-      return handleError(req, res, 400, { errors: error.errors, page: "auth/signup", pageTitle: "Sign Up" });
+      return handleError(req, res, 400, {
+        errors: error.errors,
+        page: "auth/signup",
+        pageTitle: "Sign Up",
+        data: roles,
+        formValues: req.body,
+      });
     }
-    return handleError(
-      req,
-      res,
-      500,
-      { message: error?.message || "Internal server error", page: "auth/signup", pageTitle: "Sign Up" }
-    );
+    return handleError(req, res, 500, {
+      message: error?.message || "Internal server error",
+      page: "auth/signup",
+      pageTitle: "Sign Up",
+      data: roles,
+      formValues: req.body,
+    });
   }
 };
 

@@ -124,3 +124,30 @@ validationErrors is not defined
     37|         </div>
 
 validationErrors is not defined
+20260210	18:30:30	284b4acd-de0d-465a-8e30-d0ce16808f61	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signup.ejs:103
+    101|         <select name="roleId" id="roleId" class="form-input" required>
+    102|           <option value="">Select a role</option>
+ >> 103|           <% data.forEach(role => { %>
+    104|             <option value="<%= role._id %>" <%= validationErrors?.roleId == role._id ? 'selected' : '' %>><%= role.name %></option>
+    105|           <% }) %>
+    106|         </select> 
+
+data is not defined
+20260210	18:58:09	5f0f927e-0115-413a-8d5f-e8d1c0309cc5	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signup.ejs:17
+    15|     </div> -->
+    16| 
+ >> 17|       <% if (errorMessage) { %>
+    18|             <div class="errorTop-message"><%= errorMessage %></div>
+    19|             <% } %>
+    20| 
+
+errorMessage is not defined
+20260210	18:59:38	cb344d06-1ee7-47d4-a297-8668aad601b7	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signup.ejs:17
+    15|     </div> -->
+    16| 
+ >> 17|       <% if (errorMessage) { %>
+    18|             <div class="errorTop-message"><%= errorMessage %></div>
+    19|             <% } %>
+    20| 
+
+errorMessage is not defined

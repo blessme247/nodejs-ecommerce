@@ -74,7 +74,8 @@ router.get("/signup", async (req, res)=> {
     path: "auth/signup",
     validationErrors: {},
     errorMessage: "",
-    data: roles
+    data: roles,
+    formValues: {}
   })
 })
 
@@ -83,7 +84,7 @@ router.get("/signin", (req, res)=> {
     pageTitle: "Sign In",
     path: "",
     validationErrors: {},
-    errorMessage: ""
+    errorMessage: "",
   })
 })
 

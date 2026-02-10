@@ -29,6 +29,7 @@
             class="form-input" 
             placeholder="John"
             required
+            value="<%= formValues?.firstName ?? '' %>"
           >
           <!-- <div class="error-message" id="firstNameError">First name is required</div> -->
             <% if (validationErrors.firstName) { %>
@@ -45,6 +46,7 @@
             class="form-input" 
             placeholder="Doe"
             required
+            value="<%= formValues?.lastName ?? '' %>"
           >
           <!-- <div class="error-message" id="lastNameError">Last name is required</div> -->
             <% if (validationErrors.lastName) { %>
@@ -62,6 +64,7 @@
           class="form-input" 
           placeholder="you@example.com"
           required
+          value="<%= formValues?.email ?? '' %>"
         >
         <% if (validationErrors.email) { %>
            <div class="error-message" id="emailError"><%= validationErrors.email %></div>
@@ -78,6 +81,7 @@
             class="form-input" 
             placeholder="Create a strong password"
             required
+            value="<%= formValues?.password ?? '' %>"
           >
           <button type="button" class="password-toggle" id="passwordToggle">👁️</button>
         </div>
@@ -98,7 +102,7 @@
 
        <div class="form-group">
         <label for="roleId" class="form-label">Role</label>
-        <select name="roleId" id="roleId" class="form-input" required>
+        <select name="roleId" id="roleId" class="form-input"  required>
           <option value="">Select a role</option>
           <% data.forEach(role => { %>
             <option value="<%= role._id %>" <%= validationErrors?.roleId == role._id ? 'selected' : '' %>><%= role.name %></option>
