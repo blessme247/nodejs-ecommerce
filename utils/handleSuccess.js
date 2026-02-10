@@ -13,8 +13,7 @@ export const handleSuccess = (req, res, statusCode, options) => {
   // } 
   // const {path, ...remainingRenderOptions} = rest
   return res.render(path, {
-    ...jsonResponse,
-    ...remainingRenderOptions
+    ...jsonResponse
   })
 
 };

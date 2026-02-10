@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     username: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     roleId: {type: Schema.Types.ObjectId, ref: 'Role'},
     firstName: {type: String, required: true},

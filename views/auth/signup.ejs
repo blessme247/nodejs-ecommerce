@@ -32,8 +32,8 @@
             value="<%= formValues?.firstName ?? '' %>"
           >
           <!-- <div class="error-message" id="firstNameError">First name is required</div> -->
-            <% if (validationErrors.firstName) { %>
-           <div class="error-message" id="firstNameError"><%= validationErrors.firstName %></div>
+            <% if (validationErrors.length) { %>
+           <div class="error-message" id="firstNameError"><%= validationErrors?.find((err) => err.path === 'firstName')?.msg ?? '' %></div>
             <% } %>
         </div>
 
@@ -49,8 +49,8 @@
             value="<%= formValues?.lastName ?? '' %>"
           >
           <!-- <div class="error-message" id="lastNameError">Last name is required</div> -->
-            <% if (validationErrors.lastName) { %>
-           <div class="error-message" id="lastNameError"><%= validationErrors?.lastName ?? '' %></div>
+            <% if (validationErrors.length) { %>
+           <div class="error-message" id="lastNameError"><%= validationErrors?.find((err) => err.path === 'lastName')?.msg ?? '' %></div>
             <% } %>
         </div>
       </div>
@@ -66,8 +66,8 @@
           required
           value="<%= formValues?.email ?? '' %>"
         >
-        <% if (validationErrors.email) { %>
-           <div class="error-message" id="emailError"><%= validationErrors.email %></div>
+        <% if (validationErrors.length) { %>
+           <div class="error-message" id="emailError"><%= validationErrors?.find((err) => err.path === 'email')?.msg ?? '' %></div>
             <% } %>
       </div>
 
@@ -86,8 +86,8 @@
           <button type="button" class="password-toggle" id="passwordToggle">👁️</button>
         </div>
         
-        <% if (validationErrors.password) { %>
-           <div class="error-message" id="passwordError"><%= validationErrors.password %></div>
+        <% if (validationErrors.length) { %>
+           <div class="error-message" id="passwordError"><%= validationErrors?.find((err) => err.path === 'password')?.msg ?? '' %></div>
         <% } %>
         <!-- <div class="password-strength">
           <div class="strength-label">
@@ -109,8 +109,8 @@
           <% }) %>
         </select> 
        
-        <% if (validationErrors.roleId) { %>
-        <div class="error-message" id="roleIdError"><%= validationErrors?.roleId ?? '' %></div>
+        <% if (validationErrors.length) { %>
+        <div class="error-message" id="roleIdError"><%= validationErrors?.find((err) => err.path === 'roleId')?.msg ?? '' %></div>
          <% } %>
       </div>
 

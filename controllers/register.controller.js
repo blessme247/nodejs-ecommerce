@@ -3,28 +3,37 @@ import User from "../model/User.js";
 import Role from "../model/Role.js";
 import { handleError } from "../utils/handleError.js";
 import { handleSuccess } from "../utils/handleSuccess.js";
+import { validationResult } from "express-validator";
+import mongoose from "mongoose";
 
 const register = async (req, res) => {
   const roles = await Role.find(
     { name: { $not: { $regex: /^admin$/i } } },
     { name: 1, _id: 1 },
   ).exec();
-  try {
-    const { firstName, lastName, email, password, roleId } = req.body;
-    if (!firstName || !lastName || !email || !password)
-      return handleError(req, res, 400, {
-        message: "All fields are required",
+
+  const errors = validationResult(req)
+
+  if (!errors.isEmpty()) {
+    return handleError(req, res, 400, {
+       message: errors.array()[0].msg,
         page: "auth/signup",
         pageTitle: "Sign Up",
-        errors: {
-          firstName: !firstName ? "First name is required" : "",
-          lastName: !lastName ? "Last name is required" : "",
-          email: !email ? "Email is required" : "",
-          password: !password ? "Password is required" : "",
-        },
+        errors: errors.array(),
         data: roles,
         formValues: req.body,
-      });
+    })
+  }
+  try {
+    const { firstName, lastName, email, password, roleId } = req.body;
+    // if (!firstName || !lastName || !email || !password)
+    //   return handleError(req, res, 400, {
+    //     message: "All fields are required",
+    //     page: "auth/signup",
+    //     pageTitle: "Sign Up",
+    //     data: roles,
+    //     formValues: req.body,
+    //   });
 
     const duplicate = await User.findOne({ email }).exec();
     if (duplicate)
