@@ -6,12 +6,20 @@ import { handleSuccess } from "../utils/handleSuccess.js";
 
 const register = async (req, res) => {
   try {
-    const { firstName, lastName, email, pwd, roleId } = req.body;
-    if (!firstName || !lastName || !email || !pwd)
-      return handleError(req, res, 400, { message: "All fields are required" });
+     const roles = await Role.find(
+            { name: { $not: { $regex: /^admin$/i } } },
+            { name: 1, _id: 1 },
+          ).exec();
+
+    const { firstName, lastName, email, password, roleId } = req.body;
+    if (!firstName || !lastName || !email || !password)
+      return handleError(req, res, 400, { message: "All fields are required", page: "auth/signup", pageTitle: "Sign Up", 
+    errors: { firstName: !firstName ? "First name is required" : "", lastName: !lastName ? "Last name is required" : "", email: !email ? "Email is required" : "", password: !password ? "Password is required" : "" }, 
+    data: roles
+  });
 
     const duplicate = await User.findOne({ email }).exec();
-    if (duplicate) return handleError(req, res, 409, { message: "Email already exists" });
+    if (duplicate) return handleError(req, res, 409, { message: "Email already exists", page: "auth/signup", pageTitle: "Sign Up",  data: roles  });
 
     let role;
     if (!roleId) {
@@ -20,38 +28,38 @@ const register = async (req, res) => {
       role = await Role.findById(roleId).exec();
     }
     const username = email.split("@")[0];
-    const hashedPwd = await bcrypt.hash(pwd, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User({
       firstName: firstName,
       lastName: lastName,
       email: email,
-      password: hashedPwd,
+      password: hashedPassword,
       roleId: role._id,
-      username: username,
+      username: username
     });
 
     const result = await user.save();
     // console.log(result, 'result')
     const message = `New user ${result.username} created!`;
     return handleSuccess(req, res, 201, {
-      message,
+      // message,
       pageTitle: "Sign In",
-      path: "signin",
-    //   validationErrors: {},
-    //   errorMessage: ""
+      path: "auth/signin",
+      errors: {},
+      errorMessage: ""
     });
     // return res.status(201).json({ message: `New user ${result.username} created!` });
   } catch (error) {
     console.log(error, "error")
     if (error instanceof mongoose.Error) {
-      return handleError(req, res, 400, { errors: error.errors });
+      return handleError(req, res, 400, { errors: error.errors, page: "auth/signup", pageTitle: "Sign Up" });
     }
     return handleError(
       req,
       res,
       500,
-      { message: error?.message || "Internal server error" }
+      { message: error?.message || "Internal server error", page: "auth/signup", pageTitle: "Sign Up" }
     );
   }
 };

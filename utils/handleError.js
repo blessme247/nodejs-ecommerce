@@ -1,14 +1,19 @@
 export const handleError = (req, res, statusCode, options) => {
-    const { message, errors } = options;
-    if(req.accepts("json")){
-        return res.status(statusCode).json({message})
-    }
+    const { message, errors = {}, page, data, pageTitle } = options;
+    // if(req.accepts("json")){
+    //     console.log("fail here")
+    //     return res.status(statusCode).json({message})
+    // }
     const jsonResponse = {
         ...(message && { errorMessage: message }),
-        ...(errors && { validationErrors: errors })
+        // ...(Object.keys(errors).length > 0 && { validationErrors: errors }),
+        ...(data && { data }),
+        ...(pageTitle && { pageTitle }),
+        validationErrors: errors
     }
-    return res.render(req.path, {
+    // console.log(jsonResponse, 'jsonResponse in handleError') 
+    return res.render(page, {
         ...jsonResponse,
-        path: req.path
+        path: page,
     })
 }

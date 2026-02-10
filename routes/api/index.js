@@ -9,6 +9,7 @@ import productsRouter from "./products.js"
 import path from "path"
 import { fileURLToPath } from 'url';
 import { dirname as pathDirname } from 'path';
+import Role from "../../model/Role.js"
 
 
 const router = express.Router();
@@ -62,12 +63,18 @@ router.get(['/', '/index.html', '/index'], (req, res) => {
 });
 
 // render views 
-router.get("/signup", (req, res)=> {
+router.get("/signup", async (req, res)=> {
+  console.log(req.accepts(), 'accept heeaders')
+  const roles = await Role.find(
+        { name: { $not: { $regex: /^admin$/i } } },
+        { name: 1, _id: 1 },
+      ).exec();
   res.render('auth/signup', {
     pageTitle: "Sign Up",
-    path: "",
+    path: "auth/signup",
     validationErrors: {},
-    errorMessage: ""
+    errorMessage: "",
+    data: roles
   })
 })
 

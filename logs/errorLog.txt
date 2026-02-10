@@ -26,3 +26,101 @@
     9|     <link rel="stylesheet" href="/css/index.css">
 
 pageTitle is not defined
+20260209	21:55:28	204a917e-2a3e-4607-a70c-490498a8ddab	MongoServerSelectionError: F8720000:error:0A000438:SSL routines:ssl3_read_bytes:tlsv1 alert internal error:c:\ws\deps\openssl\openssl\ssl\record\rec_layer_s3.c:1605:SSL alert number 80
+
+20260209	21:58:32	496d87a4-8b4e-44d8-a5ac-13c71bba9184	MongoServerSelectionError: F8720000:error:0A000438:SSL routines:ssl3_read_bytes:tlsv1 alert internal error:c:\ws\deps\openssl\openssl\ssl\record\rec_layer_s3.c:1605:SSL alert number 80
+
+20260209	23:33:36	c04bf79b-b752-44f0-a4e7-47bcb97380ee	MongoServerSelectionError: F8720000:error:0A000438:SSL routines:ssl3_read_bytes:tlsv1 alert internal error:c:\ws\deps\openssl\openssl\ssl\record\rec_layer_s3.c:1605:SSL alert number 80
+
+20260210	00:27:12	a34e9aba-8c42-478d-9182-8679b6424040	Error: Failed to lookup view "signup" in views directory "C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views"
+20260210	00:32:45	4790ae82-741f-476d-90f5-32d686236281	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signup.ejs:34
+    32|           >
+    33|           <!-- <div class="error-message" id="firstNameError">First name is required</div> -->
+ >> 34|            <div class="error-message" id="emailError"><%= validationErrors.firstName ?? '' %></div>
+    35|         </div>
+    36| 
+    37|         <div class="form-group">
+
+validationErrors is not defined
+20260210	00:45:58	a5bc6d3c-1263-4a73-bece-22b87aee00cc	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signup.ejs:34
+    32|           >
+    33|           <!-- <div class="error-message" id="firstNameError">First name is required</div> -->
+ >> 34|            <div class="error-message" id="emailError"><%= validationErrors.firstName ?? '' %></div>
+    35|         </div>
+    36| 
+    37|         <div class="form-group">
+
+validationErrors is not defined
+20260210	07:37:05	077ece47-155a-4487-b301-56a4bdaaa87e	Error: Failed to lookup view "signin" in views directory "C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views"
+20260210	07:39:44	a1114ace-70e7-4b8e-9327-2f3603df7103	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signup.ejs:34
+    32|           >
+    33|           <!-- <div class="error-message" id="firstNameError">First name is required</div> -->
+ >> 34|            <div class="error-message" id="emailError"><%= validationErrors?.firstName ?? '' %></div>
+    35|         </div>
+    36| 
+    37|         <div class="form-group">
+
+validationErrors is not defined
+20260210	07:51:05	4164265e-6d98-4d91-abcd-02f8d8b01968	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signup.ejs:34
+    32|           >
+    33|           <!-- <div class="error-message" id="firstNameError">First name is required</div> -->
+ >> 34|             <% if (validationErrors.firstName) { %>
+    35|            <div class="error-message" id="firstNameError"><%= validationErrors.firstName %></div>
+    36|             <% } %>
+    37|         </div>
+
+validationErrors is not defined
+20260210	07:51:56	ecdb72ce-353c-411f-9257-959987216f03	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signup.ejs:34
+    32|           >
+    33|           <!-- <div class="error-message" id="firstNameError">First name is required</div> -->
+ >> 34|             <% if (validationErrors.firstName) { %>
+    35|            <div class="error-message" id="firstNameError"><%= validationErrors.firstName %></div>
+    36|             <% } %>
+    37|         </div>
+
+validationErrors is not defined
+20260210	07:53:31	4e51470e-b434-42b7-a4bc-c0f84eda2054	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signup.ejs:34
+    32|           >
+    33|           <!-- <div class="error-message" id="firstNameError">First name is required</div> -->
+ >> 34|             <% if (validationErrors.firstName) { %>
+    35|            <div class="error-message" id="firstNameError"><%= validationErrors.firstName %></div>
+    36|             <% } %>
+    37|         </div>
+
+validationErrors is not defined
+20260210	07:54:02	890d0c1b-847f-49ee-b961-37ad1b3bfa44	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signup.ejs:34
+    32|           >
+    33|           <!-- <div class="error-message" id="firstNameError">First name is required</div> -->
+ >> 34|             <% if (validationErrors.firstName) { %>
+    35|            <div class="error-message" id="firstNameError"><%= validationErrors.firstName %></div>
+    36|             <% } %>
+    37|         </div>
+
+validationErrors is not defined
+20260210	08:17:37	adcfe06b-2b77-48eb-a1cc-ef97f2d6ade1	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signup.ejs:34
+    32|           >
+    33|           <!-- <div class="error-message" id="firstNameError">First name is required</div> -->
+ >> 34|             <% if (validationErrors.firstName) { %>
+    35|            <div class="error-message" id="firstNameError"><%= validationErrors.firstName %></div>
+    36|             <% } %>
+    37|         </div>
+
+validationErrors is not defined
+20260210	09:21:20	7135b9aa-a30c-4b0c-a0ff-1429eadbd8e2	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signup.ejs:34
+    32|           >
+    33|           <!-- <div class="error-message" id="firstNameError">First name is required</div> -->
+ >> 34|             <% if (validationErrors.firstName) { %>
+    35|            <div class="error-message" id="firstNameError"><%= validationErrors.firstName %></div>
+    36|             <% } %>
+    37|         </div>
+
+validationErrors is not defined
+20260210	09:30:01	f7e2a21c-b1a9-4556-89ec-b8910d8d1741	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signup.ejs:34
+    32|           >
+    33|           <!-- <div class="error-message" id="firstNameError">First name is required</div> -->
+ >> 34|             <% if (validationErrors.firstName) { %>
+    35|            <div class="error-message" id="firstNameError"><%= validationErrors.firstName %></div>
+    36|             <% } %>
+    37|         </div>
+
+validationErrors is not defined

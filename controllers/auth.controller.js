@@ -7,14 +7,14 @@ import { handleError } from "../utils/handleError.js";
 const handleLogin = async (req, res) => {
   try {
     const { user, pwd } = req.body;
-    if (!user || !pwd) return handleError(req, res, 400, "Username and password are required");
+    if (!user || !pwd) return handleError(req, res, 400, {message: "Username and password are required", page: "signin" });
 
     const foundUser = await User.findOne({ username: user }).exec();
-    if (!foundUser) return handleError(req, res, 401, { message: "Unauthorized" }); //Unauthorized
+    if (!foundUser) return handleError(req, res, 401, { message: "Unauthorized", page: "signin" }); //Unauthorized
     const userRole = await Role.findById(foundUser.roleId).exec();
 
     const match = await bcrypt.compare(pwd, foundUser.password);
-    if (!match) return handleError(req, res, 401, { message: "Unauthorized" });
+    if (!match) return handleError(req, res, 401, { message: "Unauthorized", page: "signin" });
 
     const role = userRole.code;
 
@@ -56,7 +56,7 @@ const handleLogin = async (req, res) => {
       req,
       res,
       500,
-      { message: error?.message || "Internal server error" },
+      { message: error?.message || "Internal server error", page: "signin" },
     );
   }
 };

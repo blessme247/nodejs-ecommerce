@@ -14,10 +14,10 @@ export const getAllSellerOrders = async (req, res) => {
     const { id } = req.params;
 
     if (!id) {
-      return handleError(req, res, 400, "id parameter is required")
+      return handleError(req, res, 400, { message: "id parameter is required"  })
     }
     const seller = await Seller.findOne({userId: id}).exec();
-    if (!seller) return handleError(req, res, 404, "seller not found")
+    if (!seller) return handleError(req, res, 404, { message: "seller not found" } )
 
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -64,10 +64,10 @@ export const getAllBuyerOrders = async (req, res) => {
     const { id } = req.params;
 
     if (!id) {
-      return handleError(req, res, 400, "id parameter is required")
+      return handleError(req, res, 400, { message: "id parameter is required" } )
     }
     const buyer = await Buyer.findOne({userId: id}).exec();
-    if (!buyer) return handleError(req, res, 404, "buyer not found")
+    if (!buyer) return handleError(req, res, 404, { message: "buyer not found" })
 
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;

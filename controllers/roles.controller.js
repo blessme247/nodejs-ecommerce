@@ -2,7 +2,7 @@ import Role from "../model/Role.js";
 
 export const getRoles = async (req, res) => {
   try {
-    const roles = Role.find(
+    const roles = await Role.find(
       { name: { $not: { $regex: /^admin$/i } } },
       { name: 1, _id: 1 },
     ).exec();
