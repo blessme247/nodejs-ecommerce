@@ -72,19 +72,20 @@ router.get("/signup", async (req, res)=> {
   res.render('auth/signup', {
     pageTitle: "Sign Up",
     path: "auth/signup",
-    validationErrors: {},
+    validationErrors: [],
     errorMessage: "",
     data: roles,
     formValues: {}
   })
 })
 
-router.get("/signin", (req, res)=> {
+router.get("/login", (req, res)=> {
   res.render('auth/signin', {
-    pageTitle: "Sign In",
-    path: "",
-    validationErrors: {},
+    pageTitle: "Log In",
+    path: "auth/signin",
+    validationErrors: [],
     errorMessage: "",
+    formValues: {}
   })
 })
 

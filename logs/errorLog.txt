@@ -152,3 +152,30 @@ errorMessage is not defined
 
 errorMessage is not defined
 20260211	00:42:59	a9800f34-2471-41b5-b8b1-4b7610408ac5	ReferenceError: mongoose is not defined
+20260211	01:10:08	bd24802b-730e-4b1d-9694-9efe06227c31	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signin.ejs:27
+    25|           placeholder="you@example.com"
+    26|           required
+ >> 27|           value="<%= formValues?.email ?? '' %>"
+    28|         >
+    29|          <% if (validationErrors.length) { %>
+    30|            <div class="error-message" id="emailError"><%= validationErrors?.find((err) => err.path === 'email')?.msg ?? '' %></div>
+
+formValues is not defined
+20260211	01:10:15	a8362838-33c2-4337-aeea-1edf4a6ab298	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signin.ejs:27
+    25|           placeholder="you@example.com"
+    26|           required
+ >> 27|           value="<%= formValues?.email ?? '' %>"
+    28|         >
+    29|          <% if (validationErrors.length) { %>
+    30|            <div class="error-message" id="emailError"><%= validationErrors?.find((err) => err.path === 'email')?.msg ?? '' %></div>
+
+formValues is not defined
+20260211	01:10:17	3d20fb91-76b5-4f24-bc54-bf6b6af19db9	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signin.ejs:27
+    25|           placeholder="you@example.com"
+    26|           required
+ >> 27|           value="<%= formValues?.email ?? '' %>"
+    28|         >
+    29|          <% if (validationErrors.length) { %>
+    30|            <div class="error-message" id="emailError"><%= validationErrors?.find((err) => err.path === 'email')?.msg ?? '' %></div>
+
+formValues is not defined

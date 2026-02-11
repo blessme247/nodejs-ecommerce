@@ -3,18 +3,30 @@ import jwt from "jsonwebtoken";
 import User from "../model/User.js";
 import Role from "../model/Role.js";
 import { handleError } from "../utils/handleError.js";
+import { validationResult } from "express-validator";
+import mongoose from "mongoose";
 
 const handleLogin = async (req, res) => {
+    const errors = validationResult(req)
+  
+    if (!errors.isEmpty()) {
+      return handleError(req, res, 400, {
+         message: errors.array()[0].msg,
+          page: "auth/signin",
+          pageTitle: "Log In",
+          errors: errors.array(),
+          formValues: req.body,
+      })
+    }
   try {
-    const { user, pwd } = req.body;
-    if (!user || !pwd) return handleError(req, res, 400, {message: "Username and password are required", page: "signin" });
+    const { user, password } = req.body;
 
     const foundUser = await User.findOne({ username: user }).exec();
-    if (!foundUser) return handleError(req, res, 401, { message: "Unauthorized", page: "signin" }); //Unauthorized
+    if (!foundUser) return handleError(req, res, 401, { message: "Unauthorized", page: "signin", formValues: req.body }); //Unauthorized
     const userRole = await Role.findById(foundUser.roleId).exec();
 
-    const match = await bcrypt.compare(pwd, foundUser.password);
-    if (!match) return handleError(req, res, 401, { message: "Unauthorized", page: "signin" });
+    const match = await bcrypt.compare(password, foundUser.password);
+    if (!match) return handleError(req, res, 401, { message: "Unauthorized", page: "signin", formValues: req.body });
 
     const role = userRole.code;
 

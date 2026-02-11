@@ -555,3 +555,11 @@
 20260211	00:47:47	7487cbb7-e409-4309-b3ba-15d228c73d83	GET	/css/index.css	undefined
 20260211	00:47:47	d2278fe7-8388-4542-9320-74e80b3a581f	GET	/css/auth.css	undefined
 20260211	00:47:47	888dbb1a-6156-477d-aef2-ce54cd2c2ca3	GET	/js/main.js	undefined
+20260211	00:57:45	20733133-6b75-4c72-983e-1af6ec0565e2	POST	/auth/signup	http://localhost:3500
+20260211	00:57:46	4dea595c-2129-4b21-b52e-9a8a21e6f398	GET	/login	undefined
+20260211	00:57:47	c4a643b7-4ade-40ff-9e97-d0d10b5b6976	GET	/css/index.css	undefined
+20260211	00:57:47	51991732-359b-4629-a2f0-8e3d878a20a3	GET	/css/auth.css	undefined
+20260211	00:57:47	23287def-c455-4021-a865-42404d76eb99	GET	/js/main.js	undefined
+20260211	01:10:08	1806494b-f451-4a30-918d-5294abc897bb	GET	/login	undefined
+20260211	01:10:15	175e7740-1909-4c71-bdf5-70f5cdf8dc7f	GET	/login	undefined
+20260211	01:10:17	259c1965-fe85-4a42-8f1c-919ba258d465	GET	/login	undefined

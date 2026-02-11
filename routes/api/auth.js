@@ -8,9 +8,12 @@ import { authRateLimiter } from "../../middleware/rateLimiter.js";
 import { body } from "express-validator";
 
 router.use(authRateLimiter)
-// router.post('/', handleLogin);
-router.route("/login").post(handleLogin);
-// router.route("/signup").post(register)
+
+router.post("/login",[
+    body("email").trim().isEmail().withMessage("Please enter a valid email address"),
+    body("password").trim().notEmpty().withMessage("Password is required")
+], handleLogin);
+
 router.post("/signup", [
     body("email").trim().isEmail().withMessage("Please enter a valid email address"),
     body("password").trim().isLength({ min: 6 }).withMessage("Password must be at least 6 characters long")
@@ -20,7 +23,10 @@ router.post("/signup", [
     body("roleId").trim().notEmpty().withMessage("Role is required")
 ], register
 )
+
+
 router.route("/refresh").post(refreshToken)
+
 router.route("/logout").post(logout)
 
 export default router;

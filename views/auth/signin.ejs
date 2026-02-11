@@ -10,11 +10,11 @@
       <p class="auth-subtitle">Sign in to continue your shopping journey</p>
     </div>
 
-    <div class="success-message" id="successMessage">
-      Successfully signed in! Redirecting...
-    </div>
+    <% if (errorMessage) { %>
+            <div class="errorTop-message"><%= errorMessage %></div>
+            <% } %>
 
-    <form id="signinForm" novalidate>
+    <form id="signinForm" novalidate action="/auth/login" method="POST">
       <div class="form-group">
         <label for="email" class="form-label">Email Address</label>
         <input 
@@ -24,8 +24,11 @@
           class="form-input" 
           placeholder="you@example.com"
           required
+          value="<%= formValues?.email ?? '' %>"
         >
-        <div class="error-message" id="emailError">Please enter a valid email address</div>
+         <% if (validationErrors.length) { %>
+           <div class="error-message" id="emailError"><%= validationErrors?.find((err) => err.path === 'email')?.msg ?? '' %></div>
+            <% } %>
       </div>
 
       <div class="form-group">
@@ -37,8 +40,11 @@
           class="form-input" 
           placeholder="Enter your password"
           required
+          value="<%= formValues?.password ?? '' %>"
         >
-        <div class="error-message" id="passwordError">Password is required</div>
+        <% if (validationErrors.length) { %>
+           <div class="error-message" id="passwordError"><%= validationErrors?.find((err) => err.path === 'password')?.msg ?? '' %></div>
+            <% } %>
       </div>
 
       <div class="form-options">

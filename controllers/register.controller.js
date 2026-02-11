@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import User from "../model/User.js";
 import Role from "../model/Role.js";
 import { handleError } from "../utils/handleError.js";
-import { handleSuccess } from "../utils/handleSuccess.js";
+// import { handleSuccess } from "../utils/handleSuccess.js";
 import { validationResult } from "express-validator";
 import mongoose from "mongoose";
 
@@ -26,14 +26,6 @@ const register = async (req, res) => {
   }
   try {
     const { firstName, lastName, email, password, roleId } = req.body;
-    // if (!firstName || !lastName || !email || !password)
-    //   return handleError(req, res, 400, {
-    //     message: "All fields are required",
-    //     page: "auth/signup",
-    //     pageTitle: "Sign Up",
-    //     data: roles,
-    //     formValues: req.body,
-    //   });
 
     const duplicate = await User.findOne({ email }).exec();
     if (duplicate)
@@ -63,17 +55,17 @@ const register = async (req, res) => {
       username: username,
     });
 
-    const result = await user.save();
+     await user.save();
     // console.log(result, 'result')
-    const message = `New user ${result.username} created!`;
-    return handleSuccess(req, res, 201, {
-      // message,
-      pageTitle: "Sign In",
-      path: "auth/signin",
-      errors: {},
-      errorMessage: "",
-    });
-    // return res.status(201).json({ message: `New user ${result.username} created!` });
+    // const message = `New user ${result.username} created!`;
+    // return handleSuccess(req, res, 201, {
+    //   // message,
+    //   pageTitle: "Sign In",
+    //   path: "auth/signin",
+    //   errors: {},
+    //   errorMessage: "",
+    // });
+    res.redirect("/login")
   } catch (error) {
     console.log(error, "error");
     if (error instanceof mongoose.Error) {
