@@ -1,23 +1,100 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'E-Commerce' %></title>
+  <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet"> -->
+</head>
+<body>
   <header class="header">
     <div class="header-container">
-      <a href="/products" class="logo">
+      <a href="/" class="logo">
         <div class="logo-icon">E</div>
         <span>EvoMart</span>
       </a>
 
+      <!-- Search Bar (Desktop) -->
+      <div class="search-container">
+        <form class="search-form" action="/search" method="GET">
+          <input 
+            type="text" 
+            name="q" 
+            class="search-input" 
+            placeholder="Search for products..." 
+            value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+          >
+          <button type="submit" class="search-button">🔍</button>
+        </form>
+      </div>
+
+      <% 
+        // Determine user role and authentication status
+        const isLoggedIn = typeof user !== 'undefined' && user !== null;
+        const isBuyer = isLoggedIn && user.role === 'Buyer';
+        const isSeller = isLoggedIn && user.role === 'Seller';
+        const cartCount = typeof cart !== 'undefined' ? cart.cartItems.length : 0;
+      %>
+
       <!-- Desktop Navigation -->
       <nav class="nav-desktop">
-        <a href="/products" class="nav-link <%= typeof path !== 'undefined' && path === 'products' ? 'active' : '' %>">Products</a>
-        <a href="/orders" class="nav-link <%= typeof path !== 'undefined' && path === 'orders' ? 'active' : '' %>">Orders</a>
-        <a href="#" class="nav-link">Categories</a>
-        <a href="#" class="nav-link">About</a>
+        <% if (isSeller) { %>
+          <a href="/seller/dashboard" class="nav-link <%= typeof page !== 'undefined' && page === 'seller-dashboard' ? 'active' : '' %>">Dashboard</a>
+          <a href="/seller/products" class="nav-link <%= typeof page !== 'undefined' && page === 'seller-products' ? 'active' : '' %>">My Products</a>
+          <a href="/seller/orders" class="nav-link <%= typeof page !== 'undefined' && page === 'seller-orders' ? 'active' : '' %>">Orders</a>
+        <% } else { %>
+          <a href="/" class="nav-link <%= typeof page !== 'undefined' && page === 'home' ? 'active' : '' %>">Home</a>
+          <a href="/products" class="nav-link <%= typeof page !== 'undefined' && page === 'products' ? 'active' : '' %>">Products</a>
+          <% if (isBuyer) { %>
+            <a href="/orders" class="nav-link <%= typeof page !== 'undefined' && page === 'orders' ? 'active' : '' %>">My Orders</a>
+          <% } %>
+        <% } %>
       </nav>
 
-      <!-- Desktop Auth Buttons -->
-      <div class="auth-buttons">
-        <a href="/signin" class="btn-outline">Sign In</a>
-        <a href="/signup" class="btn-primary">Sign Up</a>
+      <!-- User Actions -->
+      <div class="user-actions">
+        <% if (isLoggedIn) { %>
+          <!-- Cart (Buyer Only) -->
+          <% if (isBuyer) { %>
+            <a href="/cart" class="cart-button">
+              <span class="cart-icon">🛒</span>
+              <span>Cart</span>
+              <% if (cartCount > 0) { %>
+                <span class="cart-badge"><%= cartCount %></span>
+              <% } %>
+            </a>
+          <% } %>
+
+          <!-- Profile Dropdown -->
+          <div class="profile-dropdown" id="profileDropdown">
+            <button class="profile-button" id="profileButton">
+              <div class="profile-avatar"><%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %></div>
+              <span><%= user.name || 'User' %></span>
+              <span>▾</span>
+            </button>
+            <div class="dropdown-menu">
+              <% if (isBuyer) { %>
+                <a href="/profile" class="dropdown-item">👤 My Profile</a>
+                <a href="/orders" class="dropdown-item">📦 My Orders</a>
+                <a href="/settings" class="dropdown-item">⚙️ Settings</a>
+              <% } else if (isSeller) { %>
+                <a href="/seller/profile" class="dropdown-item">👤 My Profile</a>
+                <a href="/seller/dashboard" class="dropdown-item">📊 Dashboard</a>
+                <a href="/seller/settings" class="dropdown-item">⚙️ Settings</a>
+              <% } %>
+              <a href="/logout" class="dropdown-item logout">🚪 Logout</a>
+            </div>
+          </div>
+        <% } else { %>
+          <!-- Auth Buttons (Not Logged In) -->
+          <div class="auth-buttons">
+            <a href="/login" class="btn-outline">Sign In</a>
+            <a href="/signup" class="btn-primary">Sign Up</a>
+          </div>
+        <% } %>
       </div>
 
       <!-- Mobile Menu Toggle -->
@@ -28,15 +105,104 @@
 
     <!-- Mobile Navigation -->
     <nav class="nav-mobile" id="mobileMenu">
-      <div class="nav-mobile-links">
-        <a href="/products" class="nav-mobile-link <%= typeof path !== 'undefined' && path === 'products' ? 'active' : '' %>">Products</a>
-        <a href="/orders" class="nav-mobile-link <%= typeof path !== 'undefined' && path === 'orders' ? 'active' : '' %>">Orders</a>
-        <a href="#" class="nav-mobile-link">Categories</a>
-        <a href="#" class="nav-mobile-link">About</a>
+      <!-- Mobile Search -->
+      <div class="mobile-search">
+        <form class="search-form" action="/search" method="GET">
+          <input 
+            type="text" 
+            name="q" 
+            class="search-input" 
+            placeholder="Search products..." 
+            value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+          >
+          <button type="submit" class="search-button">🔍</button>
+        </form>
       </div>
-      <div class="mobile-auth-buttons">
-        <a href="/signin" class="btn-outline">Sign In</a>
-        <a href="/signup" class="btn-primary">Sign Up</a>
+
+      <!-- Mobile Links -->
+      <div class="nav-mobile-links">
+        <% if (isSeller) { %>
+          <a href="/seller/dashboard" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'seller-dashboard' ? 'active' : '' %>">📊 Dashboard</a>
+          <a href="/seller/products" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'seller-products' ? 'active' : '' %>">📦 My Products</a>
+          <a href="/seller/orders" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'seller-orders' ? 'active' : '' %>">📋 Orders</a>
+        <% } else { %>
+          <a href="/" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'home' ? 'active' : '' %>">🏠 Home</a>
+          <a href="/products" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'products' ? 'active' : '' %>">🛍️ Products</a>
+          <% if (isBuyer) { %>
+            <a href="/cart" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'cart' ? 'active' : '' %>">
+              🛒 Cart
+              <% if (cartCount > 0) { %>
+                <span class="cart-badge"><%= cartCount %></span>
+              <% } %>
+            </a>
+            <a href="/orders" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'orders' ? 'active' : '' %>">📦 My Orders</a>
+          <% } %>
+        <% } %>
+      </div>
+
+      <!-- Mobile User Section -->
+      <div class="mobile-user-section">
+        <% if (isLoggedIn) { %>
+          <div class="nav-mobile-links">
+            <a href="<%= isSeller ? '/seller/profile' : '/profile' %>" class="nav-mobile-link">👤 Profile</a>
+            <a href="<%= isSeller ? '/seller/settings' : '/settings' %>" class="nav-mobile-link">⚙️ Settings</a>
+            <a href="/logout" class="nav-mobile-link" style="color: var(--error);">🚪 Logout</a>
+          </div>
+        <% } else { %>
+          <div class="mobile-auth-buttons">
+            <a href="/login" class="btn-outline">Sign In</a>
+            <a href="/signup" class="btn-primary">Sign Up</a>
+          </div>
+        <% } %>
       </div>
     </nav>
   </header>
+
+  <script>
+    // Mobile Menu Toggle
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    mobileMenuToggle.addEventListener('click', () => {
+      mobileMenuToggle.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+    });
+
+    // Close mobile menu when clicking a link
+    const mobileLinks = document.querySelectorAll('.nav-mobile-link, .mobile-auth-buttons a');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenuToggle.classList.remove('active');
+        mobileMenu.classList.remove('active');
+      });
+    });
+
+    // Close mobile menu on window resize to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) {
+        mobileMenuToggle.classList.remove('active');
+        mobileMenu.classList.remove('active');
+      }
+    });
+
+    // Profile Dropdown Toggle
+    const profileDropdown = document.getElementById('profileDropdown');
+    const profileButton = document.getElementById('profileButton');
+
+    if (profileButton) {
+      profileButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('active');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!profileDropdown.contains(e.target)) {
+          profileDropdown.classList.remove('active');
+        }
+      });
+    }
+  </script>
+
+  <main>
+

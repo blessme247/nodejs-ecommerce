@@ -17,9 +17,9 @@ const verifyJwt = (req, res, next) => {
 
   const token = req.cookies?.accessToken;
   if (!token) {
-    if (req.accepts("json")) {
-      return handleError(req, res, 401,  { message: "Unauthorized" });
-    }
+    // if (req.accepts("json")) {
+    //   return handleError(req, res, 401,  { message: "Unauthorized" });
+    // }
     res.redirect("/login");
   }
 

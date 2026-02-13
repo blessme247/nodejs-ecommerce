@@ -1,8 +1,14 @@
-const userRoles = {
-    "User": 2005,
-    "Admin": 2001,
-    "Seller": 2000,
-    "Buyer": 2009,
+export const ROLES = {
+     141920 : "Admin",
+     251159 : "Seller",
+     222519 : "Buyer"
 }
 
-export default userRoles
+export const ROLE_CODES = {
+    "Admin": 141920,
+    "Seller": 251159,
+    "Buyer": 222519
+}
+
+
+export const getRoleName = (role) => ROLES[role] || null
