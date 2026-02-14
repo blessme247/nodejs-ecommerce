@@ -26,7 +26,7 @@
       <h2 class="section-title">Featured Products</h2>
       <% if (paginator) { %>
         <p class="products-count">
-          Showing <%= ((paginator.currentPage - 1) * paginator.perPage) + 1 %>-<%= Math.min(paginator.currentPage * paginator.perPage, paginator.totalItems) %> 
+          Showing <%= (paginator.from )  %>-<%= (paginator.to) %> 
           of <%= paginator.totalItems %> products
         </p>
       <% } %>

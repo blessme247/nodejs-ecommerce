@@ -33,14 +33,14 @@
       <!-- Desktop Navigation -->
       <nav class="nav-desktop">
         <% if (isSeller) { %>
-          <a href="/seller/dashboard" class="nav-link <%= typeof page !== 'undefined' && page === 'seller-dashboard' ? 'active' : '' %>">Dashboard</a>
-          <a href="/seller/products" class="nav-link <%= typeof page !== 'undefined' && page === 'seller-products' ? 'active' : '' %>">My Products</a>
-          <a href="/seller/orders" class="nav-link <%= typeof page !== 'undefined' && page === 'seller-orders' ? 'active' : '' %>">Orders</a>
+          <a href="/seller/dashboard" class="nav-link <%= typeof pathName !== 'undefined' && pathName === 'seller-dashboard' ? 'active' : '' %>">Dashboard</a>
+          <a href="/seller/products" class="nav-link <%= typeof pathName !== 'undefined' && pathName === 'seller-products' ? 'active' : '' %>">My Products</a>
+          <a href="/seller/orders" class="nav-link <%= typeof pathName !== 'undefined' && pathName === 'seller-orders' ? 'active' : '' %>">Orders</a>
         <% } else { %>
-          <a href="/" class="nav-link <%= typeof page !== 'undefined' && page === 'home' ? 'active' : '' %>">Home</a>
-          <a href="/products" class="nav-link <%= typeof page !== 'undefined' && page === 'products' ? 'active' : '' %>">Products</a>
+          <a href="/" class="nav-link <%= typeof pathName !== 'undefined' && pathName === 'home' ? 'active' : '' %>">Home</a>
+          <a href="/products" class="nav-link <%= typeof pathName !== 'undefined' && pathName === 'products' ? 'active' : '' %>">Products</a>
           <% if (isBuyer) { %>
-            <a href="/orders" class="nav-link <%= typeof page !== 'undefined' && page === 'orders' ? 'active' : '' %>">My Orders</a>
+            <a href="/orders" class="nav-link <%= typeof pathName !== 'undefined' && pathName === 'orders' ? 'active' : '' %>">My Orders</a>
           <% } %>
         <% } %>
       </nav>
@@ -113,20 +113,20 @@
       <!-- Mobile Links -->
       <div class="nav-mobile-links">
         <% if (isSeller) { %>
-          <a href="/seller/dashboard" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'seller-dashboard' ? 'active' : '' %>">📊 Dashboard</a>
-          <a href="/seller/products" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'seller-products' ? 'active' : '' %>">📦 My Products</a>
-          <a href="/seller/orders" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'seller-orders' ? 'active' : '' %>">📋 Orders</a>
+          <a href="/seller/dashboard" class="nav-mobile-link <%= typeof pathName !== 'undefined' && pathName === 'seller-dashboard' ? 'active' : '' %>">📊 Dashboard</a>
+          <a href="/seller/products" class="nav-mobile-link <%= typeof pathName !== 'undefined' && pathName === 'seller-products' ? 'active' : '' %>">📦 My Products</a>
+          <a href="/seller/orders" class="nav-mobile-link <%= typeof pathName !== 'undefined' && pathName === 'seller-orders' ? 'active' : '' %>">📋 Orders</a>
         <% } else { %>
-          <a href="/" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'home' ? 'active' : '' %>">🏠 Home</a>
-          <a href="/products" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'products' ? 'active' : '' %>">🛍️ Products</a>
+          <a href="/" class="nav-mobile-link <%= typeof pathName !== 'undefined' && pathName === 'home' ? 'active' : '' %>">🏠 Home</a>
+          <a href="/products" class="nav-mobile-link <%= typeof pathName !== 'undefined' && pathName === 'products' ? 'active' : '' %>">🛍️ Products</a>
           <% if (isBuyer) { %>
-            <a href="/cart" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'cart' ? 'active' : '' %>">
+            <a href="/cart" class="nav-mobile-link <%= typeof pathName !== 'undefined' && pathName === 'cart' ? 'active' : '' %>">
               🛒 Cart
               <% if (cartCount > 0) { %>
                 <span class="cart-badge"><%= cartCount %></span>
               <% } %>
             </a>
-            <a href="/orders" class="nav-mobile-link <%= typeof page !== 'undefined' && page === 'orders' ? 'active' : '' %>">📦 My Orders</a>
+            <a href="/orders" class="nav-mobile-link <%= typeof pathName !== 'undefined' && pathName === 'orders' ? 'active' : '' %>">📦 My Orders</a>
           <% } %>
         <% } %>
       </div>

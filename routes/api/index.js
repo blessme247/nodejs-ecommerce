@@ -10,6 +10,7 @@ import path from "path"
 import { fileURLToPath } from 'url';
 import { dirname as pathDirname } from 'path';
 import { getLoginPage, getSignupPage } from "../../controllers/auth.controller.js"
+import { getHomepage } from "../../controllers/views.controller.js"
 
 
 const router = express.Router();
@@ -62,9 +63,7 @@ defaultRoutes.forEach((route) => {
 //     res.sendFile(path.join(__dirname, '..', '..', 'views', 'index.html'));
 // });
 
-router.get(['/', '/index.html', '/index'], async (req, res) => {
-  res.render('index.ejs', { pageTitle: "EvoMart - Shop the Best Products", paginator: undefined, data: [], path: "/"})
-})
+router.get(['/', '/index.html', '/index'], getHomepage)
 
 // render views 
 router.get("/signup", getSignupPage)

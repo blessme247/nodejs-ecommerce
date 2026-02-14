@@ -3,7 +3,7 @@ import { handleError } from "../utils/handleError.js";
 
  const verifyRoles = (...allowedRoles) => {
     return (req, res, next) => {
-        if (!req?.role) return handleError(req, res, 401, { message: "Unauthorized", page: "auth/signin", pageTitle: "Sign In" });
+        if (!req?.role) return handleError(req, res, 401, { message: "Unauthorized in verifyRoles middleware", page: "auth/signin", pageTitle: "Sign In" });
 
          const roleName = getRoleName(req.role);
     

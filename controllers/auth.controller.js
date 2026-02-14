@@ -5,6 +5,7 @@ import Role from "../model/Role.js";
 import { handleError } from "../utils/handleError.js";
 import { validationResult } from "express-validator";
 import mongoose from "mongoose";
+// import { handleSuccess } from "../utils/handleSuccess.js";
 
 const handleRegister = async (req, res) => {
   const roles = await Role.find(
@@ -17,7 +18,7 @@ const handleRegister = async (req, res) => {
   if (!errors.isEmpty()) {
     return handleError(req, res, 400, {
        message: errors.array()[0].msg,
-        page: "auth/signup",
+        filePath: "auth/signup",
         pageTitle: "Sign Up",
         errors: errors.array(),
         data: roles,
@@ -26,12 +27,13 @@ const handleRegister = async (req, res) => {
   }
   try {
     const { firstName, lastName, email, password, roleId } = req.body;
+    console.log(req.body, 'register details')
 
     const duplicate = await User.findOne({ email }).exec();
     if (duplicate)
       return handleError(req, res, 409, {
         message: "Email already exists",
-        page: "auth/signup",
+        filePath: "auth/signup",
         pageTitle: "Sign Up",
         data: roles,
         formValues: req.body,
@@ -44,34 +46,26 @@ const handleRegister = async (req, res) => {
       role = await Role.findById(roleId).exec();
     }
     const username = email.split("@")[0];
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password.trim(), 10);
 
     const user = new User({
       firstName: firstName,
       lastName: lastName,
-      email: email,
+      email: email.trim(),
       password: hashedPassword,
       roleId: role._id,
       username: username,
     });
 
      await user.save();
-    // console.log(result, 'result')
-    // const message = `New user ${result.username} created!`;
-    // return handleSuccess(req, res, 201, {
-    //   // message,
-    //   pageTitle: "Sign In",
-    //   path: "auth/signin",
-    //   errors: {},
-    //   errorMessage: "",
-    // });
+    
     res.redirect("/login")
   } catch (error) {
     console.log(error, "error");
     if (error instanceof mongoose.Error) {
       return handleError(req, res, 400, {
         errors: error.errors,
-        page: "auth/signup",
+        filePath: "auth/signup",
         pageTitle: "Sign Up",
         data: roles,
         formValues: req.body,
@@ -79,7 +73,7 @@ const handleRegister = async (req, res) => {
     }
     return handleError(req, res, 500, {
       message: error?.message || "Internal server error",
-      page: "auth/signup",
+      filePath: "auth/signup",
       pageTitle: "Sign Up",
       data: roles,
       formValues: req.body,
@@ -93,7 +87,7 @@ const handleLogin = async (req, res) => {
     if (!errors.isEmpty()) {
       return handleError(req, res, 400, {
          message: errors.array()[0].msg,
-          page: "auth/signin",
+          filePath: "auth/signin",
           pageTitle: "Log In",
           errors: errors.array(),
           formValues: req.body,
@@ -101,21 +95,22 @@ const handleLogin = async (req, res) => {
     }
   try {
     const { email, password } = req.body;
+    // console.log(email, password, 'login details')
 
-    const foundUser = await User.findOne({ email }).exec();
-    if (!foundUser) return handleError(req, res, 401, { message: "Unauthorized", page: "auth/signin", formValues: req.body }); //Unauthorized
+    const foundUser = await User.findOne({ email: email.trim() }).exec();
+    if (!foundUser) return handleError(req, res, 401, { message: "Unauthorized login", filePath: "auth/signin", formValues: req.body }); //Unauthorized
     const userRole = await Role.findById(foundUser.roleId).exec();
 
-    const match = await bcrypt.compare(password, foundUser.password);
-    if (!match) return handleError(req, res, 401, { message: "Unauthorized", page: "auth/signin", formValues: req.body });
-
-    const role = userRole.code;
+    // console.log(foundUser, 'found user')
+    const match = await bcrypt.compare(password.trim(), foundUser.password);
+    // console.log(match, 'password match')
+    if (!match) return handleError(req, res, 401, { message: "Invalid credentials", filePath: "auth/signin", formValues: req.body });
 
     const accessToken = jwt.sign(
       {
         UserInfo: {
           username: foundUser.username,
-          role: role,
+          role: userRole.code
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
@@ -128,11 +123,8 @@ const handleLogin = async (req, res) => {
     );
 
     // await User.findOneAndUpdate({ email: foundUser.email }, { refreshToken }).exec();
-    const user = new User({
-      ...foundUser.toObject(),
-      refreshToken
-    })
-    await user.save();
+    foundUser.refreshToken = refreshToken
+    await foundUser.save();
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
       secure: true,
@@ -141,20 +133,23 @@ const handleLogin = async (req, res) => {
     });
 
     if(!req.accepts("json")){
-        res.cookie("accessToken", refreshToken, {
+        res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: true,
       sameSite: "None",
       maxAge:  30 * 60 * 1000,
     });
     }
-    return res.status(200).json({ accessToken });
+    // return res.status(200).json({ accessToken })
+
+    // return handleSuccess(req, res, 200, {data: [], pageTitle: "EvoMart - Your Online Store", path: "index"});
+    res.redirect("/")
   } catch (error) {
     return handleError(
       req,
       res,
       500,
-      { message: error?.message || "Internal server error", page: "auth/signin" },
+      { message: error?.message || "Internal server error", filePath: "auth/signin" },
     );
   }
 };

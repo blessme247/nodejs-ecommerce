@@ -202,3 +202,160 @@ Could not find the include file "../components/head.ejs"
 
 Could not find the include file "partials/footer"
 20260214	18:48:15	b0473250-0abc-48e9-a460-5d9d124989e3	Error: Failed to lookup view "signin" in views directory "C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views"
+20260214	19:10:22	0ca244b5-cd5f-4bb3-95eb-33ca7c1b3c8e	Error: Failed to lookup view "signin" in views directory "C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views"
+20260214	19:11:09	728c2647-f991-43eb-998b-c787572b365a	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signin.ejs:1
+ >> 1| <%- include('../components/head.ejs') %>
+    2|     <link rel="stylesheet" href="/css/auth.css">
+    3|     </head>
+    4| <body>
+
+C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\components\head.ejs:8
+    6|     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    7|     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ >> 8|     <title><%= pageTitle %></title>
+    9|     <link rel="stylesheet" href="/css/index.css">
+
+pageTitle is not defined
+20260214	19:13:24	4b0ab315-2bff-4145-abcf-69b66b0abca2	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signin.ejs:1
+ >> 1| <%- include('../components/head.ejs') %>
+    2|     <link rel="stylesheet" href="/css/auth.css">
+    3|     </head>
+    4| <body>
+
+C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\components\head.ejs:8
+    6|     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    7|     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ >> 8|     <title><%= pageTitle || 'EvoMart - Your Online Store' %></title>
+    9|     <link rel="stylesheet" href="/css/index.css">
+
+pageTitle is not defined
+20260214	19:14:35	9bb51782-5053-4d35-92c8-25f4a4048e11	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signin.ejs:1
+ >> 1| <%- include('../components/head.ejs') %>
+    2|     <link rel="stylesheet" href="/css/auth.css">
+    3|     </head>
+    4| <body>
+
+C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\components\head.ejs:8
+    6|     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    7|     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ >> 8|     <title><%= pageTitle || 'EvoMart - Your Online Store' %></title>
+    9|     <link rel="stylesheet" href="/css/index.css">
+
+pageTitle is not defined
+20260214	19:17:25	6a657a76-7a6c-4334-8e07-188588e7616f	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signin.ejs:1
+ >> 1| <%- include('../components/head.ejs') %>
+    2|     <link rel="stylesheet" href="/css/auth.css">
+    3|     </head>
+    4| <body>
+
+C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\components\head.ejs:8
+    6|     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    7|     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ >> 8|     <title><%= pageTitle || 'EvoMart - Your Online Store' %></title>
+    9|     <link rel="stylesheet" href="/css/index.css">
+
+pageTitle is not defined
+20260214	19:17:54	37316c13-8c54-4f9e-a470-e64bd70b0353	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signin.ejs:1
+ >> 1| <%- include('../components/head.ejs') %>
+    2|     <link rel="stylesheet" href="/css/auth.css">
+    3|     </head>
+    4| <body>
+
+C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\components\head.ejs:8
+    6|     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    7|     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ >> 8|     <title><%= pageTitle || 'EvoMart - Your Online Store' %></title>
+    9|     <link rel="stylesheet" href="/css/index.css">
+
+pageTitle is not defined
+20260214	19:18:12	12d9d585-c4d7-459b-a9c9-412b400963db	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signin.ejs:1
+ >> 1| <%- include('../components/head.ejs') %>
+    2|     <link rel="stylesheet" href="/css/auth.css">
+    3|     </head>
+    4| <body>
+
+C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\components\head.ejs:8
+    6|     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    7|     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ >> 8|     <title><%= pageTitle || 'EvoMart - Your Online Store' %></title>
+    9|     <link rel="stylesheet" href="/css/index.css">
+
+pageTitle is not defined
+20260214	19:22:46	129c90d8-6183-4838-9ce6-b36cbe26350b	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\auth\signin.ejs:1
+ >> 1| <%- include('../components/head.ejs') %>
+    2|     <link rel="stylesheet" href="/css/auth.css">
+    3|     </head>
+    4| <body>
+
+C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\components\head.ejs:8
+    6|     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    7|     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ >> 8|     <title><%= pageTitle || 'EvoMart - Your Online Store' %></title>
+    9|     <link rel="stylesheet" href="/css/index.css">
+
+pageTitle is not defined
+20260214	22:00:44	b8b535fc-72a8-4cdf-acc7-c63bdffb92c1	Error: Failed to lookup view "/" in views directory "C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views"
+20260214	22:03:05	9ff9574c-0d2b-47f9-b733-bf4587721db3	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\index.ejs:27
+    25|     <div>
+    26|       <h2 class="section-title">Featured Products</h2>
+ >> 27|       <% if (paginator) { %>
+    28|         <p class="products-count">
+    29|           Showing <%= ((paginator.currentPage - 1) * paginator.perPage) + 1 %>-<%= Math.min(paginator.currentPage * paginator.perPage, paginator.totalItems) %> 
+    30|           of <%= paginator.totalItems %> products
+
+paginator is not defined
+20260214	22:34:33	5093dc3c-08da-435c-9aaa-685fdb077e59	TypeError: The "path" argument must be of type string. Received undefined
+20260214	22:44:50	6d2d68aa-9ebb-48c8-9ded-ea3a53cd2b2f	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\index.ejs:27
+    25|     <div>
+    26|       <h2 class="section-title">Featured Products</h2>
+ >> 27|       <% if (paginator) { %>
+    28|         <p class="products-count">
+    29|           Showing <%= ((paginator.currentPage - 1) * paginator.perPage) + 1 %>-<%= Math.min(paginator.currentPage * paginator.perPage, paginator.totalItems) %> 
+    30|           of <%= paginator.totalItems %> products
+
+paginator is not defined
+20260214	22:47:06	1899db2d-edec-4230-83f7-756237e90318	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\index.ejs:27
+    25|     <div>
+    26|       <h2 class="section-title">Featured Products</h2>
+ >> 27|       <% if (paginator) { %>
+    28|         <p class="products-count">
+    29|           Showing <%= ((paginator.currentPage - 1) * paginator.perPage) + 1 %>-<%= Math.min(paginator.currentPage * paginator.perPage, paginator.totalItems) %> 
+    30|           of <%= paginator.totalItems %> products
+
+paginator is not defined
+20260214	23:13:50	af4454e9-14fe-469a-8d1c-fbab1a9c560c	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\index.ejs:27
+    25|     <div>
+    26|       <h2 class="section-title">Featured Products</h2>
+ >> 27|       <% if (paginator) { %>
+    28|         <p class="products-count">
+    29|           Showing <%= ((paginator.currentPage - 1) * paginator.perPage) + 1 %>-<%= Math.min(paginator.currentPage * paginator.perPage, paginator.totalItems) %> 
+    30|           of <%= paginator.totalItems %> products
+
+paginator is not defined
+20260214	23:20:17	30468fec-e0d6-458e-8f54-a9c461e50108	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\index.ejs:27
+    25|     <div>
+    26|       <h2 class="section-title">Featured Products</h2>
+ >> 27|       <% if (paginator) { %>
+    28|         <p class="products-count">
+    29|           Showing <%= ((paginator.currentPage - 1) * paginator.perPage) + 1 %>-<%= Math.min(paginator.currentPage * paginator.perPage, paginator.totalItems) %> 
+    30|           of <%= paginator.totalItems %> products
+
+paginator is not defined
+20260214	23:20:44	47357068-3765-4ce1-99ff-9b96b23c7e37	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\index.ejs:27
+    25|     <div>
+    26|       <h2 class="section-title">Featured Products</h2>
+ >> 27|       <% if (paginator) { %>
+    28|         <p class="products-count">
+    29|           Showing <%= ((paginator.currentPage - 1) * paginator.perPage) + 1 %>-<%= Math.min(paginator.currentPage * paginator.perPage, paginator.totalItems) %> 
+    30|           of <%= paginator.totalItems %> products
+
+paginator is not defined
+20260214	23:26:54	dfdca044-f3a8-4561-936d-aafa5c76b388	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\index.ejs:27
+    25|     <div>
+    26|       <h2 class="section-title">Featured Products</h2>
+ >> 27|       <% if (paginator) { %>
+    28|         <p class="products-count">
+    29|           Showing <%= ((paginator.currentPage - 1) * paginator.perPage) + 1 %>-<%= Math.min(paginator.currentPage * paginator.perPage, paginator.totalItems) %> 
+    30|           of <%= paginator.totalItems %> products
+
+paginator is not defined
