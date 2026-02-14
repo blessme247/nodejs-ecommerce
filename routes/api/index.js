@@ -9,7 +9,7 @@ import productsRouter from "./products.js"
 import path from "path"
 import { fileURLToPath } from 'url';
 import { dirname as pathDirname } from 'path';
-import Role from "../../model/Role.js"
+import { getLoginPage, getSignupPage } from "../../controllers/auth.controller.js"
 
 
 const router = express.Router();
@@ -56,38 +56,20 @@ defaultRoutes.forEach((route) => {
 
 
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = pathDirname(__filename);
-router.get(['/', '/index.html', '/index'], (req, res) => {
-    res.sendFile(path.join(__dirname, '..', '..', 'views', 'index.html'));
-});
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = pathDirname(__filename);
+// router.get(['/', '/index.html', '/index'], (req, res) => {
+//     res.sendFile(path.join(__dirname, '..', '..', 'views', 'index.html'));
+// });
+
+router.get(['/', '/index.html', '/index'], async (req, res) => {
+  res.render('index.ejs', { pageTitle: "EvoMart - Shop the Best Products", paginator: undefined, data: [], path: "/"})
+})
 
 // render views 
-router.get("/signup", async (req, res)=> {
-  console.log(req.accepts(), 'accept heeaders')
-  const roles = await Role.find(
-        { name: { $not: { $regex: /^admin$/i } } },
-        { name: 1, _id: 1 },
-      ).exec();
-  res.render('auth/signup', {
-    pageTitle: "Sign Up",
-    path: "auth/signup",
-    validationErrors: [],
-    errorMessage: "",
-    data: roles,
-    formValues: {}
-  })
-})
+router.get("/signup", getSignupPage)
 
-router.get("/login", (req, res)=> {
-  res.render('auth/signin', {
-    pageTitle: "Log In",
-    path: "auth/signin",
-    validationErrors: [],
-    errorMessage: "",
-    formValues: {}
-  })
-})
+router.get("/login", getLoginPage)
 
 // router.get("/shop/orders", (req, res) => {
 //   res.render("shop/orders")

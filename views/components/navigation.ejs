@@ -1,15 +1,6 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'E-Commerce' %></title>
-  <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet"> -->
-</head>
-<body>
+
+
   <header class="header">
     <div class="header-container">
       <a href="/" class="logo">
@@ -158,51 +149,4 @@
     </nav>
   </header>
 
-  <script>
-    // Mobile Menu Toggle
-    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    mobileMenuToggle.addEventListener('click', () => {
-      mobileMenuToggle.classList.toggle('active');
-      mobileMenu.classList.toggle('active');
-    });
-
-    // Close mobile menu when clicking a link
-    const mobileLinks = document.querySelectorAll('.nav-mobile-link, .mobile-auth-buttons a');
-    mobileLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenuToggle.classList.remove('active');
-        mobileMenu.classList.remove('active');
-      });
-    });
-
-    // Close mobile menu on window resize to desktop
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 1024) {
-        mobileMenuToggle.classList.remove('active');
-        mobileMenu.classList.remove('active');
-      }
-    });
-
-    // Profile Dropdown Toggle
-    const profileDropdown = document.getElementById('profileDropdown');
-    const profileButton = document.getElementById('profileButton');
-
-    if (profileButton) {
-      profileButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        profileDropdown.classList.toggle('active');
-      });
-
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!profileDropdown.contains(e.target)) {
-          profileDropdown.classList.remove('active');
-        }
-      });
-    }
-  </script>
-
-  <main>
 

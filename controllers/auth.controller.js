@@ -6,6 +6,87 @@ import { handleError } from "../utils/handleError.js";
 import { validationResult } from "express-validator";
 import mongoose from "mongoose";
 
+const handleRegister = async (req, res) => {
+  const roles = await Role.find(
+    { name: { $not: { $regex: /^admin$/i } } },
+    { name: 1, _id: 1 },
+  ).exec();
+
+  const errors = validationResult(req)
+
+  if (!errors.isEmpty()) {
+    return handleError(req, res, 400, {
+       message: errors.array()[0].msg,
+        page: "auth/signup",
+        pageTitle: "Sign Up",
+        errors: errors.array(),
+        data: roles,
+        formValues: req.body,
+    })
+  }
+  try {
+    const { firstName, lastName, email, password, roleId } = req.body;
+
+    const duplicate = await User.findOne({ email }).exec();
+    if (duplicate)
+      return handleError(req, res, 409, {
+        message: "Email already exists",
+        page: "auth/signup",
+        pageTitle: "Sign Up",
+        data: roles,
+        formValues: req.body,
+      });
+
+    let role;
+    if (!roleId) {
+      role = await Role.findOne({ name: "Buyer" }).exec();
+    } else {
+      role = await Role.findById(roleId).exec();
+    }
+    const username = email.split("@")[0];
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = new User({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: hashedPassword,
+      roleId: role._id,
+      username: username,
+    });
+
+     await user.save();
+    // console.log(result, 'result')
+    // const message = `New user ${result.username} created!`;
+    // return handleSuccess(req, res, 201, {
+    //   // message,
+    //   pageTitle: "Sign In",
+    //   path: "auth/signin",
+    //   errors: {},
+    //   errorMessage: "",
+    // });
+    res.redirect("/login")
+  } catch (error) {
+    console.log(error, "error");
+    if (error instanceof mongoose.Error) {
+      return handleError(req, res, 400, {
+        errors: error.errors,
+        page: "auth/signup",
+        pageTitle: "Sign Up",
+        data: roles,
+        formValues: req.body,
+      });
+    }
+    return handleError(req, res, 500, {
+      message: error?.message || "Internal server error",
+      page: "auth/signup",
+      pageTitle: "Sign Up",
+      data: roles,
+      formValues: req.body,
+    });
+  }
+};
+
 const handleLogin = async (req, res) => {
     const errors = validationResult(req)
   
@@ -19,14 +100,14 @@ const handleLogin = async (req, res) => {
       })
     }
   try {
-    const { user, password } = req.body;
+    const { email, password } = req.body;
 
-    const foundUser = await User.findOne({ username: user }).exec();
-    if (!foundUser) return handleError(req, res, 401, { message: "Unauthorized", page: "signin", formValues: req.body }); //Unauthorized
+    const foundUser = await User.findOne({ email }).exec();
+    if (!foundUser) return handleError(req, res, 401, { message: "Unauthorized", page: "auth/signin", formValues: req.body }); //Unauthorized
     const userRole = await Role.findById(foundUser.roleId).exec();
 
     const match = await bcrypt.compare(password, foundUser.password);
-    if (!match) return handleError(req, res, 401, { message: "Unauthorized", page: "signin", formValues: req.body });
+    if (!match) return handleError(req, res, 401, { message: "Unauthorized", page: "auth/signin", formValues: req.body });
 
     const role = userRole.code;
 
@@ -46,7 +127,12 @@ const handleLogin = async (req, res) => {
       { expiresIn: "1d" },
     );
 
-    await User.findOneAndUpdate({ username: user }, { refreshToken }).exec();
+    // await User.findOneAndUpdate({ email: foundUser.email }, { refreshToken }).exec();
+    const user = new User({
+      ...foundUser.toObject(),
+      refreshToken
+    })
+    await user.save();
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
       secure: true,
@@ -68,9 +154,35 @@ const handleLogin = async (req, res) => {
       req,
       res,
       500,
-      { message: error?.message || "Internal server error", page: "signin" },
+      { message: error?.message || "Internal server error", page: "auth/signin" },
     );
   }
 };
 
-export default handleLogin;
+const getLoginPage = async (req, res)=> {
+  res.render('auth/signin', {
+    pageTitle: "Log In",
+    path: "signin",
+    validationErrors: [],
+    errorMessage: "",
+    formValues: {}
+  })
+}
+
+const getSignupPage = async (req, res)=> {
+  // console.log(req.accepts(), 'accept heeaders')
+  const roles = await Role.find(
+        { name: { $not: { $regex: /^admin$/i } } },
+        { name: 1, _id: 1 },
+      ).exec();
+  res.render('auth/signup', {
+    pageTitle: "Sign Up",
+    path: "signup",
+    validationErrors: [],
+    errorMessage: "",
+    data: roles,
+    formValues: {}
+  })
+}
+
+export { handleRegister, handleLogin, getLoginPage, getSignupPage };

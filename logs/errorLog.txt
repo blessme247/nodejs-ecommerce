@@ -179,3 +179,26 @@ formValues is not defined
     30|            <div class="error-message" id="emailError"><%= validationErrors?.find((err) => err.path === 'email')?.msg ?? '' %></div>
 
 formValues is not defined
+20260214	18:15:16	eda6520e-28d1-4eae-ab2f-254f03efafe7	Error: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\index.ejs:1
+ >> 1| <!-- <%- include('partials/header-dynamic', { title: 'EvoMart - Shop the Best Products', page: 'home' }) %> -->
+    2| <%- include('../components/head.ejs') %>
+    3|     <link rel="stylesheet" href="/css/index.css">
+    4|     </head>
+
+Could not find the include file "partials/header-dynamic"
+20260214	18:20:06	ef4b1b35-a8e2-4184-b508-85db4c31faf0	Error: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\index.ejs:2
+    1| 
+ >> 2| <%- include('../components/head.ejs') %>
+    3|     <link rel="stylesheet" href="/css/index.css">
+    4|     </head>
+    5| <%- include('../components/navigation.ejs') %>
+
+Could not find the include file "../components/head.ejs"
+20260214	18:20:48	902c67a5-f8ac-48bb-93dc-5945b3c3d914	Error: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\index.ejs:236
+    234| </script>
+    235| 
+ >> 236| <%- include('partials/footer') %>
+    237| 
+
+Could not find the include file "partials/footer"
+20260214	18:48:15	b0473250-0abc-48e9-a460-5d9d124989e3	Error: Failed to lookup view "signin" in views directory "C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views"

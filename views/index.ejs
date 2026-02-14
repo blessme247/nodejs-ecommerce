@@ -1,7 +1,8 @@
-<!-- <%- include('partials/header-dynamic', { title: 'EvoMart - Shop the Best Products', page: 'home' }) %> -->
-<%- include('../components/head.ejs') %>
+
+<%- include('./components/head.ejs') %>
     <link rel="stylesheet" href="/css/index.css">
     </head>
+<%- include('./components/navigation.ejs') %>
 <body>
 
 <!-- Hero Section -->
@@ -23,7 +24,7 @@
   <div class="section-header">
     <div>
       <h2 class="section-title">Featured Products</h2>
-      <% if (typeof paginator !== 'undefined' && paginator) { %>
+      <% if (paginator) { %>
         <p class="products-count">
           Showing <%= ((paginator.currentPage - 1) * paginator.perPage) + 1 %>-<%= Math.min(paginator.currentPage * paginator.perPage, paginator.totalItems) %> 
           of <%= paginator.totalItems %> products
@@ -49,9 +50,9 @@
     </div>
   </div>
 
-  <% if (typeof products !== 'undefined' && products && products.length > 0) { %>
+  <% if (typeof data !== 'undefined' && data && data.length > 0) { %>
     <div class="products-grid">
-      <% products.forEach(product => { %>
+      <% data.forEach(product => { %>
         <div class="product-card" onclick="window.location.href='/product/<%= product._id %>'">
           <div class="product-image">
             <% if (product.badge) { %>
@@ -232,4 +233,4 @@
   });
 </script>
 
-<%- include('partials/footer') %>
+ <%- include('./components/end.ejs') %>
