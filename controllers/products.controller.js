@@ -190,7 +190,58 @@ export const updateProduct = async (req, res) => {
   }
 };
 
+export const getSellerProductsPage  = async (req, res) => {
+  try {
+    const userId = req.userId
 
-export const getSellerProductsPage = async (req, res) => {
-  
-}
+    const seller = await Seller.findOne({ userId }).exec();
+    if (!seller) return res.status(404).json({ message: "Seller not found" });
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    const match = {};
+    const pipeline = [];
+
+    match["sellerId"] = seller.userId;
+    if (inStock) {
+      match["inStock"] = inStock;
+    }
+    if (categoryId) {
+      match["categoryId"] = categoryId;
+    }
+    const sort = { _id: 1 };
+    const facet = {
+      data: [{ $skip: skip }, { $limit: limit }],
+      total: [{ $count: "count" }],
+    };
+
+    // Aggregation pipeline for paginated results
+    // const pipelinee = [
+    //   { $match: {
+    //     sellerId:  seller.userId
+    //   } },
+    //   { $sort: { _id: 1 } }, // or other sort key
+    //   {
+    //     $facet: {
+    //       data: [{ $skip: skip }, { $limit: limit }],
+    //       total: [{ $count: "count" }],
+    //     },
+    //   },
+    // ];
+
+    pipeline.push({ $match: match }, { $sort: sort }, { $facet: facet });
+
+    const result = await Product.aggregate(pipeline).exec();
+
+    const { data, paginator } = paginateResponse(result, page, limit);
+
+    if (!result || result.length === 0)
+      return res.status(404).json({ message: "No product found." });
+
+    return res.status(200).json({ data, paginator });
+  } catch (error) {
+    console.log(error, "error in catch block");
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

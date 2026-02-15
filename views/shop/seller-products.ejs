@@ -1,0 +1,289 @@
+<%- include('./components/head.ejs') %>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/products.css">
+    </head>
+<%- include('./components/navigation.ejs') %>
+<body>
+
+<div class="products-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>My Products</h1>
+      <p class="header-subtitle">
+        <% if (typeof products !== 'undefined' && products && products.length > 0) { %>
+          Manage your <%= products.length %> product<%= products.length !== 1 ? 's' : '' %>
+        <% } else { %>
+          No products yet. Start by adding your first product!
+        <% } %>
+      </p>
+    </div>
+    <a href="/seller/products/new" class="btn-add-product">
+      <span>➕</span>
+      <span>Add New Product</span>
+    </a>
+  </div>
+
+  <div class="filters-bar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input 
+        type="text" 
+        class="search-input" 
+        placeholder="Search products..."
+        id="searchInput"
+      >
+    </div>
+    <select class="filter-select" id="categoryFilter">
+      <option value="">All Categories</option>
+      <option value="electronics">Electronics</option>
+      <option value="fashion">Fashion</option>
+      <option value="home">Home & Living</option>
+      <option value="sports">Sports</option>
+      <option value="books">Books</option>
+    </select>
+    <select class="filter-select" id="stockFilter">
+      <option value="">All Stock Status</option>
+      <option value="in-stock">In Stock</option>
+      <option value="low-stock">Low Stock</option>
+      <option value="out-stock">Out of Stock</option>
+    </select>
+  </div>
+
+  <% if (typeof products !== 'undefined' && products && products.length > 0) { %>
+    <div class="products-table">
+      <div class="table-header">
+        <div>Image</div>
+        <div>Product</div>
+        <div>Price</div>
+        <div>Stock</div>
+        <div class="stock-cell">Status</div>
+        <div>Actions</div>
+      </div>
+      <div class="table-body">
+        <% products.forEach(product => { %>
+          <div class="product-row" data-product-id="<%= product._id %>">
+            <div class="product-image-cell">
+              <%= product.emoji || '📦' %>
+            </div>
+            <div class="product-name-cell">
+              <div class="product-name"><%= product.name %></div>
+              <div class="product-category"><%= product.category || 'Uncategorized' %></div>
+            </div>
+            <div class="price-cell">$<%= product.price %></div>
+            <div><%= product.stock || 0 %> units</div>
+            <div class="stock-cell">
+              <% 
+                let stockClass = 'in-stock';
+                let stockText = 'In Stock';
+                if (product.stock === 0) {
+                  stockClass = 'out-stock';
+                  stockText = 'Out of Stock';
+                } else if (product.stock < 10) {
+                  stockClass = 'low-stock';
+                  stockText = 'Low Stock';
+                }
+              %>
+              <span class="stock-badge <%= stockClass %>"><%= stockText %></span>
+            </div>
+            <div class="actions-cell">
+              <button 
+                class="btn-icon btn-edit" 
+                onclick="editProduct('<%= product._id %>')"
+                title="Edit product"
+              >
+                ✏️
+              </button>
+              <button 
+                class="btn-icon btn-delete" 
+                onclick="deleteProduct('<%= product._id %>', '<%= product.name %>')"
+                title="Delete product"
+              >
+                🗑️
+              </button>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <% if (typeof paginator !== 'undefined' && paginator && paginator.totalPages > 1) { %>
+      <div class="pagination">
+        <button 
+          class="page-btn" 
+          <%= paginator.currentPage === 1 ? 'disabled' : '' %> 
+          onclick="window.location.href='/seller/products?page=<%= paginator.currentPage - 1 %>'"
+        >
+          ‹
+        </button>
+        
+        <% for (let i = 1; i <= paginator.totalPages; i++) { %>
+          <% if (i === 1 || i === paginator.totalPages || (i >= paginator.currentPage - 1 && i <= paginator.currentPage + 1)) { %>
+            <button 
+              class="page-btn <%= i === paginator.currentPage ? 'active' : '' %>" 
+              onclick="window.location.href='/seller/products?page=<%= i %>'"
+            >
+              <%= i %>
+            </button>
+          <% } else if (i === paginator.currentPage - 2 || i === paginator.currentPage + 2) { %>
+            <span class="page-btn" disabled>...</span>
+          <% } %>
+        <% } %>
+        
+        <button 
+          class="page-btn" 
+          <%= paginator.currentPage === paginator.totalPages ? 'disabled' : '' %>
+          onclick="window.location.href='/seller/products?page=<%= paginator.currentPage + 1 %>'"
+        >
+          ›
+        </button>
+      </div>
+    <% } %>
+  <% } else { %>
+    <div class="products-table">
+      <div class="empty-state">
+        <div class="empty-icon">📦</div>
+        <h2 class="empty-title">No Products Yet</h2>
+        <p class="empty-text">Start selling by adding your first product to the catalog.</p>
+        <a href="/seller/products/new" class="btn-add-product">
+          <span>➕</span>
+          <span>Add Your First Product</span>
+        </a>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+<script>
+  function editProduct(productId) {
+    window.location.href = `/seller/products/edit/${productId}`;
+  }
+
+  async function deleteProduct(productId, productName) {
+    if (!confirm(`Are you sure you want to delete "${productName}"? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/seller/products/${productId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (response.ok) {
+        showNotification('Product deleted successfully', 'success');
+        // Remove the row from UI
+        const row = document.querySelector(`[data-product-id="${productId}"]`);
+        if (row) {
+          row.style.animation = 'slideOut 0.3s ease';
+          setTimeout(() => {
+            row.remove();
+            // Reload if no products left
+            if (document.querySelectorAll('.product-row').length === 0) {
+              window.location.reload();
+            }
+          }, 300);
+        }
+      } else {
+        const error = await response.json();
+        showNotification(error.message || 'Failed to delete product', 'error');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      showNotification('Failed to delete product', 'error');
+    }
+  }
+
+  // Search functionality
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const rows = document.querySelectorAll('.product-row');
+      
+      rows.forEach(row => {
+        const productName = row.querySelector('.product-name').textContent.toLowerCase();
+        const category = row.querySelector('.product-category').textContent.toLowerCase();
+        
+        if (productName.includes(searchTerm) || category.includes(searchTerm)) {
+          row.style.display = 'grid';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  }
+
+  // Filter functionality
+  const categoryFilter = document.getElementById('categoryFilter');
+  const stockFilter = document.getElementById('stockFilter');
+
+  function applyFilters() {
+    const category = categoryFilter.value.toLowerCase();
+    const stockStatus = stockFilter.value;
+    const rows = document.querySelectorAll('.product-row');
+    
+    rows.forEach(row => {
+      const rowCategory = row.querySelector('.product-category').textContent.toLowerCase();
+      const stockBadge = row.querySelector('.stock-badge');
+      const rowStockStatus = stockBadge ? stockBadge.className.split(' ')[1] : '';
+      
+      const categoryMatch = !category || rowCategory.includes(category);
+      const stockMatch = !stockStatus || rowStockStatus === stockStatus;
+      
+      if (categoryMatch && stockMatch) {
+        row.style.display = 'grid';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  if (categoryFilter) {
+    categoryFilter.addEventListener('change', applyFilters);
+  }
+  if (stockFilter) {
+    stockFilter.addEventListener('change', applyFilters);
+  }
+
+  function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: ${type === 'success' ? '#10B981' : '#EF4444'};
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      z-index: 9999;
+      animation: slideIn 0.3s ease;
+    `;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+
+  // Animations
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideIn {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(400px); opacity: 0; }
+    }
+  `;
+  document.head.appendChild(style);
+</script>
+
+ <%- include('../components/end.ejs') %>

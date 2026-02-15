@@ -13,6 +13,7 @@ const optionalAuth = (req, res, next) => {
         // Valid token - set user info
         req.user = decoded.UserInfo.username;
         req.role = decoded.UserInfo.role;
+        req.userId = decoded.UserInfo.userId;
         res.locals.role = getRoleName(req.role);
         res.locals.user = {
           username: decoded.UserInfo.username,
