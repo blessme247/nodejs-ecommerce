@@ -190,3 +190,7 @@ export const updateProduct = async (req, res) => {
   }
 };
 
+
+export const getSellerProductsPage = async (req, res) => {
+  
+}

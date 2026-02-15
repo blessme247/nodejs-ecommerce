@@ -41,6 +41,14 @@ export const getAllSellerOrders = async (req, res) => {
         $facet: {
           data: [{ $skip: skip }, { $limit: limit }],
           total: [{ $count: "count" }],
+          stats: [
+            {
+              $group: {
+                _id: "$status.name",
+                count: { $sum: 1 },
+              },
+            }
+          ]
         },
       },
     ];

@@ -1,0 +1,236 @@
+<%- include('./components/head.ejs') %>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/orders.css">
+    </head>
+<%- include('./components/navigation.ejs') %>
+<body>
+
+
+
+<div class="orders-container">
+  <div class="page-header">
+    <h1>Order Management</h1>
+    <p class="header-subtitle">Track and manage orders for your products</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card primary">
+      <div class="stat-label">Total Orders</div>
+      <div class="stat-value"><%= typeof stats !== 'undefined' ? stats.total : 0 %></div>
+    </div>
+    <div class="stat-card warning">
+      <div class="stat-label">Pending</div>
+      <div class="stat-value"><%= typeof stats !== 'undefined' ? stats.pending : 0 %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Processing</div>
+      <div class="stat-value"><%= typeof stats !== 'undefined' ? stats.processing : 0 %></div>
+    </div>
+    <div class="stat-card success">
+      <div class="stat-label">Delivered</div>
+      <div class="stat-value"><%= typeof stats !== 'undefined' ? stats.delivered : 0 %></div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-bar">
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-status="all">All Orders</button>
+      <button class="filter-tab" data-status="awaiting_confirmation">Awaiting</button>
+      <button class="filter-tab" data-status="processing">Processing</button>
+      <button class="filter-tab" data-status="shipped">Shipped</button>
+      <button class="filter-tab" data-status="delivered">Delivered</button>
+    </div>
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input 
+        type="text" 
+        class="search-input" 
+        placeholder="Search orders..."
+        id="searchInput"
+      >
+    </div>
+  </div>
+
+  <!-- Orders List -->
+  <% if (typeof orderItems !== 'undefined' && orderItems && orderItems.length > 0) { %>
+    <div class="orders-list">
+      <% orderItems.forEach(item => { %>
+        <div class="order-card" data-status="<%= item.status.code %>">
+          <div class="order-header">
+            <div class="order-info">
+              <div class="order-detail">
+                <span class="order-label">Order Item ID</span>
+                <span class="order-value">#<%= item._id.toString().substring(0, 8).toUpperCase() %></span>
+              </div>
+              <div class="order-detail">
+                <span class="order-label">Order Date</span>
+                <span class="order-value"><%= new Date(item.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+              </div>
+              <div class="order-detail">
+                <span class="order-label">Customer</span>
+                <span class="order-value"><%= item.buyerName || 'Customer' %></span>
+              </div>
+            </div>
+            <span class="order-status-badge status-<%= item.status.code.replace(/_/g, '-') %>">
+              <%= item.status.name %>
+            </span>
+          </div>
+          
+          <div class="order-body">
+            <div class="order-items">
+              <div class="order-item">
+                <div class="item-image">
+                  <%= item.productEmoji || '📦' %>
+                </div>
+                <div class="item-details">
+                  <div class="item-name"><%= item.name %></div>
+                  <div class="item-meta">Quantity: <%= item.quantity %> • Unit Price: $<%= item.price %></div>
+                </div>
+                <div class="item-price">$<%= (item.price * item.quantity).toFixed(2) %></div>
+              </div>
+            </div>
+
+            <div class="order-actions">
+              <div class="status-update">
+                <select class="status-select" id="status-<%= item._id %>" data-item-id="<%= item._id %>">
+                  <option value="awaiting_confirmation" <%= item.status.code === 'awaiting_confirmation' ? 'selected' : '' %>>Awaiting Confirmation</option>
+                  <option value="confirmed" <%= item.status.code === 'confirmed' ? 'selected' : '' %>>Confirmed</option>
+                  <option value="processing" <%= item.status.code === 'processing' ? 'selected' : '' %>>Processing</option>
+                  <option value="packed" <%= item.status.code === 'packed' ? 'selected' : '' %>>Packed</option>
+                  <option value="shipped" <%= item.status.code === 'shipped' ? 'selected' : '' %>>Shipped</option>
+                  <option value="out_for_delivery" <%= item.status.code === 'out_for_delivery' ? 'selected' : '' %>>Out for Delivery</option>
+                  <option value="delivered" <%= item.status.code === 'delivered' ? 'selected' : '' %>>Delivered</option>
+                </select>
+                <button class="btn-update-status" onclick="updateStatus('<%= item._id %>')">
+                  Update Status
+                </button>
+              </div>
+              <a href="/order/<%= item.orderId %>" class="btn-view-details">
+                View Full Order
+              </a>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <div class="empty-state">
+      <div class="empty-icon">📦</div>
+      <h2 class="empty-title">No Orders Yet</h2>
+      <p class="empty-text">When customers purchase your products, their orders will appear here.</p>
+    </div>
+  <% } %>
+</div>
+
+<script>
+  // Filter tabs
+  const filterTabs = document.querySelectorAll('.filter-tab');
+  filterTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const status = tab.getAttribute('data-status');
+      
+      // Update active state
+      filterTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      
+      // Filter orders
+      const orderCards = document.querySelectorAll('.order-card');
+      orderCards.forEach(card => {
+        if (status === 'all' || card.getAttribute('data-status') === status) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // Search functionality
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const orderCards = document.querySelectorAll('.order-card');
+      
+      orderCards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  }
+
+  // Update order status
+  async function updateStatus(itemId) {
+    const selectEl = document.getElementById(`status-${itemId}`);
+    const newStatus = selectEl.value;
+    
+    if (!confirm('Update order status?')) return;
+
+    try {
+      const response = await fetch(`/api/seller/order-items/${itemId}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ statusCode: newStatus })
+      });
+
+      if (response.ok) {
+        showNotification('Order status updated successfully', 'success');
+        // Reload page to reflect changes
+        setTimeout(() => window.location.reload(), 1500);
+      } else {
+        const error = await response.json();
+        showNotification(error.message || 'Failed to update status', 'error');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      showNotification('Failed to update order status', 'error');
+    }
+  }
+
+  function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: ${type === 'success' ? '#10B981' : '#EF4444'};
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      z-index: 9999;
+      animation: slideIn 0.3s ease;
+    `;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+
+  // Animations
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideIn {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(400px); opacity: 0; }
+    }
+  `;
+  document.head.appendChild(style);
+</script>
+
+ <%- include('../components/end.ejs') %>

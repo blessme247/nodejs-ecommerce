@@ -37,7 +37,7 @@ const optionalAuth = (req, res, next) => {
         res.locals.user = {
           username: decoded.UserInfo.username,
           role: getRoleName(req.role),
-          roleCode: req.role
+          // roleCode: req.role
         };
       }
       next();

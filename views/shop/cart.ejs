@@ -1,0 +1,222 @@
+<%- include('./components/head.ejs') %>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/cart.css">
+    </head>
+<%- include('./components/navigation.ejs') %>
+<body>
+
+<div class="cart-container">
+  <div class="cart-header">
+    <h1 class="cart-title">Shopping Cart</h1>
+    <p class="cart-subtitle">
+      <% if (typeof cart !== 'undefined' && cart && cart.items && cart.items.length > 0) { %>
+        You have <%= cart.totalItems %> item<%= cart.totalItems !== 1 ? 's' : '' %> in your cart
+      <% } else { %>
+        Your cart is empty
+      <% } %>
+    </p>
+  </div>
+
+  <div class="cart-layout">
+    <% if (typeof cart !== 'undefined' && cart && cart.items && cart.items.length > 0) { %>
+      <!-- Cart Items -->
+      <div class="cart-items">
+        <% cart.items.forEach((item, index) => { %>
+          <div class="cart-item" data-item-id="<%= item.productId %>">
+            <div class="item-image" onclick="window.location.href='/product/<%= item.productId %>'">
+              <%= item.emoji || '📦' %>
+            </div>
+            <div class="item-details">
+              <div class="item-header">
+                <div class="item-info">
+                  <div class="item-seller">Sold by <%= item.sellerName || 'EvoMart Seller' %></div>
+                  <h3 class="item-name" onclick="window.location.href='/product/<%= item.productId %>'">
+                    <%= item.name %>
+                  </h3>
+                  <div class="item-category"><%= item.category || 'General' %></div>
+                </div>
+                <button class="remove-btn" onclick="removeItem('<%= item.productId %>')" title="Remove item">
+                  ×
+                </button>
+              </div>
+              <div class="item-controls">
+                <div class="quantity-controls">
+                  <button class="qty-btn" onclick="updateQuantity('<%= item.productId %>', <%= item.quantity - 1 %>)">−</button>
+                  <input type="number" class="qty-display" value="<%= item.quantity %>" readonly>
+                  <button class="qty-btn" onclick="updateQuantity('<%= item.productId %>', <%= item.quantity + 1 %>)" 
+                    <%= item.maxStock && item.quantity >= item.maxStock ? 'disabled' : '' %>>+</button>
+                </div>
+                <div class="item-price">
+                  <div class="price-current">$<%= (item.price * item.quantity).toFixed(2) %></div>
+                  <div class="price-unit">$<%= item.price %> each</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+
+      <!-- Cart Summary -->
+      <div class="cart-summary">
+        <div class="summary-card">
+          <h2 class="summary-title">Order Summary</h2>
+          
+          <div class="summary-row">
+            <span class="summary-label">Subtotal (<%= cart.totalItems %> items)</span>
+            <span class="summary-value" id="subtotal">$<%= cart.totalPrice.toFixed(2) %></span>
+          </div>
+          
+          <div class="summary-row">
+            <span class="summary-label">Shipping</span>
+            <span class="summary-value" id="shipping">
+              <%= cart.totalPrice >= 50 ? 'FREE' : '$5.99' %>
+            </span>
+          </div>
+          
+          <div class="summary-row">
+            <span class="summary-label">Tax (Estimated)</span>
+            <span class="summary-value" id="tax">$<%= (cart.totalPrice * 0.08).toFixed(2) %></span>
+          </div>
+          
+          <div class="summary-row summary-total">
+            <span class="total-label">Total</span>
+            <span class="total-value" id="total">
+              $<%= (cart.totalPrice + (cart.totalPrice >= 50 ? 0 : 5.99) + (cart.totalPrice * 0.08)).toFixed(2) %>
+            </span>
+          </div>
+          
+          <button class="checkout-btn" onclick="proceedToCheckout()">
+            Proceed to Checkout
+          </button>
+          
+          <a href="/" class="continue-shopping">
+            Continue Shopping
+          </a>
+          
+          <div class="promo-section">
+            <div class="summary-label">Have a promo code?</div>
+            <div class="promo-input-group">
+              <input type="text" class="promo-input" id="promoCode" placeholder="Enter code">
+              <button class="promo-btn" onclick="applyPromo()">Apply</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } else { %>
+      <!-- Empty Cart -->
+      <div class="empty-cart">
+        <div class="empty-icon">🛒</div>
+        <h2 class="empty-title">Your Cart is Empty</h2>
+        <p class="empty-text">Looks like you haven't added anything to your cart yet.</p>
+        <a href="/" class="checkout-btn" style="max-width: 300px; margin: 0 auto; display: block;">
+          Start Shopping
+        </a>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  async function updateQuantity(productId, newQuantity) {
+    if (newQuantity < 1) return;
+    
+    try {
+      const response = await fetch('/api/cart/update', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId, quantity: newQuantity })
+      });
+
+      if (response.ok) {
+        // Reload page to reflect changes
+        window.location.reload();
+      } else {
+        const error = await response.json();
+        showNotification(error.message || 'Failed to update quantity', 'error');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      showNotification('Failed to update cart', 'error');
+    }
+  }
+
+  async function removeItem(productId) {
+    if (!confirm('Remove this item from your cart?')) return;
+    
+    try {
+      const response = await fetch('/api/cart/remove', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId })
+      });
+
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        const error = await response.json();
+        showNotification(error.message || 'Failed to remove item', 'error');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      showNotification('Failed to remove item', 'error');
+    }
+  }
+
+  function proceedToCheckout() {
+    window.location.href = '/checkout';
+  }
+
+  function applyPromo() {
+    const promoCode = document.getElementById('promoCode').value.trim();
+    if (!promoCode) {
+      showNotification('Please enter a promo code', 'error');
+      return;
+    }
+    
+    // This would normally call an API to validate the promo code
+    showNotification('Promo code feature coming soon!', 'error');
+  }
+
+  function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: ${type === 'success' ? '#10B981' : '#EF4444'};
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      z-index: 9999;
+      animation: slideIn 0.3s ease;
+    `;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+
+  // Add animation styles
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideIn {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(400px); opacity: 0; }
+    }
+  `;
+  document.head.appendChild(style);
+</script>
+
+<%- include('./components/end.ejs') %>
