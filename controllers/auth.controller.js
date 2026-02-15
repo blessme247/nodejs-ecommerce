@@ -27,7 +27,6 @@ const handleRegister = async (req, res) => {
   }
   try {
     const { firstName, lastName, email, password, roleId } = req.body;
-    console.log(req.body, 'register details')
 
     const duplicate = await User.findOne({ email }).exec();
     if (duplicate)
@@ -125,6 +124,7 @@ const handleLogin = async (req, res) => {
     // await User.findOneAndUpdate({ email: foundUser.email }, { refreshToken }).exec();
     foundUser.refreshToken = refreshToken
     await foundUser.save();
+    
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
       secure: true,
@@ -132,14 +132,14 @@ const handleLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    if(!req.accepts("json")){
+    // if(!req.accepts("json")){
         res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: true,
       sameSite: "None",
       maxAge:  30 * 60 * 1000,
     });
-    }
+    // }
     // return res.status(200).json({ accessToken })
 
     // return handleSuccess(req, res, 200, {data: [], pageTitle: "EvoMart - Your Online Store", path: "index"});

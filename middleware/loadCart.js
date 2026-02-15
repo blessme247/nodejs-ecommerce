@@ -22,6 +22,7 @@ export const loadCart = async (req, res, next) => {
     const cart = await Cart.find({ buyerId: buyer._id }).exec()
     
      res.locals.cart = cart || { cartItems: [], totalAmount: 0 }
+     res.locals.user = req.user
   } catch (error) {
      res.locals.cart = { cartItems: [], totalAmount: 0 }
   }

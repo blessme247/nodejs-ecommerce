@@ -13,6 +13,7 @@ const verifyJwt = (req, res, next) => {
       req.role = decoded.UserInfo.role;
       next();
     });
+    return
   }
 
   const token = req.cookies?.accessToken;
@@ -25,9 +26,9 @@ const verifyJwt = (req, res, next) => {
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) {
-      if (req.accepts("json")) {
-        return handleError(req, res, 403, { message: "Forbidden" });
-      }
+      // if (req.accepts("json")) {
+      //   return handleError(req, res, 403, { message: "Forbidden" });
+      // }
       return res.redirect("/login"); // invalid token
     }
     req.user = decoded.UserInfo.username;

@@ -15,6 +15,8 @@ import cookieParser from "cookie-parser"
 import credentials from "./middleware/credentials.js";
 import mongoose from "mongoose"
 import connectDB from "./config/dbConfig.js";
+import optionalAuth from "./middleware/optionalAuth.js";
+import { loadCart } from "./middleware/loadCart.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = pathDirname(__filename);
 const app = express()
@@ -41,6 +43,9 @@ app.use(express.json())
 
 // middleware for cookies
 app.use(cookieParser())
+
+app.use(optionalAuth)
+app.use(loadCart)
 
 app.use(express.static(path.join(__dirname, "/public")))
 app.use('/subdir', express.static(path.join(__dirname, "/public")))

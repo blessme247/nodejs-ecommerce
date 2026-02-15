@@ -359,3 +359,20 @@ paginator is not defined
     30|           of <%= paginator.totalItems %> products
 
 paginator is not defined
+20260214	23:53:03	ed5fee45-ef46-4926-9443-70d0cb79062b	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\index.ejs:5
+    3|     <link rel="stylesheet" href="/css/index.css">
+    4|     </head>
+ >> 5| <%- include('./components/navigation.ejs') %>
+    6| <body>
+    7| 
+    8| <!-- Hero Section -->
+
+C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\components\navigation.ejs:25
+    23|       </div>
+    24| 
+ >> 25|       <% 
+    26|         // Determine user role and authentication status
+    27|         const isLoggedIn = typeof user !== 'undefined' && user !== null;
+    28|         const isBuyer = isLoggedIn && user.role === 'Buyer';
+
+user is not defined
