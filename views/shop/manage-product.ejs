@@ -1,0 +1,427 @@
+<%- include('./components/head.ejs') %>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/manage-product.css">
+    </head>
+<%- include('./components/navigation.ejs') %>
+<body>
+
+<div class="form-container">
+  <div class="form-header">
+    <h1><%= typeof data !== 'undefined' && data ? 'Edit Product' : 'Add New Product' %></h1>
+    <p class="form-subtitle">
+      <%= typeof data !== 'undefined' && data ? 'Update your product information' : 'Fill in the details to add a new product to your store' %>
+    </p>
+  </div>
+
+  <form class="product-form" id="productForm" enctype="multipart/form-data">
+    <!-- Basic Information -->
+    <div class="form-section">
+      <h2 class="section-title">Basic Information</h2>
+
+      <% if (data) { %>
+        <div class="" id="productId" hidden><%= data._id %></div>
+      <% } %>
+      
+      <div class="form-group">
+        <label for="name" class="form-label">
+          Product Name<span class="label-required">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          class="form-input" 
+          placeholder="e.g., Wireless Headphones Pro"
+          value="<%= typeof data !== 'undefined' && data ? data.name : '' %>"
+          required
+        >
+        <div class="error-message" id="nameError">Product name is required</div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="category" class="form-label">
+            Category<span class="label-required">*</span>
+          </label>
+          <select id="category" name="category" class="form-select" required>
+            <option value="">Select a category</option>
+            <% if (typeof categories !== 'undefined' && categories && categories.length > 0) { %>
+              <% categories.forEach(category => { %>
+                <option 
+                  value="<%= category._id %>" 
+                  <%= typeof data !== 'undefined' && data && data.categoryId && data.categoryId.toString() === category._id.toString() ? 'selected' : '' %>
+                >
+                  <%= category.name %>
+                </option>
+              <% }); %>
+            <% } %>
+          </select>
+          <div class="error-message" id="categoryError">Please select a category</div>
+        </div>
+
+     
+      </div>
+
+      <div class="form-group">
+        <label for="description" class="form-label">
+          Description<span class="label-required">*</span>
+        </label>
+        <textarea 
+          id="description" 
+          name="description" 
+          class="form-textarea" 
+          placeholder="Describe your product, its features, and benefits..."
+          required
+        ><%= typeof data !== 'undefined' && data ? data.description : '' %></textarea>
+        <div class="form-hint">Provide a detailed description to help buyers understand your product</div>
+        <div class="error-message" id="descriptionError">Description is required</div>
+      </div>
+    </div>
+
+    <!-- Pricing & Stock -->
+    <div class="form-section">
+      <h2 class="section-title">Pricing & Inventory</h2>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="price" class="form-label">
+            Price (USD)<span class="label-required">*</span>
+          </label>
+          <input 
+            type="number" 
+            id="price" 
+            name="price" 
+            class="form-input" 
+            placeholder="0.00"
+            step="0.01"
+            min="0"
+            value="<%= typeof data !== 'undefined' && data ? data.price : '' %>"
+            required
+          >
+          <div class="error-message" id="priceError">Price must be greater than 0</div>
+        </div>
+
+        <div class="form-group">
+          <label for="quantityAvailable" class="form-label">
+            Stock Quantity<span class="label-required">*</span>
+          </label>
+          <input 
+            type="number" 
+            id="quantityAvailable" 
+            name="quantityAvailable" 
+            class="form-input" 
+            placeholder="0"
+            min="0"
+            value="<%= typeof data !== 'undefined' && data ? data.quantityAvailable : '' %>"
+            required
+          >
+          <div class="error-message" id="quantityAvailableError">Stock quantity is required</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Image Upload -->
+    <div class="form-section">
+      <h2 class="section-title">Product Image</h2>
+      
+      <div class="form-group">
+        <label for="file" class="form-label">
+          Product Image<span class="label-required">*</span>
+        </label>
+        
+        <!-- Current Image Preview (for edit mode) -->
+        <% if (typeof data !== 'undefined' && data && data.imageUrl) { %>
+          <div class="current-image-wrapper">
+            <p class="form-hint">Current Image:</p>
+            <div class="current-image-preview">
+              <img src="<%= data.imageUrl %>" alt="<%= data.name %>" class="current-image">
+            </div>
+            <p class="form-hint">Upload a new image to replace the current one</p>
+          </div>
+        <% } %>
+        
+        <!-- Image Upload Area -->
+        <div class="image-upload-area" id="uploadArea">
+          <div class="upload-icon">📤</div>
+          <div class="upload-text">Drop image here or click to upload</div>
+          <div class="upload-hint">Support: JPG, PNG, WEBP (Max 5MB)</div>
+        </div>
+        
+        <input 
+          type="file" 
+          id="file" 
+          name="file" 
+          class="file-input" 
+          accept="image/jpeg,image/png,image/webp"
+          <%= typeof data === 'undefined' || !data ? 'required' : '' %>
+        >
+        
+        <!-- New Image Preview -->
+        <div class="image-preview-container" id="previewContainer"></div>
+        
+        <div class="error-message" id="fileError">
+          <%= typeof data !== 'undefined' && data ? 'Please select a valid image file' : 'Product image is required' %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <a href="/seller/products" class="btn-cancel">Cancel</a>
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <%= typeof data !== 'undefined' && data ? 'Update Product' : 'Add Product' %>
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  const productIdEl = document.querySelector("#productId");
+  const isEdit = !!productIdEl;
+  const productId = isEdit ? productIdEl.textContent.trim() : '';
+
+  const fileInput = document.getElementById('file');
+  const uploadArea = document.getElementById('uploadArea');
+  const previewContainer = document.getElementById('previewContainer');
+
+  // File upload handling
+  uploadArea.addEventListener('click', () => {
+    fileInput.click();
+  });
+
+  // Drag and drop
+  uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('dragover');
+  });
+
+  uploadArea.addEventListener('dragleave', () => {
+    uploadArea.classList.remove('dragover');
+  });
+
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      fileInput.files = files;
+      previewImage(files[0]);
+    }
+  });
+
+  // File input change
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+      previewImage(e.target.files[0]);
+      fileInput.classList.remove('error');
+      document.getElementById('fileError').classList.remove('show');
+    }
+  });
+
+  // Preview image
+  function previewImage(file) {
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      showNotification('Please select a valid image file (JPG, PNG, or WEBP)', 'error');
+      fileInput.value = '';
+      return;
+    }
+
+    // Validate file size (5MB max)
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    if (file.size > maxSize) {
+      showNotification('Image size must be less than 5MB', 'error');
+      fileInput.value = '';
+      return;
+    }
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      previewContainer.innerHTML = `
+        <div class="image-preview">
+          <img src="${e.target.result}" alt="Preview" class="preview-image">
+          <button type="button" class="remove-image" onclick="removeImage()">×</button>
+        </div>
+      `;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Remove image
+  function removeImage() {
+    fileInput.value = '';
+    previewContainer.innerHTML = '';
+  }
+
+  // Form validation
+  function validateForm() {
+    let isValid = true;
+    const name = document.getElementById('name');
+    const category = document.getElementById('category');
+    const description = document.getElementById('description');
+    const price = document.getElementById('price');
+    const quantityAvailable = document.getElementById('quantityAvailable');
+
+    // Reset errors
+    document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
+    document.querySelectorAll('.form-input, .form-select, .form-textarea, .file-input').forEach(el => el.classList.remove('error'));
+
+    if (name.value.trim().length < 3) {
+      name.classList.add('error');
+      document.getElementById('nameError').textContent = 'Product name must be at least 3 characters';
+      document.getElementById('nameError').classList.add('show');
+      isValid = false;
+    }
+
+    if (!category.value) {
+      category.classList.add('error');
+      document.getElementById('categoryError').classList.add('show');
+      isValid = false;
+    }
+
+    if (description.value.trim().length < 10) {
+      description.classList.add('error');
+      document.getElementById('descriptionError').textContent = 'Description must be at least 10 characters';
+      document.getElementById('descriptionError').classList.add('show');
+      isValid = false;
+    }
+
+    if (parseFloat(price.value) <= 0 || !price.value) {
+      price.classList.add('error');
+      document.getElementById('priceError').classList.add('show');
+      isValid = false;
+    }
+
+    if (parseInt(quantityAvailable.value) < 0 || !quantityAvailable.value) {
+      quantityAvailable.classList.add('error');
+      document.getElementById('quantityAvailableError').textContent = 'Stock cannot be negative';
+      document.getElementById('quantityAvailableError').classList.add('show');
+      isValid = false;
+    }
+
+    // Validate file upload (only required for new products)
+    if (!isEdit && fileInput.files.length === 0) {
+      fileInput.classList.add('error');
+      document.getElementById('fileError').classList.add('show');
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+  // Form submission
+  document.getElementById('productForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      showNotification('Please fix the errors in the form', 'error');
+      return;
+    }
+
+    // Create FormData for file upload
+    const formData = new FormData();
+    formData.append('name', document.getElementById('name').value.trim());
+    formData.append('categoryId', document.getElementById('category').value);
+    formData.append('brand', document.getElementById('brand').value.trim());
+    formData.append('description', document.getElementById('description').value.trim());
+    formData.append('price', parseFloat(document.getElementById('price').value));
+    formData.append('quantityAvailable', parseInt(document.getElementById('quantityAvailable').value));
+    
+    // Add file if present
+    if (fileInput.files.length > 0) {
+      formData.append('file', fileInput.files[0]);
+    }
+
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = isEdit ? 'Updating...' : 'Adding...';
+
+    try {
+      const url = isEdit 
+        ? `/api/seller/products/${productId}` 
+        : '/api/seller/products';
+      
+      const method = isEdit ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method: method,
+        // Note: Don't set Content-Type header - browser will set it automatically with boundary for multipart/form-data
+        body: formData
+      });
+
+      if (response.ok) {
+        showNotification(
+          isEdit ? 'Product updated successfully!' : 'Product added successfully!', 
+          'success'
+        );
+        setTimeout(() => {
+          window.location.href = '/seller/products';
+        }, 1500);
+      } else {
+        const error = await response.json();
+        showNotification(error.message || 'Failed to save product', 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = isEdit ? 'Update Product' : 'Add Product';
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      showNotification('Failed to save product', 'error');
+      submitBtn.disabled = false;
+      submitBtn.textContent = isEdit ? 'Update Product' : 'Add Product';
+    }
+  });
+
+  // Clear errors on input
+  document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(input => {
+    input.addEventListener('input', () => {
+      input.classList.remove('error');
+      const errorId = input.id + 'Error';
+      const errorEl = document.getElementById(errorId);
+      if (errorEl) {
+        errorEl.classList.remove('show');
+      }
+    });
+  });
+
+  function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: ${type === 'success' ? '#10B981' : '#EF4444'};
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      z-index: 9999;
+      animation: slideIn 0.3s ease;
+    `;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+
+  // Animations
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideIn {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(400px); opacity: 0; }
+    }
+  `;
+  document.head.appendChild(style);
+</script>
+
+<%- include('../components/end.ejs') %>

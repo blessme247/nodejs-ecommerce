@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { getProducts, getProductsBySellerId, updateProduct, addProduct } from "../../controllers/products.controller.js";
+import { getProducts, getProductsBySellerId, updateProduct, addProduct, getSellerProductsPage } from "../../controllers/products.controller.js";
 import verifyRoles from "../../middleware/verifyRoles.js";
 import verifyJwt from "../../middleware/verifyJwt.js";
 import { roles } from "../../config/seedData.js";
@@ -16,6 +16,8 @@ router
   .route("/")
   .get(getProducts)
   .post(verifyRoles(adminRole.code, sellerRole.code), addProduct);
+
+router.route("/seller").get(verifyRoles(sellerRole.code), getSellerProductsPage)
 
 router
   .route("/:id")

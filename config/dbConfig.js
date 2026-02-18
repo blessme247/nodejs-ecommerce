@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { seedRoles, seedStatuses } from "./seedData.js";
+import { seedCategories, seedRoles, seedStatuses } from "./seedData.js";
 import os from "os"
 import dns from 'node:dns/promises';
 
@@ -17,6 +17,7 @@ const connectDB = async ()=> {
 
         await seedStatuses()
         await seedRoles()
+        await seedCategories()
         
     } catch (error) {
         console.error(error, "DB connection error")

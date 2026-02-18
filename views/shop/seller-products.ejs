@@ -1,8 +1,8 @@
-<%- include('./components/head.ejs') %>
+<%- include('../components/head.ejs') %>
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/products.css">
     </head>
-<%- include('./components/navigation.ejs') %>
+<%- include('../components/navigation.ejs') %>
 <body>
 
 <div class="products-container">
@@ -10,14 +10,14 @@
     <div class="header-content">
       <h1>My Products</h1>
       <p class="header-subtitle">
-        <% if (typeof products !== 'undefined' && products && products.length > 0) { %>
-          Manage your <%= products.length %> product<%= products.length !== 1 ? 's' : '' %>
+        <% if (typeof data !== 'undefined' && data && data.length > 0) { %>
+          Manage your <%= data.length %> product<%= data.length !== 1 ? 's' : '' %>
         <% } else { %>
           No products yet. Start by adding your first product!
         <% } %>
       </p>
     </div>
-    <a href="/seller/products/new" class="btn-add-product">
+    <a href="/seller/manage-product" class="btn-add-product">
       <span>➕</span>
       <span>Add New Product</span>
     </a>
@@ -49,7 +49,7 @@
     </select>
   </div>
 
-  <% if (typeof products !== 'undefined' && products && products.length > 0) { %>
+  <% if (typeof data !== 'undefined' && data && data.length > 0) { %>
     <div class="products-table">
       <div class="table-header">
         <div>Image</div>
@@ -60,14 +60,13 @@
         <div>Actions</div>
       </div>
       <div class="table-body">
-        <% products.forEach(product => { %>
+        <% data.forEach(product => { %>
           <div class="product-row" data-product-id="<%= product._id %>">
-            <div class="product-image-cell">
-              <%= product.emoji || '📦' %>
-            </div>
+            <img class="product-image-cell" src="<%= product.asset.secure_url || '📦' %>" />
+             
             <div class="product-name-cell">
               <div class="product-name"><%= product.name %></div>
-              <div class="product-category"><%= product.category || 'Uncategorized' %></div>
+              <div class="product-category"><%= product.category.name || 'Uncategorized' %></div>
             </div>
             <div class="price-cell">$<%= product.price %></div>
             <div><%= product.stock || 0 %> units</div>
@@ -75,10 +74,10 @@
               <% 
                 let stockClass = 'in-stock';
                 let stockText = 'In Stock';
-                if (product.stock === 0) {
+                if (product.quantityAvailable === 0) {
                   stockClass = 'out-stock';
                   stockText = 'Out of Stock';
-                } else if (product.stock < 10) {
+                } else if (product.quantityAvailable < 10) {
                   stockClass = 'low-stock';
                   stockText = 'Low Stock';
                 }
@@ -88,14 +87,14 @@
             <div class="actions-cell">
               <button 
                 class="btn-icon btn-edit" 
-                onclick="editProduct('<%= product._id %>')"
+                onclick="editProduct('<%= data._id %>')"
                 title="Edit product"
               >
                 ✏️
               </button>
               <button 
                 class="btn-icon btn-delete" 
-                onclick="deleteProduct('<%= product._id %>', '<%= product.name %>')"
+                onclick="deleteProduct('<%= data._id %>', '<%= data.name %>')"
                 title="Delete product"
               >
                 🗑️
@@ -107,17 +106,17 @@
     </div>
 
     <!-- Pagination -->
-    <% if (typeof paginator !== 'undefined' && paginator && paginator.totalPages > 1) { %>
+    <% if (paginator) { %>
       <div class="pagination">
         <button 
           class="page-btn" 
-          <%= paginator.currentPage === 1 ? 'disabled' : '' %> 
+          <%= !paginator.prev ? 'disabled' : '' %> 
           onclick="window.location.href='/seller/products?page=<%= paginator.currentPage - 1 %>'"
         >
           ‹
         </button>
         
-        <% for (let i = 1; i <= paginator.totalPages; i++) { %>
+        <!-- <% for (let i = 1; i <= paginator.totalPages; i++) { %>
           <% if (i === 1 || i === paginator.totalPages || (i >= paginator.currentPage - 1 && i <= paginator.currentPage + 1)) { %>
             <button 
               class="page-btn <%= i === paginator.currentPage ? 'active' : '' %>" 
@@ -128,11 +127,11 @@
           <% } else if (i === paginator.currentPage - 2 || i === paginator.currentPage + 2) { %>
             <span class="page-btn" disabled>...</span>
           <% } %>
-        <% } %>
+        <% } %> -->
         
         <button 
           class="page-btn" 
-          <%= paginator.currentPage === paginator.totalPages ? 'disabled' : '' %>
+          <%= !paginator.next ? 'disabled' : '' %>
           onclick="window.location.href='/seller/products?page=<%= paginator.currentPage + 1 %>'"
         >
           ›
@@ -145,7 +144,7 @@
         <div class="empty-icon">📦</div>
         <h2 class="empty-title">No Products Yet</h2>
         <p class="empty-text">Start selling by adding your first product to the catalog.</p>
-        <a href="/seller/products/new" class="btn-add-product">
+        <a href="/seller/manage-product" class="btn-add-product">
           <span>➕</span>
           <span>Add Your First Product</span>
         </a>
@@ -156,7 +155,7 @@
 
 <script>
   function editProduct(productId) {
-    window.location.href = `/seller/products/edit/${productId}`;
+    window.location.href = `/seller/manage-product/${productId}`;
   }
 
   async function deleteProduct(productId, productName) {

@@ -376,3 +376,44 @@ C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\components\navigation.ejs:2
     28|         const isBuyer = isLoggedIn && user.role === 'Buyer';
 
 user is not defined
+20260218	01:32:02	f7d34150-87c9-455b-ac1d-c9410cbf4880	TypeError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\index.ejs:5
+    3|     <link rel="stylesheet" href="/css/index.css">
+    4|     </head>
+ >> 5| <%- include('./components/navigation.ejs') %>
+    6| <body>
+    7| 
+    8| <!-- Hero Section -->
+
+C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\components\navigation.ejs:66
+    64|           <div class="profile-dropdown" id="profileDropdown">
+    65|             <button class="profile-button" id="profileButton">
+ >> 66|               <div class="profile-avatar"><%= user.username ? user.name.charAt(0).toUpperCase() : 'U' %></div>
+    67|               <span><%= user.username || 'User' %></span>
+    68|               <span>▾</span>
+    69|             </button>
+
+Cannot read properties of undefined (reading 'charAt')
+20260218	01:32:09	97c0e114-cfd9-4645-bba7-685c2cbce1b8	TypeError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\index.ejs:5
+    3|     <link rel="stylesheet" href="/css/index.css">
+    4|     </head>
+ >> 5| <%- include('./components/navigation.ejs') %>
+    6| <body>
+    7| 
+    8| <!-- Hero Section -->
+
+C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\components\navigation.ejs:66
+    64|           <div class="profile-dropdown" id="profileDropdown">
+    65|             <button class="profile-button" id="profileButton">
+ >> 66|               <div class="profile-avatar"><%= user.username ? user.name.charAt(0).toUpperCase() : 'U' %></div>
+    67|               <span><%= user.username || 'User' %></span>
+    68|               <span>▾</span>
+    69|             </button>
+
+Cannot read properties of undefined (reading 'charAt')
+20260218	01:48:16	c1765287-34e1-403d-872e-b2640f47191d	Error: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\shop\seller-products.ejs:1
+ >> 1| <%- include('./components/head.ejs') %>
+    2|     <link rel="stylesheet" href="/css/index.css">
+    3|     <link rel="stylesheet" href="/css/products.css">
+    4|     </head>
+
+Could not find the include file "./components/head.ejs"

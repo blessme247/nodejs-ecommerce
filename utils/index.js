@@ -13,6 +13,7 @@ export const paginateResponse = (result, page, limit) => {
     prev,
     from,
     to,
+    currentPage: page
   };
 
   return { data, paginator };

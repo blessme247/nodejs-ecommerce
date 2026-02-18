@@ -35,7 +35,7 @@
       <nav class="nav-desktop">
         <% if (isSeller) { %>
           <a href="/seller/dashboard" class="nav-link <%= typeof pathName !== 'undefined' && pathName === 'seller-dashboard' ? 'active' : '' %>">Dashboard</a>
-          <a href="/seller/products" class="nav-link <%= typeof pathName !== 'undefined' && pathName === 'seller-products' ? 'active' : '' %>">My Products</a>
+          <a href="/products/seller" class="nav-link <%= typeof pathName !== 'undefined' && pathName === 'seller-products' ? 'active' : '' %>">My Products</a>
           <a href="/seller/orders" class="nav-link <%= typeof pathName !== 'undefined' && pathName === 'seller-orders' ? 'active' : '' %>">Orders</a>
         <% } else { %>
           <a href="/" class="nav-link <%= typeof pathName !== 'undefined' && pathName === 'home' ? 'active' : '' %>">Home</a>
@@ -63,8 +63,8 @@
           <!-- Profile Dropdown -->
           <div class="profile-dropdown" id="profileDropdown">
             <button class="profile-button" id="profileButton">
-              <div class="profile-avatar"><%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %></div>
-              <span><%= user.name || 'User' %></span>
+              <div class="profile-avatar"><%= user.username ? user.username.charAt(0).toUpperCase() : 'U' %></div>
+              <span><%= user.username || 'User' %></span>
               <span>▾</span>
             </button>
             <div class="dropdown-menu">

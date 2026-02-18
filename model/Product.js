@@ -24,6 +24,7 @@ const productSchema = new Schema({
     },
     sellerId: {type: Schema.Types.ObjectId, ref: 'User'},
     categoryId: {type: Schema.Types.ObjectId, ref: 'ProductCategory'},
+    assetId: {type: Schema.Types.ObjectId, ref: 'Asset'},
 },
 {
     timestamps: true

@@ -11,6 +11,7 @@ const verifyJwt = (req, res, next) => {
       if (err) return handleError(req, res, 403, { message: "Forbidden" }); // invalid token
       req.user = decoded.UserInfo.username;
       req.role = decoded.UserInfo.role;
+      req.userId = decoded.UserInfo.userId;
       next();
     });
     return
@@ -33,6 +34,7 @@ const verifyJwt = (req, res, next) => {
     }
     req.user = decoded.UserInfo.username;
     req.role = decoded.UserInfo.role;
+    req.userId = decoded.UserInfo.userId;
     next();
   });
 };

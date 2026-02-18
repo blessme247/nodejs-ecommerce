@@ -1,4 +1,5 @@
 import OrderStatus from "../model/OrderStatus.js"
+import ProductCategory from "../model/ProductCategory.js";
 import Role from "../model/Role.js"
 
 const statuses = [
@@ -20,6 +21,12 @@ export const roles = [
  { name: "Admin" , code: 141920 }
 ];
 
+const categories = [
+{name: "Gadgets", code: 700700},
+{name: "Automobile", code: 100100},
+{name: "Food and Fruits", code: 600600}
+]
+
 export const seedStatuses = async ()=> {
     const count = await OrderStatus.countDocuments({})
     if (count === 0) {
@@ -34,5 +41,13 @@ const count = await Role.countDocuments({})
         await Role.insertMany(roles)
         // console.log("roles initialized")
     } 
+}
+
+export const seedCategories = async () => {
+    const count = await ProductCategory.countDocuments({})
+    if (count === 0) {
+        await ProductCategory.insertMany(categories)
+        console.log("categories seeded")
+    }  
 }
 

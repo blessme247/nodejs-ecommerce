@@ -4,6 +4,8 @@ import ProductCategory from "../model/ProductCategory.js";
 import User from "../model/User.js";
 import { handleError } from "../utils/handleError.js";
 import { handleSuccess } from "../utils/handleSuccess.js";
+import { paginateResponse } from "../utils/index.js";
+import uploadToCloud from "../services/uploadToCloud.js";
 
 export const getProducts = async (req, res) => {
   try {
@@ -108,8 +110,9 @@ export const getProductsBySellerId = async (req, res) => {
 
 export const addProduct = async (req, res) => {
   try {
-    const username = req.user;
-    const foundUser = await User.findOne({ username }).exec();
+    const { success, error, asset } = await uploadToCloud(req);
+    const userId = req.userId;
+    const foundUser = await User.findById(userId).exec();
     const { name, price, description, quantityAvailable, categoryId } =
       req.body;
 
@@ -193,12 +196,15 @@ export const updateProduct = async (req, res) => {
 export const getSellerProductsPage  = async (req, res) => {
   try {
     const userId = req.userId
+    console.log(userId, 'user id')
 
     const seller = await Seller.findOne({ userId }).exec();
-    if (!seller) return res.status(404).json({ message: "Seller not found" });
+    if (!seller) return res.redirect("/login")
 
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
+    const inStock = req.query.inStock
+    const categoryId = req.query.categoryId
     const skip = (page - 1) * limit;
     const match = {};
     const pipeline = [];
@@ -210,6 +216,18 @@ export const getSellerProductsPage  = async (req, res) => {
     if (categoryId) {
       match["categoryId"] = categoryId;
     }
+      const categoryLookup = {
+          from: "category",
+          localField: "categoryId", // Field in 'product'
+          foreignField: "_id", // Field in 'category'
+          as: "category",
+        }
+         const assetLookup = {
+          from: "asset",
+          localField: "assetId", // Field in 'product'
+          foreignField: "_id", // Field in 'asset'
+          as: "asset",
+        }
     const sort = { _id: 1 };
     const facet = {
       data: [{ $skip: skip }, { $limit: limit }],
@@ -230,16 +248,24 @@ export const getSellerProductsPage  = async (req, res) => {
     //   },
     // ];
 
-    pipeline.push({ $match: match }, { $sort: sort }, { $facet: facet });
+    pipeline.push(
+      { $match: match }, 
+      { $lookup: categoryLookup }, 
+      { $unwind: "$category" },
+      { $unset: ["_id", "__v"] }, 
+      { $lookup: assetLookup }, 
+      { $unwind: "$asset" },
+      { $unset: ["_id", "__v", "productId", "resource_type", "type", "bytes", "folder"] }, 
+      { $sort: sort },
+      { $facet: facet });
 
     const result = await Product.aggregate(pipeline).exec();
 
     const { data, paginator } = paginateResponse(result, page, limit);
 
-    if (!result || result.length === 0)
-      return res.status(404).json({ message: "No product found." });
+    if (!result || result.length === 0) return handleSuccess(req, res, 200, { filePath: "shop/seller-products", data: [], pageTitle: "Seller Products", paginator: {} });
 
-    return res.status(200).json({ data, paginator });
+    return handleSuccess(req, res, 200, { filePath: "shop/seller-products", data, paginator, pageTitle: "Seller Products" });
   } catch (error) {
     console.log(error, "error in catch block");
     return res.status(500).json({ message: "Internal server error" });
