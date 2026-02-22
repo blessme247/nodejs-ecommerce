@@ -75,14 +75,14 @@ const uploadToCloud = async (req) => {
         folder: result.folder,
         user: foundUser._id ?? "",
       });
-      await asset.save();
-      return { success: true, asset, error: null}
+      // await asset.save();
+      return { asset, error: null}
     }
 
     // console.log(result, 'cloudinary upload result')
   } catch (error) {
     // console.log(error, 'error in catch block')
-    return { success: false, asset: null, error: error.message || "Internal server error" };
+    return {  asset: null, error: error.message || "Internal server error" };
   }
 };
 

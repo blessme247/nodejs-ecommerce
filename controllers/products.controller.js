@@ -36,12 +36,20 @@ export const getProducts = async (req, res) => {
 
     const { data, paginator } = paginateResponse(result, page, limit);
 
-    if (!result || result.length === 0) return handleError(req, res, 404, { message: "products not found" });
+    if (!result || result.length === 0)
+      return handleError(req, res, 404, { message: "products not found" });
 
-    return handleSuccess(req, res, 200, {data, paginator, pageTitle: "Products", path: "shop/products"})
+    return handleSuccess(req, res, 200, {
+      data,
+      paginator,
+      pageTitle: "Products",
+      path: "shop/products",
+    });
   } catch (error) {
     console.log(error, "error in catch block");
-   return handleError(req, res, 500, { message: error?.message || "Internal server error" })
+    return handleError(req, res, 500, {
+      message: error?.message || "Internal server error",
+    });
   }
 };
 
@@ -110,32 +118,43 @@ export const getProductsBySellerId = async (req, res) => {
 
 export const addProduct = async (req, res) => {
   try {
-    const { success, error, asset } = await uploadToCloud(req);
     const userId = req.userId;
     const foundUser = await User.findById(userId).exec();
-    const { name, price, description, quantityAvailable, categoryId } =
-      req.body;
 
-    if (quantityAvailable == 0 || typeof quantityAvailable !== "number")
-      return res.status(400).json({ message: `Invalid quantity` });
-    const foundCategory = await ProductCategory.findById(categoryId).exec();
-    if (!foundCategory)
-      return res.status(400).json({ message: `Invalid category` });
+    if (foundUser) {
+      const {  error, asset } = await uploadToCloud(req);
+      if (asset) {
+        const { name, price, description, quantityAvailable, categoryId } =
+          req.body;
 
-    const product = new Product({
-      name,
-      price,
-      description,
-      quantityAvailable,
-      categoryId,
-      sellerId: foundUser._id,
-    });
+        if (quantityAvailable == 0 || typeof quantityAvailable !== "number")
+          return res.status(400).json({ message: `Invalid quantity` });
+        const foundCategory = await ProductCategory.findById(categoryId).exec();
+        if (!foundCategory)
+          return res.status(400).json({ message: `Invalid category` });
 
-    await product.save();
+        await asset.save()
 
-    return res.status(201).json({ success: `New product added!` });
+        const product = new Product({
+          name,
+          price,
+          description,
+          quantityAvailable,
+          categoryId,
+          sellerId: foundUser._id,
+          assetId: asset._id
+        });
+
+        await product.save();
+
+        // return res.status(201).json({ message: `New product added!` });
+        res.redirect("/products/seller")
+      } else {
+        return res.status(400).json({ message: error });
+      }
+    }
   } catch (error) {
-    console.log(error, "error");
+    // console.log(error, "error");
     return res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -147,33 +166,31 @@ export const updateProduct = async (req, res) => {
       return res.status(400).json({ message: "id parameter is required" });
     }
 
-    const { name, price, description, quantityAvailable, categoryId } = req.body;
-    
+    const { name, price, description, quantityAvailable, categoryId } =
+      req.body;
+
     if (!name && !price && !description && !quantityAvailable && !categoryId) {
-      return res.status(400).json({ 
-        message: "At least one field is required to update" 
+      return res.status(400).json({
+        message: "At least one field is required to update",
       });
     }
 
     const foundCategory = await ProductCategory.findById(categoryId).exec();
-    if (!foundCategory) return res.status(400).json({ message: `Invalid category` });
+    if (!foundCategory)
+      return res.status(400).json({ message: `Invalid category` });
 
-    
     const updateFields = {};
     if (name !== undefined) updateFields.name = name;
     if (price !== undefined) updateFields.price = price;
     if (description !== undefined) updateFields.description = description;
-    if (quantityAvailable !== undefined) updateFields.quantityAvailable = quantityAvailable;
+    if (quantityAvailable !== undefined)
+      updateFields.quantityAvailable = quantityAvailable;
     if (categoryId !== undefined) updateFields.categoryId = categoryId;
 
-    const product = await Product.findByIdAndUpdate(
-      id,
-      updateFields,
-      { 
-        new: true, 
-        runValidators: true
-      }
-    );
+    const product = await Product.findByIdAndUpdate(id, updateFields, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!product) {
       return res.status(404).json({
@@ -184,27 +201,26 @@ export const updateProduct = async (req, res) => {
     console.log(product, "product update result");
     return res.json({
       message: `Product ${product._id} updated!`,
-      product 
+      product,
     });
-
   } catch (error) {
     console.log(error, "error");
     return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const getSellerProductsPage  = async (req, res) => {
+export const getSellerProductsPage = async (req, res) => {
   try {
-    const userId = req.userId
-    console.log(userId, 'user id')
+    const userId = req.userId;
+    // console.log(userId, 'user id')
 
     const seller = await Seller.findOne({ userId }).exec();
-    if (!seller) return res.redirect("/login")
+    if (!seller) return res.redirect("/login");
 
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    const inStock = req.query.inStock
-    const categoryId = req.query.categoryId
+    const inStock = req.query.inStock;
+    const categoryId = req.query.categoryId;
     const skip = (page - 1) * limit;
     const match = {};
     const pipeline = [];
@@ -216,58 +232,132 @@ export const getSellerProductsPage  = async (req, res) => {
     if (categoryId) {
       match["categoryId"] = categoryId;
     }
-      const categoryLookup = {
-          from: "category",
-          localField: "categoryId", // Field in 'product'
-          foreignField: "_id", // Field in 'category'
-          as: "category",
-        }
-         const assetLookup = {
-          from: "asset",
-          localField: "assetId", // Field in 'product'
-          foreignField: "_id", // Field in 'asset'
-          as: "asset",
-        }
+    const categoryLookup = {
+      from: "category",
+      localField: "categoryId", // Field in 'product'
+      foreignField: "_id", // Field in 'category'
+      as: "category",
+    };
+    const assetLookup = {
+      from: "asset",
+      localField: "assetId", // Field in 'product'
+      foreignField: "_id", // Field in 'asset'
+      as: "asset",
+    };
     const sort = { _id: 1 };
     const facet = {
       data: [{ $skip: skip }, { $limit: limit }],
       total: [{ $count: "count" }],
     };
 
-    // Aggregation pipeline for paginated results
-    // const pipelinee = [
-    //   { $match: {
-    //     sellerId:  seller.userId
-    //   } },
-    //   { $sort: { _id: 1 } }, // or other sort key
-    //   {
-    //     $facet: {
-    //       data: [{ $skip: skip }, { $limit: limit }],
-    //       total: [{ $count: "count" }],
-    //     },
-    //   },
-    // ];
-
     pipeline.push(
-      { $match: match }, 
-      { $lookup: categoryLookup }, 
+      { $match: match },
+      { $lookup: categoryLookup },
       { $unwind: "$category" },
-      { $unset: ["_id", "__v"] }, 
-      { $lookup: assetLookup }, 
+      { $unset: ["_id", "__v"] },
+      { $lookup: assetLookup },
       { $unwind: "$asset" },
-      { $unset: ["_id", "__v", "productId", "resource_type", "type", "bytes", "folder"] }, 
+      {
+        $unset: [
+          "_id",
+          "__v",
+          "productId",
+          "resource_type",
+          "type",
+          "bytes",
+          "folder",
+        ],
+      },
       { $sort: sort },
-      { $facet: facet });
+      { $facet: facet },
+    );
 
     const result = await Product.aggregate(pipeline).exec();
 
     const { data, paginator } = paginateResponse(result, page, limit);
 
-    if (!result || result.length === 0) return handleSuccess(req, res, 200, { filePath: "shop/seller-products", data: [], pageTitle: "Seller Products", paginator: {} });
+    if (!result || result.length === 0)
+      return handleSuccess(req, res, 200, {
+        filePath: "shop/seller-products",
+        data: [],
+        pageTitle: "Seller Products",
+        paginator: {},
+      });
 
-    return handleSuccess(req, res, 200, { filePath: "shop/seller-products", data, paginator, pageTitle: "Seller Products" });
+    return handleSuccess(req, res, 200, {
+      filePath: "shop/seller-products",
+      data,
+      paginator,
+      pageTitle: "Seller Products",
+    });
   } catch (error) {
     console.log(error, "error in catch block");
     return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getProductManagementPage = async (req, res) => {
+  try {
+    const categories = await ProductCategory.find().exec();
+    // console.log(categories, "categories")
+    const { productId } = req.params;
+    if (!productId)
+      return handleSuccess(req, res, 200, {
+        filePath: "shop/manage-product",
+        data: null,
+        pageTitle: "Add Product",
+        categories,
+      });
+
+    const pipeline = [];
+    const categoryLookup = {
+      from: "category",
+      localField: "categoryId", // Field in 'product'
+      foreignField: "_id", // Field in 'category'
+      as: "category",
+    };
+    const assetLookup = {
+      from: "asset",
+      localField: "assetId", // Field in 'product'
+      foreignField: "_id", // Field in 'asset'
+      as: "asset",
+    };
+    const sort = { _id: 1 };
+    pipeline.push(
+      { $match: { _id: productId } },
+      { $lookup: categoryLookup },
+      { $unwind: "$category" },
+      { $unset: ["_id", "__v"] },
+      { $lookup: assetLookup },
+      { $unwind: "$asset" },
+      {
+        $unset: [
+          "_id",
+          "__v",
+          "productId",
+          "resource_type",
+          "type",
+          "bytes",
+          "folder",
+        ],
+      },
+      { $sort: sort },
+    );
+
+    const product = await Product.aggregate(pipeline).exec();
+    return handleSuccess(req, res, 200, {
+      filePath: "shop/manage-product",
+      data: product[0],
+      pageTitle: "Add Product",
+      categories,
+    });
+  } catch (error) {
+    return handleError(req, res, 500, {
+      filePath: "shop/manage-product",
+      message: error?.message || "Internal server error",
+      data: null,
+      pageTitle: "Add Product",
+      categories: null,
+    });
   }
 };

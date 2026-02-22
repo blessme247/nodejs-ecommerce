@@ -6,9 +6,9 @@ import assetsRouter from "./assets.js"
 import rolesRouter from "./roles.js"
 import ordersRouter from "./orders.js"
 import productsRouter from "./products.js"
-import path from "path"
-import { fileURLToPath } from 'url';
-import { dirname as pathDirname } from 'path';
+// import path from "path"
+// import { fileURLToPath } from 'url';
+// import { dirname as pathDirname } from 'path';
 import { getLoginPage, getSignupPage } from "../../controllers/auth.controller.js"
 import { getHomepage } from "../../controllers/views.controller.js"
 

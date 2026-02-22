@@ -1,9 +1,9 @@
 export const handleSuccess = (req, res, statusCode, options) => {
   const args = { ...options };
-  const { data, paginator = undefined, message = '', filePath, pageTitle = 'EvoMart - Your Online Store' } = args;
+  const { data, paginator = undefined, message = '', filePath, pageTitle = 'EvoMart - Your Online Store', ...rest } = args;
   
   const jsonResponse = {
-    ...(data && { data }),
+    // ...(data && { data }),
     ...(paginator && { paginator }),
     ...(message && { message }),
     ...(pageTitle && { pageTitle }),
@@ -13,7 +13,9 @@ export const handleSuccess = (req, res, statusCode, options) => {
   // } 
   // const {path, ...remainingRenderOptions} = rest
   return res.render(filePath, {
-    ...jsonResponse
+    ...jsonResponse,
+    ...rest,
+    data
   })
 
 };

@@ -417,3 +417,42 @@ Cannot read properties of undefined (reading 'charAt')
     4|     </head>
 
 Could not find the include file "./components/head.ejs"
+20260219	01:14:47	db5f5603-38d9-4373-b3a4-bf5cc5df5874	Error: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\shop\manage-product.ejs:1
+ >> 1| <%- include('./components/head.ejs') %>
+    2|     <link rel="stylesheet" href="/css/index.css">
+    3|     <link rel="stylesheet" href="/css/manage-product.css">
+    4|     </head>
+
+Could not find the include file "./components/head.ejs"
+20260219	01:15:23	d0ce2a7f-d6d3-4aad-8632-00e7f39b1b34	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\shop\manage-product.ejs:21
+    19|       <h2 class="section-title">Basic Information</h2>
+    20| 
+ >> 21|       <% if (data) { %>
+    22|         <div class="" id="productId" hidden><%= data._id %></div>
+    23|       <% } %>
+    24|       
+
+data is not defined
+20260219	01:19:18	6b151ece-7edd-4e75-a314-b4ba1c810776	SyntaxError: Unexpected token '>' in C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\shop\manage-product.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+20260219	01:19:41	a2591b96-b5a9-4cac-8596-0d5598ac9776	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\shop\manage-product.ejs:8
+    6| <body>
+    7| 
+ >> 8|    <% 
+    9|         // Determine user role and authentication status
+    10|         console.log('data in manage product:', data);
+    11|       %>
+
+data is not defined
+20260219	01:26:41	86a96f2c-6100-4621-bc17-c835d626616d	ReferenceError: C:\Users\USER\Desktop\blessme\nodejs-ecommerce\views\shop\manage-product.ejs:8
+    6| <body>
+    7| 
+ >> 8|    <% 
+    9|         // Determine user role and authentication status
+    10|         console.log('categories in manage product:', categories);
+    11|       %>
+
+categories is not defined
