@@ -456,3 +456,41 @@ data is not defined
     11|       %>
 
 categories is not defined
+20260302	05:12:25	592a0e40-8447-4acb-aa09-e1830d0eae77	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/auth/signin.ejs:27
+    25|           placeholder="you@example.com"
+    26|           required
+ >> 27|           value="<%= formValues?.email ?? '' %>"
+    28|         >
+    29|          <% if (validationErrors.length) { %>
+    30|            <div class="error-message" id="emailError"><%= validationErrors?.find((err) => err.path === 'email')?.msg ?? '' %></div>
+
+formValues is not defined
+20260302	05:12:38	36d813ee-202e-46a7-8be3-af0e25aeed95	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/auth/signin.ejs:27
+    25|           placeholder="you@example.com"
+    26|           required
+ >> 27|           value="<%= formValues?.email ?? '' %>"
+    28|         >
+    29|          <% if (validationErrors.length) { %>
+    30|            <div class="error-message" id="emailError"><%= validationErrors?.find((err) => err.path === 'email')?.msg ?? '' %></div>
+
+formValues is not defined
+20260302	05:13:36	2b97cfc6-21b3-4c52-9b2c-ae4e7b57d021	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/auth/signin.ejs:27
+    25|           placeholder="you@example.com"
+    26|           required
+ >> 27|           value="<%= formValues?.email ?? '' %>"
+    28|         >
+    29|          <% if (validationErrors.length) { %>
+    30|            <div class="error-message" id="emailError"><%= validationErrors?.find((err) => err.path === 'email')?.msg ?? '' %></div>
+
+formValues is not defined
+20260302	05:13:49	99b60978-78a1-4130-8fde-b3e34b53c66d	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/auth/signin.ejs:27
+    25|           placeholder="you@example.com"
+    26|           required
+ >> 27|           value="<%= formValues?.email ?? '' %>"
+    28|         >
+    29|          <% if (validationErrors.length) { %>
+    30|            <div class="error-message" id="emailError"><%= validationErrors?.find((err) => err.path === 'email')?.msg ?? '' %></div>
+
+formValues is not defined
+20260302	06:27:04	644d1d76-62d6-4d49-959d-193d8c8c5a33	TypeError: Cannot read properties of null (reading '_id')
+20260302	06:28:48	a626177b-803a-482d-9214-08b49602088b	TypeError: Cannot read properties of null (reading '_id')

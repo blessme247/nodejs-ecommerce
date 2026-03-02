@@ -280,6 +280,7 @@
       font-size: 0.9375rem;
       transition: all 0.2s ease;
       border-bottom: 1px solid var(--border);
+      cursor: pointer;
     }
 
     .dropdown-item:first-child {
@@ -289,6 +290,20 @@
     .dropdown-item:last-child {
       border-bottom: none;
       border-radius: 0 0 12px 12px;
+      font-size: 0.9375rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      width: 100%;
+      button {
+        background-color: transparent;
+        border: none;
+        font-size: 0.9375rem;
+        width: 100%;
+        cursor: pointer;
+        align-self: flex-start;
+        text-align: left;
+      }
     }
 
     .dropdown-item:hover {

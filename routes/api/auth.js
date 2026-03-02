@@ -1,8 +1,7 @@
 import express from "express"
 const router = express.Router();
-import {handleLogin, handleRegister} from "../../controllers/auth.controller.js"
+import {handleLogin, handleRegister, handleLogout} from "../../controllers/auth.controller.js"
 import refreshToken from "../../controllers/refresh.token.controller.js";
-import logout from "../../controllers/logout.controller.js";
 import { authRateLimiter } from "../../middleware/rateLimiter.js";
 import { body } from "express-validator";
 
@@ -26,6 +25,6 @@ router.post("/signup", [
 
 router.route("/refresh").post(refreshToken)
 
-router.route("/logout").post(logout)
+router.route("/logout").post(handleLogout)
 
 export default router;

@@ -148,23 +148,25 @@ const handleLogin = async (req, res) => {
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "1d" },
     );
+    // console.log(accessToken, 'accessToken')
+    // console.log(refreshToken, 'refreshToken')
 
     // await User.findOneAndUpdate({ email: foundUser.email }, { refreshToken }).exec();
     foundUser.refreshToken = refreshToken;
     await foundUser.save();
 
-    res.cookie("jwt", refreshToken, {
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
     // if(!req.accepts("json")){
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 30 * 60 * 1000,
     });
     // }
@@ -206,4 +208,50 @@ const getSignupPage = async (req, res) => {
   });
 };
 
-export { handleRegister, handleLogin, getLoginPage, getSignupPage };
+const handleLogout = async (req, res) => {
+  console.log("handle logout function called");
+  const cookies = req.cookies;
+  if (!cookies?.refreshToken) return res.sendStatus(204); // No content
+  const refreshToken = cookies?.refreshToken;
+
+  // is refresh token in DB ?
+  const foundUser = await User.findOne({ refreshToken: refreshToken }).exec();
+  // console.log(foundUser, "found user");
+  if (!foundUser) {
+    // res.clearCookie("jwt", {httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    });
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    });
+    // return res.sendStatus(204)
+    res.redirect("/");
+    return;
+  }
+  await User.findByIdAndUpdate(foundUser._id, { refreshToken: "" });
+  res.clearCookie("accessToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+  });
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+  });
+  // return res.sendStatus(204)
+  res.redirect("/");
+};
+
+export {
+  handleRegister,
+  handleLogin,
+  getLoginPage,
+  getSignupPage,
+  handleLogout,
+};

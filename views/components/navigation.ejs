@@ -77,7 +77,10 @@
                 <a href="/seller/dashboard" class="dropdown-item">📊 Dashboard</a>
                 <a href="/seller/settings" class="dropdown-item">⚙️ Settings</a>
               <% } %>
-              <a href="/logout" class="dropdown-item logout">🚪 Logout</a>
+              <form  action="/auth/logout" method="POST" class="dropdown-item logout">
+
+                <button type="submit" class="logout-button">🚪 Logout</button>
+              </form>
             </div>
           </div>
         <% } else { %>
