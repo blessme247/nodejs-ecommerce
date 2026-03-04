@@ -5,7 +5,8 @@ import User from "../model/User.js";
 import { handleError } from "../utils/handleError.js";
 import { handleSuccess } from "../utils/handleSuccess.js";
 import { paginateResponse } from "../utils/index.js";
-import uploadToCloud from "../services/uploadToCloud.js";
+import {uploadToCloud} from "../services/uploadToCloud.js";
+import { validationResult } from "express-validator";
 
 export const getProducts = async (req, res) => {
   try {
@@ -117,21 +118,56 @@ export const getProductsBySellerId = async (req, res) => {
 };
 
 export const addProduct = async (req, res) => {
+   let errors = validationResult(req);
+    console.log(errors, "errors")
+    const categories = await ProductCategory.find().exec();
+    if (!errors.isEmpty()) {
+      return handleError(req, res, 400, {
+        message: errors.array()[0].msg,
+        filePath: "shop/manage-product",
+        pageTitle: "Add Product",
+        errors: errors.array(),
+        formValues: req.body,
+        data: null,
+        categories
+      });
+
+    }
+
+
   try {
     const userId = req.userId;
     const foundUser = await User.findById(userId).exec();
+    console.log(foundUser, "found user")
+    if(!foundUser) return res.redirect("/login")
 
-    if (foundUser) {
-      const {  error, asset } = await uploadToCloud(req);
+      const { error, asset } = await uploadToCloud(req);
       if (asset) {
         const { name, price, description, quantityAvailable, categoryId } =
           req.body;
 
-        if (quantityAvailable == 0 || typeof quantityAvailable !== "number")
-          return res.status(400).json({ message: `Invalid quantity` });
+      //   if (quantityAvailable == 0 || typeof quantityAvailable !== "number")
+      //    return handleError(req, res, 400, {
+      //   message: "Invalid quantity",
+      //   filePath: "shop/manage-product",
+      //   pageTitle: "Add Product",
+      //   errors: [{path: "quantityAvailable", msg: "Quantity must be a number"}],
+      //   formValues: req.body,
+      //   data: null,
+      //   categories
+      // });
+
         const foundCategory = await ProductCategory.findById(categoryId).exec();
         if (!foundCategory)
-          return res.status(400).json({ message: `Invalid category` });
+         return handleError(req, res, 400, {
+        message: "Invalid category",
+        filePath: "shop/manage-product",
+        pageTitle: "Add Product",
+        errors: [{path: "categoryId", msg: "Category does not exist"}],
+        formValues: req.body,
+        data: null,
+        categories
+      });
 
         await asset.save()
 
@@ -147,15 +183,48 @@ export const addProduct = async (req, res) => {
 
         await product.save();
 
-        // return res.status(201).json({ message: `New product added!` });
+    //     res.render("shop/manage-product", {
+    //     pathName: "shop/manage-product",
+    //     validationErrors: [],
+    //     errorMessage: null,
+    //     pageTitle: "Add Product",
+    //     data: null
+    // })
+    //     return res.status(201).json({ message: `New product added!` });
         res.redirect("/products/seller")
       } else {
-        return res.status(400).json({ message: error });
+
+     return handleError(req, res, 400, {
+        message: error,
+        filePath: "shop/manage-product",
+        pageTitle: "Add Product",
+        errors: errors.array(),
+        formValues: req.body,
+        data: null,
+        categories
+      });
       }
-    }
+ 
   } catch (error) {
     // console.log(error, "error");
-    return res.status(500).json({ message: "Internal server error" });
+    //  res.render("shop/manage-product", {
+    //     pathName: "shop/manage-product",
+    //     validationErrors: [],
+    //     errorMessage: null,
+    //     pageTitle: "Add Product",
+    //     data: null
+    // })
+    // return res.status(500).json({ message: "Internal server error" });
+
+     return handleError(req, res, 400, {
+        message: "",
+        filePath: "shop/manage-product",
+        pageTitle: "Add Product",
+        errors: [],
+        formValues: req.body,
+        data: null,
+        categories
+      });
   }
 };
 
@@ -307,11 +376,13 @@ export const getProductManagementPage = async (req, res) => {
         data: null,
         pageTitle: "Add Product",
         categories,
+        validationErrors: [],
+        formValues: null
       });
 
     const pipeline = [];
     const categoryLookup = {
-      from: "category",
+      from: "productcategory",
       localField: "categoryId", // Field in 'product'
       foreignField: "_id", // Field in 'category'
       as: "category",
@@ -350,6 +421,8 @@ export const getProductManagementPage = async (req, res) => {
       data: product[0],
       pageTitle: "Add Product",
       categories,
+      validationErrors: [],
+      formValues: null
     });
   } catch (error) {
     return handleError(req, res, 500, {
@@ -358,6 +431,8 @@ export const getProductManagementPage = async (req, res) => {
       data: null,
       pageTitle: "Add Product",
       categories: null,
+      validationErrors: [],
+      formValues: null
     });
   }
 };

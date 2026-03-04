@@ -24,10 +24,14 @@
 
   .product-form {
     background: white;
-    border-radius: 24px;
+  }
+
+  .product-form_wrapper {
+    background: inherit;
     padding: 3rem;
     border: 1px solid var(--border);
     box-shadow: var(--shadow-md);
+    border-radius: 24px;
   }
 
   .form-section {
@@ -105,16 +109,6 @@
     border-color: var(--error);
   }
 
-  .error-message {
-    color: var(--error);
-    font-size: 0.8125rem;
-    margin-top: 0.5rem;
-    display: none;
-  }
-
-  .error-message.show {
-    display: block;
-  }
 
   .form-hint {
     font-size: 0.8125rem;

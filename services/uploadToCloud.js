@@ -1,13 +1,12 @@
 import dotenv from "dotenv";
 dotenv.config();
 import multer from "multer";
-import constants from "../utils/constants.js";
+// import constants from "../utils/constants.js";
 import { v2 as cloudinary } from "cloudinary";
-const { fileSizeLimit } = constants;
 import Asset from "../model/Asset.js";
 import User from "../model/User.js";
-import utils from "../utils/constants.js"
-const {cloudinaryAssestFolderName} = utils
+import {cloudinaryAssestFolderName, fileSizeLimit, allowedImageFormats} from "../utils/constants.js"
+
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -16,24 +15,28 @@ cloudinary.config({
 });
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage, limits: { fileSize: fileSizeLimit } }).single(
+const upload = multer({ storage}).single(
   "file"
 );
 
 const uploadAdapter = (req, res, next) => {
-  upload(req, res, function (err) {
-    if (err instanceof multer.MulterError) {
-      // A Multer error occurred when uploading.
-      //   console.error(err, 'multer error ')
-
-      if (err.code === "LIMIT_FILE_SIZE") {
-        return res.status(400).json({ message: "File size exceeds limit." });
+  upload(req, res, function (error) {
+    // console.log(req, 'request')
+    if(error){
+      console.log(error, 'upload error')
+      if (error instanceof multer.MulterError) {
+        // A Multer error occurred when uploading.
+          console.error(err, 'multer error ')
+  
+        // if (error.code === "LIMIT_FILE_SIZE") {
+        //   return res.status(400).json({ message: "File size exceeds limit." });
+        // }
+        return res.status(400).json({ message: error.message });
+      } else  {
+        // An unknown error occurred when uploading.
+        console.error(error, "unknown error ");
+        return res.status(400).json({ message: error.message });
       }
-      return res.status(400).json({ message: err.message });
-    } else if (err) {
-      // An unknown error occurred when uploading.
-      console.error(err, "unknown error ");
-      return res.status(400).json({ message: err.message });
     }
     // Everything went fine.
     next();
@@ -87,4 +90,4 @@ const uploadToCloud = async (req) => {
 };
 
 
-export default { uploadAdapter, uploadToCloud };
+export { uploadAdapter, uploadToCloud };

@@ -1,0 +1,185 @@
+  
+  <div class="product-form_wrapper">
+  <!-- Basic Information -->
+    <div class="form-section">
+      <h2 class="section-title">Basic Information</h2>
+
+       <% 
+        console.log('form values in product form:', formValues);
+      %>
+
+      <!-- <% if (data) { %>
+        <div class="" id="productId" hidden><%= data._id %></div>
+      <% } %> -->
+      
+      <div class="form-group">
+        <label for="name" class="form-label">
+          Product Name<span class="label-required">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          class="form-input" 
+          placeholder="e.g., Wireless Headphones Pro"
+          value="<%= formValues?.name ?? '' %>"
+          required
+        >
+        <!-- <div class="error-message" id="nameError">Product name is required</div> -->
+          <% if (validationErrors.length) { %>
+           <div class="error-message" id="nameError"><%= validationErrors?.find((err) => err.path === 'name')?.msg ?? '' %></div>
+            <% } %>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="categoryId" class="form-label">
+            Category<span class="label-required">*</span>
+          </label>
+          <select id="categoryId" name="categoryId" class="form-select" required>
+            <option>Select a category</option>
+            <% if (typeof categories !== 'undefined' && categories && categories.length > 0) { %>
+              <% categories.forEach(category => { %>
+                <option 
+                  value="<%= category._id %>" 
+                  <%=  formValues?.categoryId?.toString() === category._id.toString() ? 'selected' : '' %>
+                >
+                  <%= category.name %>
+                </option>
+              <% }); %>
+            <% } %>
+          </select>
+          <!-- <div class="error-message" id="categoryError">Please select a category</div> -->
+             <% if (validationErrors.length) { %>
+           <div class="error-message" ><%= validationErrors?.find((err) => err.path === 'category')?.msg ?? '' %></div>
+            <% } %>
+        </div>
+
+     
+      </div>
+
+      <div class="form-group">
+        <label for="description" class="form-label">
+          Description<span class="label-required">*</span>
+        </label>
+        <textarea 
+          id="description" 
+          name="description" 
+          class="form-textarea" 
+          placeholder="Describe your product, its features, and benefits..."
+          required
+          value="<%= formValues?.description ?? '' %>"
+        ><%=  formValues?.description ?? '' %></textarea>
+        <!-- <div class="form-hint">Provide a detailed description to help buyers understand your product</div> -->
+        <!-- <div class="error-message" id="descriptionError">Description is required</div> -->
+           <% if (validationErrors.length) { %>
+           <div class="error-message" ><%= validationErrors?.find((err) => err.path === 'description')?.msg ?? '' %></div>
+            <% } %>
+      </div>
+    </div>
+
+    <!-- Pricing & Stock -->
+    <div class="form-section">
+      <h2 class="section-title">Pricing & Inventory</h2>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="price" class="form-label">
+            Price (USD)<span class="label-required">*</span>
+          </label>
+          <input 
+            type="number" 
+            id="price" 
+            name="price" 
+            class="form-input" 
+            placeholder="0.00"
+            step="0.01"
+            min="0"
+            value="<%= formValues?.price ?? '' %>"
+            required
+          >
+          <!-- <div class="error-message" id="priceError">Price must be greater than 0</div> -->
+             <% if (validationErrors.length) { %>
+           <div class="error-message" id="nameError"><%= validationErrors?.find((err) => err.path === 'price')?.msg ?? '' %></div>
+            <% } %>
+        </div>
+
+        <div class="form-group">
+          <label for="quantityAvailable" class="form-label">
+            Stock Quantity<span class="label-required">*</span>
+          </label>
+          <input 
+            type="number" 
+            id="quantityAvailable" 
+            name="quantityAvailable" 
+            class="form-input" 
+            placeholder="0"
+            min="0"
+            value="<%= formValues?.quantityAvailable ?? '' %>"
+            required
+          >
+          <!-- <div class="error-message" id="quantityAvailableError">Stock quantity is required</div> -->
+             <% if (validationErrors.length) { %>
+           <div class="error-message" id="nameError"><%= validationErrors?.find((err) => err.path === 'quantityAvailable')?.msg ?? '' %></div>
+            <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Image Upload -->
+    <div class="form-section">
+      <h2 class="section-title">Product Image</h2>
+      
+      <div class="form-group">
+        <label for="file" class="form-label">
+          Product Image<span class="label-required">*</span>
+        </label>
+        
+        <!-- Current Image Preview (for edit mode) -->
+        <% if (typeof data !== 'undefined' && data && data.imageUrl) { %>
+          <div class="current-image-wrapper">
+            <p class="form-hint">Current Image:</p>
+            <div class="current-image-preview">
+              <img src="<%= data.imageUrl %>" alt="<%= data.name %>" class="current-image">
+            </div>
+            <p class="form-hint">Upload a new image to replace the current one</p>
+          </div>
+        <% } %>
+        
+        <!-- Image Upload Area -->
+        <div class="image-upload-area" id="uploadArea">
+          <div class="upload-icon">📤</div>
+          <div class="upload-text">Drop image here or click to upload</div>
+          <div class="upload-hint">Support: JPG, PNG, WEBP (Max 2MB)</div>
+        </div>
+        
+        <input 
+          type="file" 
+          id="file" 
+          name="file" 
+          class="file-input" 
+          accept="image/jpeg,image/png,image/webp"
+          <%= typeof data === 'undefined' || !data ? 'required' : '' %>
+        >
+        
+        <!-- New Image Preview -->
+        <div class="image-preview-container" id="previewContainer"></div>
+        
+        <!-- <div class="error-message" id="fileError">
+          <%= typeof data !== 'undefined' && data ? 'Please select a valid image file' : 'Product image is required' %>
+        </div> -->
+         <% if (validationErrors.length) { %>
+           <div class="error-message" id="nameError"><%= validationErrors?.find((err) => err.path === 'file')?.msg ?? '' %></div>
+            <% } %>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <a href="/products/seller" class="btn-cancel">Cancel</a>
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <%= typeof data !== 'undefined' && data ? 'Update Product' : 'Add Product' %>
+      </button>
+    </div>
+
+    </div>

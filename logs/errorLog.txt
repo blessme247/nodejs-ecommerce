@@ -494,3 +494,174 @@ formValues is not defined
 formValues is not defined
 20260302	06:27:04	644d1d76-62d6-4d49-959d-193d8c8c5a33	TypeError: Cannot read properties of null (reading '_id')
 20260302	06:28:48	a626177b-803a-482d-9214-08b49602088b	TypeError: Cannot read properties of null (reading '_id')
+20260302	08:14:57	3e42cca8-07e3-446c-8bd8-15282f148b95	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/manage-product.ejs:39
+    37|         >
+    38|         <!-- <div class="error-message" id="nameError">Product name is required</div> -->
+ >> 39|           <% if (validationErrors.length) { %>
+    40|            <div class="error-message" id="nameError"><%= validationErrors?.find((err) => err.path === 'name')?.msg ?? '' %></div>
+    41|             <% } %>
+    42|       </div>
+
+validationErrors is not defined
+20260302	08:17:07	b44f3632-6918-417c-8928-0b80fb7952ce	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/manage-product.ejs:39
+    37|         >
+    38|         <!-- <div class="error-message" id="nameError">Product name is required</div> -->
+ >> 39|           <% if (validationErrors.length) { %>
+    40|            <div class="error-message" id="nameError"><%= validationErrors?.find((err) => err.path === 'name')?.msg ?? '' %></div>
+    41|             <% } %>
+    42|       </div>
+
+validationErrors is not defined
+20260302	08:57:15	d2cd93b3-ad32-4d50-8d23-b7958f9fe663	Error: Cannot set headers after they are sent to the client
+20260302	09:31:52	00351c33-a336-4baf-b540-766388f71ba6	Error: Cannot set headers after they are sent to the client
+20260302	09:37:56	9756d249-c7c9-4065-9331-1639e472dbfe	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/manage-product.ejs:21
+    19|       <h2 class="section-title">Basic Information</h2>
+    20| 
+ >> 21|       <% if (data) { %>
+    22|         <div class="" id="productId" hidden><%= data._id %></div>
+    23|       <% } %>
+    24|       
+
+data is not defined
+20260302	10:08:15	f749854c-3416-44e9-9d55-35f2fca2946b	Error: Cannot set headers after they are sent to the client
+20260302	10:08:35	a0bdfba9-0c4a-493f-8ece-39a7cf4e9195	TypeError: The "path" argument must be of type string. Received an instance of Object
+20260304	05:36:32	1cf1ea7f-80b5-4ca8-921d-5262d469cf33	Error: Cannot set headers after they are sent to the client
+20260304	05:47:30	6836b3a6-36c3-41cb-847a-a9fcba96c48e	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/manage-product.ejs:17
+    15| 
+    16|   <form class="product-form" id="productForm" novalidate action="/products" method="POST" enctype="multipart/form-data">
+ >> 17|    <%- include('../components/manage-product-form.ejs') %>
+    18|   </form>
+    19| </div>
+    20| 
+
+/Users/guess/Desktop/Work/nodejs-ecommerce/views/components/manage-product-form.ejs:7
+    5|       <h2 class="section-title">Basic Information</h2>
+    6| 
+ >> 7|       <% if (data) { %>
+    8|         <div class="" id="productId" hidden><%= data._id %></div>
+    9|       <% } %>
+    10|       
+
+data is not defined
+20260304	05:48:30	f74a0571-939f-4c2b-b3f4-1013e44ca7fa	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/manage-product.ejs:17
+    15| 
+    16|   <form class="product-form" id="productForm" novalidate action="/products" method="POST" enctype="multipart/form-data">
+ >> 17|    <%- include('../components/manage-product-form.ejs') %>
+    18|   </form>
+    19| </div>
+    20| 
+
+/Users/guess/Desktop/Work/nodejs-ecommerce/views/components/manage-product-form.ejs:7
+    5|       <h2 class="section-title">Basic Information</h2>
+    6| 
+ >> 7|       <!-- <% if (data) { %>
+    8|         <div class="" id="productId" hidden><%= data._id %></div>
+    9|       <% } %> -->
+    10|       
+
+data is not defined
+20260304	05:48:49	517dc874-7e39-4ff8-8c47-fa8779127a5c	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/manage-product.ejs:17
+    15| 
+    16|   <form class="product-form" id="productForm" novalidate action="/products" method="POST" enctype="multipart/form-data">
+ >> 17|    <%- include('../components/manage-product-form.ejs') %>
+    18|   </form>
+    19| </div>
+    20| 
+
+/Users/guess/Desktop/Work/nodejs-ecommerce/views/components/manage-product-form.ejs:7
+    5|       <h2 class="section-title">Basic Information</h2>
+    6| 
+ >> 7|       <!-- <% if (data) { %>
+    8|         <div class="" id="productId" hidden><%= data._id %></div>
+    9|       <% } %> -->
+    10|       
+
+data is not defined
+20260304	06:32:45	14365ad7-0c1b-4859-9766-efceabcc5957	Error: Cannot set headers after they are sent to the client
+20260304	07:23:49	81d4d61a-dbe7-42a2-896f-5c8c41e0ca60	Error: Cannot set headers after they are sent to the client
+20260304	07:24:01	0950f1a3-7eef-48cf-b702-865ad76a1240	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/manage-product.ejs:17
+    15| 
+    16|   <form class="product-form" id="productForm" novalidate action="/products" method="POST" enctype="multipart/form-data">
+ >> 17|    <%- include('../components/manage-product-form.ejs') %>
+    18|   </form>
+    19| </div>
+    20| 
+
+/Users/guess/Desktop/Work/nodejs-ecommerce/views/components/manage-product-form.ejs:21
+    19|           class="form-input" 
+    20|           placeholder="e.g., Wireless Headphones Pro"
+ >> 21|           value="<%= formValues.name ?? '' %>"
+    22|           required
+    23|         >
+    24|         <!-- <div class="error-message" id="nameError">Product name is required</div> -->
+
+formValues is not defined
+20260304	07:25:24	74c67386-6d64-4b91-bdba-1e52611d097b	TypeError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/manage-product.ejs:17
+    15| 
+    16|   <form class="product-form" id="productForm" novalidate action="/products" method="POST" enctype="multipart/form-data">
+ >> 17|    <%- include('../components/manage-product-form.ejs') %>
+    18|   </form>
+    19| </div>
+    20| 
+
+/Users/guess/Desktop/Work/nodejs-ecommerce/views/components/manage-product-form.ejs:21
+    19|           class="form-input" 
+    20|           placeholder="e.g., Wireless Headphones Pro"
+ >> 21|           value="<%= formValues.name ?? '' %>"
+    22|           required
+    23|         >
+    24|         <!-- <div class="error-message" id="nameError">Product name is required</div> -->
+
+Cannot read properties of null (reading 'name')
+20260304	07:26:25	da9118ec-5c65-426a-b2a2-0ac99f176211	TypeError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/manage-product.ejs:17
+    15| 
+    16|   <form class="product-form" id="productForm" novalidate action="/products" method="POST" enctype="multipart/form-data">
+ >> 17|    <%- include('../components/manage-product-form.ejs') %>
+    18|   </form>
+    19| </div>
+    20| 
+
+/Users/guess/Desktop/Work/nodejs-ecommerce/views/components/manage-product-form.ejs:68
+    66|           required
+    67|           value="<%= formValues?.description ?? '' %>"
+ >> 68|         ><%=  formValues.description ?? '' %></textarea>
+    69|         <!-- <div class="form-hint">Provide a detailed description to help buyers understand your product</div> -->
+    70|         <!-- <div class="error-message" id="descriptionError">Description is required</div> -->
+    71|            <% if (validationErrors.length) { %>
+
+Cannot read properties of null (reading 'description')
+20260304	07:36:36	71380862-a053-435c-a048-231d8dd432fa	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/manage-product.ejs:17
+    15| 
+    16|   <form class="product-form" id="productForm" novalidate action="/products" method="POST" enctype="multipart/form-data">
+ >> 17|    <%- include('../components/manage-product-form.ejs') %>
+    18|   </form>
+    19| </div>
+    20| 
+
+/Users/guess/Desktop/Work/nodejs-ecommerce/views/components/manage-product-form.ejs:41
+    39|                 <option 
+    40|                   value="<%= category._id %>" 
+ >> 41|                   <%= typeof formValues !== 'undefined'  && categoryId.categoryId && formValues.categoryId.toString() === category._id.toString() ? 'selected' : '' %>
+    42|                 >
+    43|                   <%= category.name %>
+    44|                 </option>
+
+categoryId is not defined
+20260304	07:54:18	cbb58fcc-0b11-47a2-b87c-1a4760d46ab2	Error: Cannot set headers after they are sent to the client
+20260304	07:54:28	c1e210f8-36e4-4858-a9f1-ba58d2683b75	TypeError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/manage-product.ejs:17
+    15| 
+    16|   <form class="product-form" id="productForm" novalidate action="/products" method="POST" enctype="multipart/form-data">
+ >> 17|    <%- include('../components/manage-product-form.ejs') %>
+    18|   </form>
+    19| </div>
+    20| 
+
+/Users/guess/Desktop/Work/nodejs-ecommerce/views/components/manage-product-form.ejs:45
+    43|                 <option 
+    44|                   value="<%= category._id %>" 
+ >> 45|                   <%= typeof formValues !== 'undefined'  && formValues.categoryId && formValues.categoryId.toString() === category._id.toString() ? 'selected' : '' %>
+    46|                 >
+    47|                   <%= category.name %>
+    48|                 </option>
+
+Cannot read properties of null (reading 'categoryId')

@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 import User from "../model/User.js";
 import Asset from "../model/Asset.js";
 import { v2 as cloudinary } from "cloudinary";
-import utils from "../utils/constants.js"
-const {cloudinaryAssestFolderName } = utils
+import {cloudinaryAssestFolderName} from "../utils/constants.js"
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

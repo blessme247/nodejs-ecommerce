@@ -99,7 +99,7 @@ const handleRegister = async (req, res) => {
 
 const handleLogin = async (req, res) => {
   const errors = validationResult(req);
-
+  console.log(errors, "validation errors")
   if (!errors.isEmpty()) {
     return handleError(req, res, 400, {
       message: errors.array()[0].msg,
@@ -209,7 +209,7 @@ const getSignupPage = async (req, res) => {
 };
 
 const handleLogout = async (req, res) => {
-  console.log("handle logout function called");
+  // console.log("handle logout function called");
   const cookies = req.cookies;
   if (!cookies?.refreshToken) return res.sendStatus(204); // No content
   const refreshToken = cookies?.refreshToken;

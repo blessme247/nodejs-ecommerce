@@ -409,6 +409,13 @@ body {
     cursor: not-allowed;
   }
 
+  .error-message {
+    color: var(--error);
+    font-size: 0.8125rem;
+    margin-top: 0.5rem;
+    /* display: none; */
+  }
+
   @media (max-width: 640px) {
     .hero-title {
       font-size: 2rem;

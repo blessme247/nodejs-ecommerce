@@ -105,7 +105,7 @@
         <select name="roleId" id="roleId" class="form-input"  required>
           <option value="">Select a role</option>
           <% data.forEach(role => { %>
-            <option value="<%= role._id %>" <%= validationErrors?.roleId == role._id ? 'selected' : '' %>><%= role.name %></option>
+            <option value="<%= role._id %>" <%= formValues?.roleId == role._id ? 'selected' : '' %>><%= role.name %></option>
           <% }) %>
         </select> 
        

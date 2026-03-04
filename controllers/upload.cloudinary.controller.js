@@ -3,13 +3,11 @@
 import dotenv from "dotenv";
 dotenv.config();
 import multer from "multer";
-import constants from "../utils/constants.js";
+import { fileSizeLimit , cloudinaryAssestFolderName} from "../utils/constants.js";
 import { v2 as cloudinary } from "cloudinary";
-const { fileSizeLimit } = constants;
+// const { fileSizeLimit } = constants;
 import Asset from "../model/Asset.js";
 import User from "../model/User.js";
-import utils from "../utils/constants.js"
-const {cloudinaryAssestFolderName} = utils
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
