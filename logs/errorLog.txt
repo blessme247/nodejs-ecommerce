@@ -667,3 +667,14 @@ categoryId is not defined
 Cannot read properties of null (reading 'categoryId')
 20260312	01:40:50	36415190-2f5e-4720-971b-d181a38f04c5	Error: Cannot set headers after they are sent to the client
 20260312	02:34:52	3d9e0065-17cb-4f5e-8bb8-759a28909826	Error: Cannot set headers after they are sent to the client
+20260312	03:01:12	9ecce30c-ea26-4ef2-9b0a-bcf51061ba26	TypeError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/seller-products.ejs:65
+    63|         <% data.forEach(product => { %>
+    64|           <div class="product-row" data-product-id="<%= product._id %>">
+ >> 65|             <img class="product-image-cell" src="<%= product.asset.secure_url || '📦' %>" />
+    66|              
+    67|             <div class="product-name-cell">
+    68|               <div class="product-name"><%= product.name %></div>
+
+Cannot read properties of undefined (reading 'secure_url')
+20260312	03:01:12	2a388fb5-35fe-48b2-b01b-a2d568b6c1df	URIError: Failed to decode param '%3C%=%20product.asset.secure_url%20%7C%7C%20'%F0%9F%93%A6'%20%%3E'
+20260312	03:05:10	2bff8314-46f6-491c-a270-8e9fb6a2f5ff	Error: Cannot set headers after they are sent to the client

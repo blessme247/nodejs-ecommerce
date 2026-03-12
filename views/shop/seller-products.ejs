@@ -69,7 +69,7 @@
               <div class="product-category"><%= product.category.name || 'Uncategorized' %></div>
             </div>
             <div class="price-cell">$<%= product.price %></div>
-            <div><%= product.stock || 0 %> units</div>
+            <div><%= product.quantityAvailable || 0 %> units</div>
             <div class="stock-cell">
               <% 
                 let stockClass = 'in-stock';

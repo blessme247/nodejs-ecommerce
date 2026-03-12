@@ -312,7 +312,7 @@ export const getSellerProductsPage = async (req, res) => {
       as: "category",
     };
     const assetLookup = {
-      from: "asset",
+      from: "assets",
       localField: "assetId", // Field in 'product'
       foreignField: "_id", // Field in 'asset'
       as: "asset",
@@ -348,6 +348,8 @@ export const getSellerProductsPage = async (req, res) => {
     const result = await Product.aggregate(pipeline).exec();
 
     const { data, paginator } = paginateResponse(result, page, limit);
+
+    console.log(data, 'data')
 
     if (!result || result.length === 0)
       return handleSuccess(req, res, 200, {
