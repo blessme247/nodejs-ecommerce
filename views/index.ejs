@@ -54,17 +54,18 @@
     <div class="products-grid">
       <% data.forEach(product => { %>
         <div class="product-card" onclick="window.location.href='/product/<%= product._id %>'">
-          <div class="product-image">
+          <div class="product-image-wrapper">
             <% if (product.badge) { %>
               <span class="product-badge <%= product.badge === 'Sale' ? 'sale' : '' %>"><%= product.badge %></span>
             <% } %>
-            <%= product.emoji || '📦' %>
+            <img class="product-image" src="<%= product.asset.secure_url %>" alt="product image">
+            <!-- <%= product.asset.secure_url || '📦' %> -->
           </div>
           <div class="product-info">
             <% if (product.sellerName) { %>
               <div class="product-seller">Sold by <%= product.sellerName %></div>
             <% } %>
-            <div class="product-category"><%= product.category || 'General' %></div>
+            <div class="product-category"><%= product.category.name || 'General' %></div>
             <h3 class="product-name"><%= product.name %></h3>
             <p class="product-description"><%= product.description || 'High quality product from trusted seller' %></p>
             <div class="product-footer">

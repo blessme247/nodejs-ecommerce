@@ -108,7 +108,7 @@
     border-color: var(--primary);
   }
 
-  .product-image {
+  .product-image-wrapper {
     width: 100%;
     height: 240px;
     background: linear-gradient(135deg, #E8EBFE 0%, #F3F4F6 100%);
@@ -118,7 +118,16 @@
     font-size: 4rem;
     position: relative;
     overflow: hidden;
+    
   }
+
+  .product-image {
+      width: 100%;
+      height: 100%;
+      object-position: top;
+      object-fit: contain;
+      /* border: 1px solid red; */
+    }
 
   .product-badge {
     position: absolute;

@@ -169,6 +169,8 @@ export const addProduct = async (req, res) => {
         categories
       });
 
+      // console.log(asset, 'asset')
+
         await asset.save()
 
         const product = new Product({
@@ -294,6 +296,8 @@ export const getSellerProductsPage = async (req, res) => {
     const match = {};
     const pipeline = [];
 
+    console.log(seller, "seller")
+
     match["sellerId"] = seller.userId;
     if (inStock) {
       match["inStock"] = inStock;
@@ -302,7 +306,7 @@ export const getSellerProductsPage = async (req, res) => {
       match["categoryId"] = categoryId;
     }
     const categoryLookup = {
-      from: "category",
+      from: "productcategories",
       localField: "categoryId", // Field in 'product'
       foreignField: "_id", // Field in 'category'
       as: "category",

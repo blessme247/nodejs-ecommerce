@@ -64,7 +64,6 @@ const uploadToCloud = async (req) => {
     if (result && result.secure_url) {
       const userId = req.userId;
       const foundUser = await User.findById(userId).exec();
-      //   console.log(foundUser, "foundUser")
       const asset = new Asset({
         public_id: result.public_id,
         secure_url: result.secure_url,

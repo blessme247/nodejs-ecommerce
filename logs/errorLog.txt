@@ -665,3 +665,5 @@ categoryId is not defined
     48|                 </option>
 
 Cannot read properties of null (reading 'categoryId')
+20260312	01:40:50	36415190-2f5e-4720-971b-d181a38f04c5	Error: Cannot set headers after they are sent to the client
+20260312	02:34:52	3d9e0065-17cb-4f5e-8bb8-759a28909826	Error: Cannot set headers after they are sent to the client
