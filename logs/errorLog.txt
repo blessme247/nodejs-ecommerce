@@ -678,3 +678,38 @@ Cannot read properties of null (reading 'categoryId')
 Cannot read properties of undefined (reading 'secure_url')
 20260312	03:01:12	2a388fb5-35fe-48b2-b01b-a2d568b6c1df	URIError: Failed to decode param '%3C%=%20product.asset.secure_url%20%7C%7C%20'%F0%9F%93%A6'%20%%3E'
 20260312	03:05:10	2bff8314-46f6-491c-a270-8e9fb6a2f5ff	Error: Cannot set headers after they are sent to the client
+20260317	07:49:19	7e618609-85ea-495a-9140-58aaafdc3dcc	Error: Cannot set headers after they are sent to the client
+20260317	08:59:18	6e0133d1-4a6b-4864-b7a2-2ad3dff6ccde	TypeError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/index.ejs:5
+    3|     <link rel="stylesheet" href="/css/index.css">
+    4|     </head>
+ >> 5| <%- include('./components/navigation.ejs') %>
+    6| <body>
+    7| 
+    8| <!-- Hero Section -->
+
+/Users/guess/Desktop/Work/nodejs-ecommerce/views/components/navigation.ejs:25
+    23|       </div>
+    24| 
+ >> 25|       <% 
+    26|         // Determine user role and authentication status
+    27|         const isLoggedIn = typeof user !== 'undefined' && user !== null;
+    28|         const isBuyer = isLoggedIn && user.role === 'Buyer';
+
+Cannot read properties of undefined (reading 'length')
+20260317	09:03:06	b8956b27-c291-4202-865a-5d78b8b68be5	TypeError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/index.ejs:5
+    3|     <link rel="stylesheet" href="/css/index.css">
+    4|     </head>
+ >> 5| <%- include('./components/navigation.ejs') %>
+    6| <body>
+    7| 
+    8| <!-- Hero Section -->
+
+/Users/guess/Desktop/Work/nodejs-ecommerce/views/components/navigation.ejs:25
+    23|       </div>
+    24| 
+ >> 25|       <% 
+    26|         // Determine user role and authentication status
+    27|         const isLoggedIn = typeof user !== 'undefined' && user !== null;
+    28|         const isBuyer = isLoggedIn && user.role === 'Buyer';
+
+Cannot read properties of undefined (reading 'length')

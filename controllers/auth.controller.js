@@ -27,11 +27,16 @@ const handleRegister = async (req, res) => {
       formValues: req.body,
     });
   }
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     const { firstName, lastName, email, password, roleId } = req.body;
 
-    const duplicate = await User.findOne({ email }).exec();
-    if (duplicate)
+    const duplicate = await User.findOne({ email }).session(session);
+    if (duplicate){
+      session.abortTransaction()
       return handleError(req, res, 409, {
         message: "Email already exists",
         filePath: "auth/signup",
@@ -39,6 +44,7 @@ const handleRegister = async (req, res) => {
         data: roles,
         formValues: req.body,
       });
+    }
 
     let role;
     if (!roleId) {
@@ -58,28 +64,31 @@ const handleRegister = async (req, res) => {
       username: username,
     });
 
-    await user.save();
+    await user.save({ session });
 
     if (role.name == "Buyer") {
       const buyer = new Buyer({
         userId: user._id,
         email: user.email,
       });
-      await buyer.save();
+      await buyer.save({ session });
     }
     if (role.name == "Seller") {
       const seller = new Seller({
         userId: user._id,
         email: user.email,
       });
-      await seller.save();
+      await seller.save({ session });
     }
 
+    await session.commitTransaction()
     res.redirect("/login");
   } catch (error) {
-    console.log(error, "error");
+    await session.abortTransaction();
+    // console.log(error.message, "error message");
     if (error instanceof mongoose.Error) {
       return handleError(req, res, 400, {
+        message: error.message.split(':', 2)[1],
         errors: error.errors,
         filePath: "auth/signup",
         pageTitle: "Sign Up",
@@ -94,6 +103,9 @@ const handleRegister = async (req, res) => {
       data: roles,
       formValues: req.body,
     });
+  }
+  finally {
+    session.endSession()
   }
 };
 

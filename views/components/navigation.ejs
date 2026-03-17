@@ -27,6 +27,7 @@
         const isLoggedIn = typeof user !== 'undefined' && user !== null;
         const isBuyer = isLoggedIn && user.role === 'Buyer';
         const isSeller = isLoggedIn && user.role === 'Seller';
+        console.log(cart, 'cart')
         const cartCount = typeof cart !== 'undefined' ? cart.cartItems.length : 0;
         <!-- console.log('User in navigation:', user); -->
       %>

@@ -7,8 +7,8 @@ export const loadCart = async (req, res, next) => {
     const roleName = getRoleName(req.role);
     if(req.user && roleName && roleName == "Buyer") {
          try {
-    
-    const buyer = await User.findOne({username: req.username}).exec()
+   //  console.log(req.userId, 'req userId')
+    const buyer = await User.findById(req.userId).exec()
     // if (!buyer) return res.render('auth/signin', {
     //     pageTitle: "Log In",
     //     path: "auth/signin",
@@ -19,11 +19,12 @@ export const loadCart = async (req, res, next) => {
 
     if(!buyer) res.redirect("/login")
 
-    const cart = await Cart.find({ buyerId: buyer._id }).exec()
+    const cart = await Cart.findOne({ buyerId: buyer._id }).exec()
     
      res.locals.cart = cart || { cartItems: [], totalAmount: 0 }
      res.locals.user = req.user
   } catch (error) {
+   // console.log(error, 'error in load cart')
      res.locals.cart = { cartItems: [], totalAmount: 0 }
   }
     }else {

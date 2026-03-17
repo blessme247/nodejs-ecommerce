@@ -7,7 +7,7 @@ const buyerSchema = new Schema({
     userId: {type: Schema.Types.ObjectId, ref: 'User'},
     phoneNumber: {
         type: String,
-        required: true
+        // required: true
     },
       email: {
         type: String,

@@ -69,7 +69,7 @@ export const getHomepage = async (req, res) => {
     if (!result || result.length === 0) return handleSuccess(req, res, 200, { filePath: "index.ejs", data: [] });
 
     const { data, paginator } = paginateResponse(result, page, limit);
-    console.log(data, 'products data in get homepage')
+    // console.log(data, 'products data in get homepage')
     return handleSuccess(req, res, 200, {data, paginator, filePath: "index.ejs"})
   } catch (error) {
     console.log(error, "error in catch block");
