@@ -35,6 +35,11 @@ const verifyJwt = (req, res, next) => {
     req.user = decoded.UserInfo.username;
     req.role = decoded.UserInfo.role;
     req.userId = decoded.UserInfo.userId;
+    // res.locals.role = getRoleName(decoded.UserInfo.role);
+    res.locals.user = {
+      username: decoded.UserInfo.username,
+      role: getRoleName(decoded.UserInfo.role),
+            };
     next();
   });
 };

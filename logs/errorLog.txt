@@ -713,3 +713,24 @@ Cannot read properties of undefined (reading 'length')
     28|         const isBuyer = isLoggedIn && user.role === 'Buyer';
 
 Cannot read properties of undefined (reading 'length')
+20260319	23:42:20	01fcac74-8d11-4906-abae-55a20b7fad91	TypeError: Cannot read properties of undefined (reading 'csrfToken')
+20260319	23:45:01	01eed3cc-4665-498c-82a1-cbefe33eebb5	TypeError: Cannot read properties of undefined (reading 'csrfToken')
+20260319	23:45:03	b0c5a1ae-f467-46cc-bc46-0c770f465d6a	TypeError: Cannot read properties of undefined (reading 'csrfToken')
+20260319	23:57:40	a530107d-75a4-4939-8713-c3566a7b9181	Error: /Users/guess/Desktop/Work/nodejs-ecommerce/views/index.ejs:5
+    3|     <link rel="stylesheet" href="/css/index.css">
+    4|     </head>
+ >> 5| <%- include('./components/navigation.ejs') %>
+    6| <body>
+    7| 
+    8| <!-- Hero Section -->
+
+Could not find matching close tag for "<%".
+20260320	00:01:42	d8f9c6c7-1207-4264-a326-b660088453a4	Error: /Users/guess/Desktop/Work/nodejs-ecommerce/views/index.ejs:5
+    3|     <link rel="stylesheet" href="/css/index.css">
+    4|     </head>
+ >> 5| <%- include('./components/navigation.ejs') %>
+    6| <body>
+    7| 
+    8| <!-- Hero Section -->
+
+Could not find matching close tag for "<%".

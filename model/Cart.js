@@ -18,6 +18,8 @@ const cartSchema = new Schema({
         required: true,
         default: 0
     },
+    sessionId: { type: String },
+    expiresAt: { type: Date },
 },
 {timestamps: true}
 )

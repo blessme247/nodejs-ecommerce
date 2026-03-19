@@ -24,11 +24,12 @@
 
       <% 
         // Determine user role and authentication status
-        const isLoggedIn = typeof user !== 'undefined' && user !== null;
-        const isBuyer = isLoggedIn && user.role === 'Buyer';
-        const isSeller = isLoggedIn && user.role === 'Seller';
-        console.log(cart, 'cart')
+        const activeSession = typeof user !== 'undefined' && user !== null;
+        const isBuyer = activeSession && user.role === 'Buyer';
+        const isSeller = activeSession && user.role === 'Seller';
+        const isGuest = activeSession && user.role === 'Guest';
         const cartCount = typeof cart !== 'undefined' ? cart.cartItems.length : 0;
+        <!-- console.log(cart, 'cart') -->
         <!-- console.log('User in navigation:', user); -->
       %>
 
@@ -49,9 +50,8 @@
 
       <!-- User Actions -->
       <div class="user-actions">
-        <% if (isLoggedIn) { %>
-          <!-- Cart (Buyer Only) -->
-          <% if (isBuyer) { %>
+        <% if (activeSession) { %>
+          <% if (isBuyer || isGuest) { %>
             <a href="/cart" class="cart-button">
               <span class="cart-icon">🛒</span>
               <span>Cart</span>
@@ -62,7 +62,8 @@
           <% } %>
 
           <!-- Profile Dropdown -->
-          <div class="profile-dropdown" id="profileDropdown">
+           <% if (!isGuest) { %>
+           <div class="profile-dropdown" id="profileDropdown">
             <button class="profile-button" id="profileButton">
               <div class="profile-avatar"><%= user.username ? user.username.charAt(0).toUpperCase() : 'U' %></div>
               <span><%= user.username || 'User' %></span>
@@ -83,7 +84,8 @@
                 <button type="submit" class="logout-button">🚪 Logout</button>
               </form>
             </div>
-          </div>
+          </div> <% } %>
+
         <% } else { %>
           <!-- Auth Buttons (Not Logged In) -->
           <div class="auth-buttons">
@@ -138,7 +140,7 @@
 
       <!-- Mobile User Section -->
       <div class="mobile-user-section">
-        <% if (isLoggedIn) { %>
+        <% if (activeSession) { %>
           <div class="nav-mobile-links">
             <a href="<%= isSeller ? '/seller/profile' : '/profile' %>" class="nav-mobile-link">👤 Profile</a>
             <a href="<%= isSeller ? '/seller/settings' : '/settings' %>" class="nav-mobile-link">⚙️ Settings</a>
