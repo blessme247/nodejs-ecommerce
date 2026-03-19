@@ -111,7 +111,7 @@ const handleRegister = async (req, res) => {
 
 const handleLogin = async (req, res) => {
   const errors = validationResult(req);
-  console.log(errors, "validation errors")
+  // console.log(errors, "validation errors")
   if (!errors.isEmpty()) {
     return handleError(req, res, 400, {
       message: errors.array()[0].msg,
@@ -170,7 +170,7 @@ const handleLogin = async (req, res) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -178,7 +178,7 @@ const handleLogin = async (req, res) => {
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
       maxAge: 30 * 60 * 1000,
     });
     // }
