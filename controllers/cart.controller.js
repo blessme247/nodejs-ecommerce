@@ -40,16 +40,24 @@ const addProductToCart = async (req, res) => {
         .status(400)
         .json({ message: `${product.name} is out of stock` });
     if (product.quantityAvailable < quantity)
-      return res
-        .status(400)
-        .json({
-          message: `Order quantity for ${product.name} exceeds available quantity ${product.quantityAvailable}`,
-        });
+      return res.status(400).json({
+        message: `Order quantity for ${product.name} exceeds available quantity ${product.quantityAvailable}`,
+      });
 
-    const username = req.user;
-    const foundUser = await User.findOne({ username }).exec();
+      let cart
 
-    const cart = await addItemToCart(foundUser._id, productId, quantity);
+      if(req.user) { // logged in user
+
+            const username = req.user;
+            const foundUser = await User.findOne({ username }).exec();
+        
+             cart = await addItemToCart( productId, quantity, {buyerId: foundUser._id,});
+      }
+
+      else{ // Guest user
+        
+             cart = await addItemToCart( productId, quantity, {sessionId: req.sessionID});
+      }
     return res
       .status(201)
       .json({ message: "Product added to cart", data: cart });
@@ -60,5 +68,5 @@ const addProductToCart = async (req, res) => {
 
 export default {
   getCart,
-  addProductToCart
+  addProductToCart,
 };

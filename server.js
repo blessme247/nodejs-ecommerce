@@ -53,6 +53,7 @@ mongoose.connection.once('open', () => {
         resave: false,
         saveUninitialized: false,
         store,
+        rolling: true,  // Extend session on every request
         cookie: {
             secure: process.env.NODE_ENV === 'production',
             httpOnly: true,
@@ -66,6 +67,7 @@ mongoose.connection.once('open', () => {
     app.use(csrfSynchronisedProtection);
 
     app.use((req, res, next) => {
+      // console.log(req.session, 'session')
         res.locals.csrfToken = req.csrfToken();
         next();
     });

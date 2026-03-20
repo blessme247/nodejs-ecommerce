@@ -24,4 +24,7 @@ const cartSchema = new Schema({
 {timestamps: true}
 )
 
+// delete document from DB immediately they expire
+cartSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
 export default mongoose.model('Cart', cartSchema)
