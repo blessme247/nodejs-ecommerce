@@ -28,9 +28,10 @@
         const isBuyer = activeSession && user.role === 'Buyer';
         const isSeller = activeSession && user.role === 'Seller';
         const isGuest = activeSession && user.role === 'Guest';
-        const cartCount = typeof cart !== 'undefined' ? cart.cartItems.length : 0;
+        const cartCount = typeof cart !== 'undefined' ? cart.items.length : 0;
         <!-- console.log(cart, 'cart') -->
         <!-- console.log('User in navigation:', user); -->
+         <!-- console.log(csrfToken, "csrfToken in nav") -->
       %>
 
       <!-- Desktop Navigation -->
@@ -86,11 +87,11 @@
             </div>
           </div> <% } %>
 
-        <% } else { %>
+        <% } if (isGuest)  { %>
           <!-- Auth Buttons (Not Logged In) -->
           <div class="auth-buttons">
             <a href="/login" class="btn-outline">Sign In</a>
-            <a href="/signup" class="btn-primary">Sign Up</a>
+            <!-- <a href="/signup" class="btn-primary">Sign Up</a> -->
           </div>
         <% } %>
       </div>

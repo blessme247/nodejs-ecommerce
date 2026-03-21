@@ -47,24 +47,26 @@ export const getHomepage = async (req, res) => {
       { $match: match },
       { $lookup: categoryLookup },
       { $unwind: "$category" },
-      { $unset: ["_id", "__v"] },
+      // { $unset: ["_id", "__v"] },
        { $lookup: assetLookup },
       { $unwind: "$asset" },
       {
         $unset: [
-          "_id",
-          "__v",
-          "productId",
-          "resource_type",
-          "type",
-          "bytes",
-          "folder",
-        ],
+          // "_id",
+           "__v",
+              "category.__v",
+              "category.code",
+              "asset.type",
+              "asset.bytes",
+              "asset.eager",
+              "asset.format",
+            ],
       },
        { $sort: sort },
         { $facet: facet });
 
     const result = await Product.aggregate(pipeline).exec();
+    
 
     if (!result || result.length === 0) return handleSuccess(req, res, 200, { filePath: "index.ejs", data: [] });
 

@@ -49,10 +49,10 @@ export const loadCart = async (req, res, next) => {
          res.locals.user = {role: "Guest"}
       }
 
-      res.locals.cart = cart || { cartItems: [], totalAmount: 0 };
+      res.locals.cart = cart || { items: [], totalAmount: 0 };
    } catch (error) {
        console.error('Error loading cart:', error);
-    res.locals.cart = { cartItems: [], totalAmount: 0 };
+    res.locals.cart = { items: [], totalAmount: 0 };
    }
 
    next()

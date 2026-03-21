@@ -1,16 +1,16 @@
-<%- include('./components/head.ejs') %>
+<%- include('../components/head.ejs') %>
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/cart.css">
     </head>
-<%- include('./components/navigation.ejs') %>
+<%- include('../components/navigation.ejs') %>
 <body>
 
 <div class="cart-container">
   <div class="cart-header">
     <h1 class="cart-title">Shopping Cart</h1>
     <p class="cart-subtitle">
-      <% if (typeof cart !== 'undefined' && cart && cart.items && cart.items.length > 0) { %>
-        You have <%= cart.totalItems %> item<%= cart.totalItems !== 1 ? 's' : '' %> in your cart
+      <% if (typeof data !== 'undefined' && data && data.items && data.items.length > 0) { %>
+        You have <%= data.items.length %> item<%= data.items.length !== 1 ? 's' : '' %> in your cart
       <% } else { %>
         Your cart is empty
       <% } %>
@@ -18,10 +18,10 @@
   </div>
 
   <div class="cart-layout">
-    <% if (typeof cart !== 'undefined' && cart && cart.items && cart.items.length > 0) { %>
+    <% if (typeof data !== 'undefined' && data && data.items && data.items.length > 0) { %>
       <!-- Cart Items -->
       <div class="cart-items">
-        <% cart.items.forEach((item, index) => { %>
+        <% data.items.forEach((item, index) => { %>
           <div class="cart-item" data-item-id="<%= item.productId %>">
             <div class="item-image" onclick="window.location.href='/product/<%= item.productId %>'">
               <%= item.emoji || '📦' %>
@@ -61,27 +61,27 @@
         <div class="summary-card">
           <h2 class="summary-title">Order Summary</h2>
           
-          <div class="summary-row">
-            <span class="summary-label">Subtotal (<%= cart.totalItems %> items)</span>
-            <span class="summary-value" id="subtotal">$<%= cart.totalPrice.toFixed(2) %></span>
-          </div>
+          <!-- <div class="summary-row">
+            <span class="summary-label">Subtotal (<%= cart.items.length %> items)</span>
+            <span class="summary-value" id="subtotal">$<%= cart.totalAmount.toFixed(2) %></span>
+          </div> -->
           
-          <div class="summary-row">
+          <!-- <div class="summary-row">
             <span class="summary-label">Shipping</span>
             <span class="summary-value" id="shipping">
-              <%= cart.totalPrice >= 50 ? 'FREE' : '$5.99' %>
+              <%= cart.totalAmount >= 50 ? 'FREE' : '$5.99' %>
             </span>
-          </div>
+          </div> -->
           
-          <div class="summary-row">
+          <!-- <div class="summary-row">
             <span class="summary-label">Tax (Estimated)</span>
-            <span class="summary-value" id="tax">$<%= (cart.totalPrice * 0.08).toFixed(2) %></span>
-          </div>
+            <span class="summary-value" id="tax">$<%= (cart.totalAmount * 0.08).toFixed(2) %></span>
+          </div> -->
           
           <div class="summary-row summary-total">
             <span class="total-label">Total</span>
             <span class="total-value" id="total">
-              $<%= (cart.totalPrice + (cart.totalPrice >= 50 ? 0 : 5.99) + (cart.totalPrice * 0.08)).toFixed(2) %>
+              $<%= (data.totalAmount + (data.totalAmount >= 50 ? 0 : 5.99) + (data.totalAmount * 0.08)).toFixed(2) %>
             </span>
           </div>
           
@@ -93,13 +93,13 @@
             Continue Shopping
           </a>
           
-          <div class="promo-section">
+          <!-- <div class="promo-section">
             <div class="summary-label">Have a promo code?</div>
             <div class="promo-input-group">
               <input type="text" class="promo-input" id="promoCode" placeholder="Enter code">
               <button class="promo-btn" onclick="applyPromo()">Apply</button>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     <% } else { %>
@@ -219,4 +219,4 @@
   document.head.appendChild(style);
 </script>
 
-<%- include('./components/end.ejs') %>
+<%- include('../components/end.ejs') %>

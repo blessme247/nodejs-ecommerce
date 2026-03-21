@@ -734,3 +734,40 @@ Could not find matching close tag for "<%".
     8| <!-- Hero Section -->
 
 Could not find matching close tag for "<%".
+20260321	09:42:27	6bc431f0-d2fa-45c6-9336-51e482e844c5	TypeError: Cannot set property query of #<IncomingMessage> which has only a getter
+20260321	09:42:38	c32ef6d7-7b7a-495a-8560-2ba5320fb10d	TypeError: Cannot set property query of #<IncomingMessage> which has only a getter
+20260321	09:43:56	ec5999d3-c6fd-4960-9bc6-803dc8d654bb	TypeError: Cannot set property query of #<IncomingMessage> which has only a getter
+20260321	09:44:47	ceecb099-ca68-4741-abc6-4ec585140d3d	TypeError: Cannot set property query of #<IncomingMessage> which has only a getter
+20260321	16:46:13	de6cd35f-1ef8-48a5-9bdf-2fcf32e14266	Error: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/cart.ejs:1
+ >> 1| <%- include('./components/head.ejs') %>
+    2|     <link rel="stylesheet" href="/css/index.css">
+    3|     <link rel="stylesheet" href="/css/cart.css">
+    4|     </head>
+
+Could not find the include file "./components/head.ejs"
+20260321	16:46:47	e385fc1b-f91e-41f3-a340-ee1bc316a867	Error: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/cart.ejs:1
+ >> 1| <%- include('./components/head.ejs') %>
+    2|     <link rel="stylesheet" href="/css/index.css">
+    3|     <link rel="stylesheet" href="/css/cart.css">
+    4|     </head>
+
+Could not find the include file "./components/head.ejs"
+20260321	16:48:17	ba1f6aa2-b122-4400-9f71-16fa8dec15e6	Error: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/cart.ejs:5
+    3|     <link rel="stylesheet" href="/css/cart.css">
+    4|     </head>
+ >> 5| <%- include('./components/navigation.ejs') %>
+    6| <body>
+    7| 
+    8| <div class="cart-container">
+
+Could not find the include file "./components/navigation.ejs"
+20260321	16:48:36	9b22601f-4dbd-4913-9511-f3ffde1bf6ea	Error: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/cart.ejs:222
+    220| </script>
+    221| 
+ >> 222| <%- include('./components/end.ejs') %>
+    223| 
+
+Could not find the include file "./components/end.ejs"
+20260321	16:49:58	4489aec8-08b0-4bb1-a95f-18be46c51267	ForbiddenError: invalid csrf token
+20260321	17:17:26	6368c777-b131-496c-8d3e-67d9605d9136	ForbiddenError: invalid csrf token
+20260321	18:21:13	5e105ebe-9c0a-49d2-be10-ae026d094baa	MongoServerSelectionError: connection <monitor> to 65.62.2.136:27017 timed out

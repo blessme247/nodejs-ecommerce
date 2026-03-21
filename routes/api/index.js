@@ -6,6 +6,7 @@ import assetsRouter from "./assets.js"
 import rolesRouter from "./roles.js"
 import ordersRouter from "./orders.js"
 import productsRouter from "./products.js"
+import cartRouter from "./cart.js"
 // import path from "path"
 // import { fileURLToPath } from 'url';
 // import { dirname as pathDirname } from 'path';
@@ -43,6 +44,10 @@ const defaultRoutes = [
    {
     path: '/assets',
     route: assetsRouter,
+  },
+  {
+    path: '/cart',
+    route: cartRouter,
   },
 ];
 

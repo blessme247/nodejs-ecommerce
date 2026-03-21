@@ -5,6 +5,10 @@
 <%- include('./components/navigation.ejs') %>
 <body>
 
+   <% 
+         <!-- console.log(data, "data in homepage") -->
+      %>
+
 <!-- Hero Section -->
 <div class="hero-section">
   <div class="hero-content">
@@ -68,12 +72,14 @@
             <div class="product-category"><%= product.category.name || 'General' %></div>
             <h3 class="product-name"><%= product.name %></h3>
             <p class="product-description"><%= product.description || 'High quality product from trusted seller' %></p>
-            <div class="product-footer">
+            <form class="product-footer" action="/cart" method="post">
+              <input type="hidden" name="productId" value="<%= product._id %>" />
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
               <div class="product-price">$<%= product.price %></div>
-              <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('<%= product._id %>')">
+              <button class="add-to-cart" type="submit">
                 Add to Cart
               </button>
-            </div>
+            </form>
           </div>
         </div>
       <% }); %>

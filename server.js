@@ -17,6 +17,9 @@ import { loadCart } from "./middleware/loadCart.js";
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import { csrfSync } from "csrf-sync";
+// import mongoSanitize from "express-mongo-sanitize"
+// import helmet from "helmet";
+// import { randomBytes } from 'crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = pathDirname(__filename);
@@ -31,11 +34,44 @@ app.use(credentials);
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cookieParser()); // ✅ Move cookieParser here (before session)
+app.use(cookieParser()); 
 app.use(express.static(path.join(__dirname, "/public")));
 app.use('/subdir', express.static(path.join(__dirname, "/public")));
 
+// app.use(helmet({
+//       contentSecurityPolicy: {
+//       directives: {
+//         defaultSrc: ["'self'"],
+        
+//         // ✅ Allow images from Cloudinary
+//         imgSrc: [
+//           "'self'",
+//           "data:",
+//           "https://res.cloudinary.com",  // Cloudinary domain
+//           "https://*.cloudinary.com"     // Any Cloudinary subdomain
+//         ],
+//         scriptSrc: [
+//           "'self'",
+//           (req, res) => `'nonce-${res.locals.nonce}'`  
+//         ],
+//         styleSrc: [
+//           "'self'",
+//           (req, res) => `'nonce-${res.locals.nonce}'`, 
+//           "https://fonts.googleapis.com"  
+//         ],
+//         fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
+//         connectSrc: ["'self'"],
+//         // Forms can only submit to self
+//         formAction: ["'self'"],
+        
+//         // Frames (iframes)
+//         frameAncestors: ["'none'"],  // Prevents clickjacking
+//     }
+// }
+// }))
+
 connectDB();
+
 
 
 mongoose.connection.once('open', () => {
@@ -62,15 +98,29 @@ mongoose.connection.once('open', () => {
         }
     }));
 
-    const { csrfSynchronisedProtection } = csrfSync();
+    const { csrfSynchronisedProtection } = csrfSync({
+  getTokenFromRequest: (req) => {
+    // If the incoming request is a application/x-www-form-urlencoded content type
+    // then get the token from the body.
+    if (req.is("application/x-www-form-urlencoded")) {
+      return req.body["_csrf"];
+    }
+    // Otherwise use the header for all other request types
+    return req.headers["x-csrf-token"];
+  },
+});
     
     app.use(csrfSynchronisedProtection);
 
     app.use((req, res, next) => {
-      // console.log(req.session, 'session')
+    //   console.log(req.session, 'session')
         res.locals.csrfToken = req.csrfToken();
+        // Generate a unique nonce for each request
+        // res.locals.nonce = randomBytes(16).toString('base64');
         next();
     });
+
+    // app.use(mongoSanitize())
 
     app.use(loadCart);
 
