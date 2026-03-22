@@ -1,5 +1,6 @@
 import { getOrCreateCart } from "./getOrCreateCart.js";
 import Product from "../../model/Product.js";
+import { syncCartWithSession } from "./syncCartWithSession.js";
 
 export const addItemToCart = async (req, productId, quantity, options) => {
   // console.log('trigger add to cart service')
@@ -28,8 +29,9 @@ export const addItemToCart = async (req, productId, quantity, options) => {
 
   if(sessionId){
     // Sync cart expiration with session
-    const sessionExpiry = req.session.cookie.expires;
-    cart.expiresAt = new Date(sessionExpiry)
+    // const sessionExpiry = req.session.cookie.expires;
+    // cart.expiresAt = new Date(sessionExpiry)
+    syncCartWithSession(req, cart)
   } 
   await cart.save();
   return cart;

@@ -6,6 +6,7 @@ import { validationResult } from "express-validator";
 import { handleError } from "../utils/handleError.js";
 import { getHomepageData } from "../services/getHomepageData.js";
 import { handleSuccess } from "../utils/handleSuccess.js";
+import { syncCartWithSession } from "../services/cart/syncCartWithSession.js";
 
 export const getCart = async (req, res) => {
   try {
@@ -144,7 +145,22 @@ export const addProductToCart = async (req, res) => {
   }
 };
 
-// export default {
-//   getCart,
-//   addProductToCart,
-// };
+export const updateCartItemQuantity = async (req, res) => {
+  let errors = validationResult(req);
+  console.log(errors, "validation errors in cart update");
+  try {
+    const sessionId = req.sessionID
+    const userId = req.userId
+    const {productId, quantity} = req.body
+    const cart = userId ? await Cart.findOne({buyerId: userId}).exec() : await Cart.findOne({sessionId}).exec() 
+    cart.items.find((item)=> item.productId === productId).quantity = quantity
+    syncCartWithSession(req, cart)
+    await cart.save()
+    console.log('updated cart quantity')
+    res.redirect("/cart")
+    
+  } catch (error) {
+    console.log(error, "error")
+  }
+}
+
