@@ -31,22 +31,38 @@ export const getCartPage = async (req, res) => {
   try {
     const sessionId = req.sessionID
     const userId = req.userId
+
     if(userId){ // authenticated user
       const Buyer = await User.findById(userId).exec()
       if(!Buyer) return res.redirect("login")
-        const cart = await Cart.find({ buyerId: userId }).exec()
+        const cart = await Cart.findOne({ buyerId: userId }).populate({
+        path:"items.productId",
+        select:"name price quantityAvailable inStock categoryId assetId",
+        populate: [
+          { path: "categoryId", select: "name" },
+          { path: "assetId", select: "secure_url" },
+        ]
+      }).exec()
       return handleSuccess(req, res, 400, {
       filePath: "shop/cart",
       data: cart,
-      pageTitle: `Cart ${(cart?.items?.length || 0)}`
+      pageTitle: `Cart (${cart?.items?.length || 0})`
     }); 
     }
     else {
-      const cart = await Cart.find({ sessionId }).exec()
+      const cart = await Cart.findOne({ sessionId }).populate({
+        path:"items.productId",
+        select:"name price quantityAvailable inStock categoryId assetId",
+        populate: [
+          { path: "categoryId", select: "name" },
+          { path: "assetId", select: "secure_url" },
+        ]
+      }).exec()
+      
       return handleSuccess(req, res, 400, {
       filePath: "shop/cart",
       data: cart,
-      pageTitle: `Cart ${(cart?.items?.length || 0)}`
+      pageTitle: `Cart (${cart?.items?.length || 0})`
     }); 
     }
   } catch (error) {

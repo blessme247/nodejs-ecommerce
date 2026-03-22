@@ -5,6 +5,8 @@ export const addItemToCart = async (req, productId, quantity, options) => {
   // console.log('trigger add to cart service')
   const {buyerId, sessionId} = options
 
+  // const product = await Product.findById(productId).exec()
+
   // let cart
    const cart =   buyerId  ? await getOrCreateCart({buyerId}) : await getOrCreateCart({sessionId})
   //  console.log(cart, 'cart')
@@ -13,7 +15,7 @@ export const addItemToCart = async (req, productId, quantity, options) => {
   if (existingItem) {
     existingItem.quantity += quantity;
   } else {
-    cart.items.push({ productId, quantity });
+    cart.items.push({ productId, quantity});
   }
 
   let totalAmount = 0;

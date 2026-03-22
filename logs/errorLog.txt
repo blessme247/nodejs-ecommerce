@@ -771,3 +771,52 @@ Could not find the include file "./components/end.ejs"
 20260321	16:49:58	4489aec8-08b0-4bb1-a95f-18be46c51267	ForbiddenError: invalid csrf token
 20260321	17:17:26	6368c777-b131-496c-8d3e-67d9605d9136	ForbiddenError: invalid csrf token
 20260321	18:21:13	5e105ebe-9c0a-49d2-be10-ae026d094baa	MongoServerSelectionError: connection <monitor> to 65.62.2.136:27017 timed out
+20260322	07:11:33	58f77d8d-1db4-4d19-b759-7443c8a51b74	SyntaxError: Unexpected token ';' in /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/cart.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+20260322	07:12:08	9c120c11-3c1f-4a14-8cc6-db86972729f3	SyntaxError: Unexpected token ';' in /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/cart.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+20260322	07:13:14	84264e68-5437-44a6-9236-66008d6b36e0	SyntaxError: Unexpected token ';' in /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/cart.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+20260322	07:13:17	8d32ff24-359b-4c9b-8545-5d05516a5cbd	SyntaxError: Unexpected token ';' in /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/cart.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+20260322	07:13:49	709a6b5f-28ed-43a5-a8b3-869fd1e585e8	SyntaxError: Unexpected token ';' in /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/cart.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+20260322	07:13:53	34234975-643a-4b39-9a46-8079253f56b5	SyntaxError: Unexpected token ';' in /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/cart.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+20260322	07:15:30	843395dc-4896-408d-a310-a80b3f983bd8	SyntaxError: Unexpected token ';' in /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/cart.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+20260322	07:15:33	04ab1b6e-28de-4464-a99e-13d024625490	SyntaxError: Unexpected token ';' in /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/cart.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+20260322	17:14:08	28717edd-5e87-41e0-9c17-e652315ff978	TypeError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/cart.ejs:41
+    39|                     <%= item.name || 'product' %>
+    40|                   </h3>
+ >> 41|                   <div class="item-category"><%= item.categoryId.name || 'General' %></div>
+    42|                 </div>
+    43|                 <button class="remove-btn" onclick="removeItem('<%= item.productId._id %>')" title="Remove item">
+    44|                   ×
+
+Cannot read properties of undefined (reading 'name')
