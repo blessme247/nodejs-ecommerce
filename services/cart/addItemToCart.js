@@ -2,8 +2,10 @@ import { getOrCreateCart } from "./getOrCreateCart.js";
 import Product from "../../model/Product.js";
 import { syncCartWithSession } from "./syncCartWithSession.js";
 
-export const addItemToCart = async (req, productId, quantity, options) => {
+export const addItemToCart = async (req, product, options) => {
   // console.log('trigger add to cart service')
+  const quantity = 1;
+  const productId = product._id.toString()
   const {buyerId, sessionId} = options
 
   // const product = await Product.findById(productId).exec()
@@ -16,7 +18,7 @@ export const addItemToCart = async (req, productId, quantity, options) => {
   if (existingItem) {
     existingItem.quantity += quantity;
   } else {
-    cart.items.push({ productId, quantity});
+    cart.items.push({ productId, quantity });
   }
 
   let totalAmount = 0;
@@ -28,9 +30,6 @@ export const addItemToCart = async (req, productId, quantity, options) => {
   cart.totalAmount = totalAmount;
 
   if(sessionId){
-    // Sync cart expiration with session
-    // const sessionExpiry = req.session.cookie.expires;
-    // cart.expiresAt = new Date(sessionExpiry)
     syncCartWithSession(req, cart)
   } 
   await cart.save();

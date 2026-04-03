@@ -7,7 +7,7 @@ const cartItemsSchema = new Schema({
         required: true,
         min: [1, 'Quantity must be at least 1']
     },
-    productId: {type: Schema.Types.ObjectId, ref: 'Product', required: true}
+    productId: {type: Schema.Types.ObjectId, ref: 'Product', required: true},
 });
 
 const cartSchema = new Schema({

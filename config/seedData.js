@@ -4,11 +4,12 @@ import Role from "../model/Role.js"
 
 const statuses = [
  { name: "Pending", code: 1, description: "Customer has placed order" },
- { name: "Processing", code: 2, description: "Vendor is preparing items" },
- { name: "Shipped", code: 3, description: "Package is with courier" },
- { name: "Delivered", code: 4, description: "Order complete" },
- { name: "Cancelled", code: 5, description: "Order has been cancelled" },
- { name: "Refunded", code: 6, description: "Buyer has been refunded" }
+ { name: "Paid", code: 2, description: "Customer has paid" },
+ { name: "Processing", code: 3, description: "Vendor is preparing items" },
+ { name: "Shipped", code: 4, description: "Package is with courier" },
+ { name: "Delivered", code: 5, description: "Order complete" },
+ { name: "Cancelled", code: 6, description: "Order has been cancelled" },
+ { name: "Refunded", code: 7, description: "Buyer has been refunded" }
  
 //  'pending_payment', 'payment_confirmed', 'processing', 
 //       'partially_shipped', 'shipped', 'delivered', 'completed',

@@ -53,7 +53,7 @@ export const getCartPage = async (req, res) => {
     else {
       const cart = await Cart.findOne({ sessionId }).populate({
         path:"items.productId",
-        select:"name price quantityAvailable inStock categoryId assetId",
+        select:"name price quantityAvailable inStock categoryId assetId sellerId",
         populate: [
           { path: "categoryId", select: "name" },
           { path: "assetId", select: "secure_url" },
@@ -115,7 +115,6 @@ export const addProductToCart = async (req, res) => {
       });
 
     // let cart
-    const quantity = 1;
 
     if (req.user) {
       // logged in user
@@ -123,11 +122,11 @@ export const addProductToCart = async (req, res) => {
       const username = req.user;
       const foundUser = await User.findOne({ username }).exec();
 
-      await addItemToCart(req, productId, quantity, { buyerId: foundUser._id });
+      await addItemToCart(req, product, { buyerId: foundUser._id });
     } else {
       // Guest user
 
-      await addItemToCart(req, productId, quantity, { sessionId: req.sessionID });
+      await addItemToCart(req, product, { sessionId: req.sessionID });
     }
     // return res
     //   .status(201)

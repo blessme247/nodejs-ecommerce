@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const orderItemsSchema = new Schema({
-    name: {
-        type: String
-    },
+export const orderItemsSchema = new Schema({
+    // name: {
+    //     type: String
+    // },
     price: {
         type: Number,
         required: true
