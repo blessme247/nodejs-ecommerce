@@ -17,6 +17,7 @@ import { loadCart } from "./middleware/loadCart.js";
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import { csrfSync } from "csrf-sync";
+import { useAuth } from "./middleware/useAuth.js";
 // import mongoSanitize from "express-mongo-sanitize"
 // import helmet from "helmet";
 // import { randomBytes } from 'crypto';
@@ -122,6 +123,7 @@ mongoose.connection.once('open', () => {
 
     // app.use(mongoSanitize())
 
+    app.use(useAuth)
     app.use(loadCart);
 
     app.use('/', indexRouter);

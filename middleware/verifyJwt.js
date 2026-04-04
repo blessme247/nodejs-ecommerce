@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { handleError } from "../utils/handleError.js";
+import { getRoleName } from "../config/rolesList.js";
 
 const verifyJwt = (req, res, next) => {
   const authHeader =

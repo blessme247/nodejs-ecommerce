@@ -90,6 +90,22 @@
     margin-bottom: 0.25rem;
   }
 
+  .item-name-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .out-of-stock-chip {
+    display: inline-block;
+    background: var(--error);
+    color: white;
+    font-size: 0.625rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    margin-left: 0.5rem;
+  }
+
   .item-name {
     font-size: 1.125rem;
     font-weight: 700;

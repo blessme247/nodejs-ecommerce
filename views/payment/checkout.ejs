@@ -1,0 +1,385 @@
+<%- include('./components/head.ejs') %>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/checkout.css">
+</head>
+<%- include('./components/navigation.ejs') %>
+<body>
+
+<div class="checkout-container">
+  <div class="checkout-wrapper">
+    <!-- Order Summary Card -->
+    <div class="checkout-card">
+      <div class="card-header">
+        <h1 class="checkout-title">Complete Your Order</h1>
+        <p class="checkout-subtitle">Review your order and proceed to payment</p>
+      </div>
+
+      <!-- Order Items -->
+      <div class="order-items">
+        <h3 class="section-title">Order Items (<%= cart.items.length %>)</h3>
+        <% cart.items.forEach(item => { %>
+          <div class="order-item">
+            <div class="item-image">
+              <% if (item.productId && item.productId.assetId && item.productId.assetId.url) { %>
+                <img src="<%= item.productId.assetId.url %>" alt="<%= item.productId.name %>">
+              <% } else { %>
+                <div class="item-placeholder">📦</div>
+              <% } %>
+            </div>
+            <div class="item-info">
+              <h4 class="item-name"><%= item.productId.name %></h4>
+              <p class="item-details">Qty: <%= item.quantity %> × $<%= item.productId.price.toFixed(2) %></p>
+            </div>
+            <div class="item-price">
+              $<%= (item.productId.price * item.quantity).toFixed(2) %>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+
+      <!-- Price Breakdown -->
+      <div class="price-breakdown">
+        <div class="price-row">
+          <span class="price-label">Subtotal</span>
+          <span class="price-value">$<%= cart.totalPrice.toFixed(2) %></span>
+        </div>
+        
+        <div class="price-row">
+          <span class="price-label">Shipping</span>
+          <span class="price-value">
+            <% if (cart.totalPrice >= 50) { %>
+              <span class="free-tag">FREE</span>
+            <% } else { %>
+              $5.00
+            <% } %>
+          </span>
+        </div>
+
+        <div class="price-divider"></div>
+
+        <div class="price-row total-row">
+          <span class="price-label">Total Amount</span>
+          <span class="price-value total-amount">
+            $<%= (cart.totalPrice + (cart.totalPrice >= 50 ? 0 : 5)).toFixed(2) %>
+          </span>
+        </div>
+      </div>
+
+      <!-- Payment Button -->
+      <button 
+        class="btn-pay" 
+        id="paystackBtn"
+        onclick="initializePayment()"
+      >
+        <span class="btn-icon">💳</span>
+        <span class="btn-text">Pay Now</span>
+      </button>
+
+      <!-- Back to Cart -->
+      <a href="/cart" class="btn-back-link">
+        ← Back to Cart
+      </a>
+
+      <!-- Security Badge -->
+      <div class="security-notice">
+        <span class="security-icon">🔒</span>
+        <span class="security-text">Secure payment powered by Paystack</span>
+      </div>
+    </div>
+
+    <!-- Payment Info Sidebar -->
+    <div class="payment-info">
+      <div class="info-card">
+        <h3 class="info-title">Payment Information</h3>
+        <ul class="info-list">
+          <li class="info-item">
+            <span class="info-icon">✓</span>
+            <span class="info-text">Secure payment processing</span>
+          </li>
+          <li class="info-item">
+            <span class="info-icon">✓</span>
+            <span class="info-text">Multiple payment methods</span>
+          </li>
+          <li class="info-item">
+            <span class="info-icon">✓</span>
+            <span class="info-text">Instant order confirmation</span>
+          </li>
+          <li class="info-item">
+            <span class="info-icon">✓</span>
+            <span class="info-text">Money-back guarantee</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3 class="info-title">We Accept</h3>
+        <div class="payment-methods">
+          <div class="payment-method">💳 Cards</div>
+          <div class="payment-method">🏦 Bank</div>
+          <div class="payment-method">📱 USSD</div>
+          <div class="payment-method">💰 Transfer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script nonce="<%= nonce %>">
+  // Calculate total in kobo (Paystack uses smallest currency unit)
+  const totalInDollars = <%= (cart.totalPrice + (cart.totalPrice >= 50 ? 0 : 5)).toFixed(2) %>;
+  const totalInCents = Math.round(totalInDollars * 100); // Convert to cents
+
+  function initializePayment() {
+    const paystackBtn = document.getElementById('paystackBtn');
+    paystackBtn.disabled = true;
+    paystackBtn.innerHTML = '<span class="spinner"></span> Processing...';
+
+    // Initialize Paystack payment
+    const handler = PaystackPop.setup({
+      key: '<%= process.env.PAYSTACK_PUBLIC_KEY %>', // Your Paystack public key
+      email: '<%= user.email %>',
+      amount: totalInCents, // Amount in cents
+      currency: 'USD', // or 'NGN' for Naira
+      ref: 'ORDER_' + Date.now(), // Generate unique reference
+      
+      // Callback when payment is successful
+      callback: function(response) {
+        // Send reference to your server to verify
+        verifyPayment(response.reference);
+      },
+      
+      // Callback when payment window is closed
+      onClose: function() {
+        paystackBtn.disabled = false;
+        paystackBtn.innerHTML = '<span class="btn-icon">💳</span><span class="btn-text">Pay Now</span>';
+        showNotification('Payment cancelled', 'error');
+      }
+    });
+
+    handler.openIframe();
+  }
+
+  async function verifyPayment(reference) {
+    try {
+      const response = await fetch('/api/payment/verify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': '<%= csrfToken %>'
+        },
+        body: JSON.stringify({ reference })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Payment verified successfully
+        showSuccessModal(data.orderId);
+      } else {
+        showNotification(data.message || 'Payment verification failed', 'error');
+        const paystackBtn = document.getElementById('paystackBtn');
+        paystackBtn.disabled = false;
+        paystackBtn.innerHTML = '<span class="btn-icon">💳</span><span class="btn-text">Pay Now</span>';
+      }
+    } catch (error) {
+      console.error('Verification error:', error);
+      showNotification('Failed to verify payment. Please contact support.', 'error');
+      const paystackBtn = document.getElementById('paystackBtn');
+      paystackBtn.disabled = false;
+      paystackBtn.innerHTML = '<span class="btn-icon">💳</span><span class="btn-text">Pay Now</span>';
+    }
+  }
+
+  function showSuccessModal(orderId) {
+    // Create success modal
+    const modal = document.createElement('div');
+    modal.className = 'success-modal';
+    modal.innerHTML = `
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <div class="success-icon">✓</div>
+        <h2 class="success-title">Payment Successful!</h2>
+        <p class="success-message">Your order has been placed successfully.</p>
+        <p class="order-ref">Order ID: ${orderId}</p>
+        <button class="btn-view-order" onclick="window.location.href='/orders/${orderId}'">
+          View Order
+        </button>
+        <button class="btn-continue" onclick="window.location.href='/products'">
+          Continue Shopping
+        </button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    
+    // Animate in
+    setTimeout(() => modal.classList.add('show'), 10);
+  }
+
+  function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => notification.classList.add('show'), 10);
+    setTimeout(() => {
+      notification.classList.remove('show');
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+</script>
+
+<style nonce="<%= nonce %>">
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .success-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .success-modal.show {
+    opacity: 1;
+  }
+
+  .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-content {
+    position: relative;
+    background: white;
+    border-radius: 24px;
+    padding: 3rem;
+    max-width: 500px;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+  }
+
+  .success-modal.show .modal-content {
+    transform: scale(1);
+  }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--success);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    margin: 0 auto 1.5rem;
+  }
+
+  .success-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .success-message {
+    color: var(--text-gray);
+    margin-bottom: 1rem;
+  }
+
+  .order-ref {
+    font-size: 0.875rem;
+    color: var(--text-gray);
+    margin-bottom: 2rem;
+    font-weight: 600;
+  }
+
+  .btn-view-order,
+  .btn-continue {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 0.75rem;
+  }
+
+  .btn-view-order {
+    background: var(--primary);
+    color: white;
+  }
+
+  .btn-view-order:hover {
+    background: var(--primary-dark);
+  }
+
+  .btn-continue {
+    background: white;
+    color: var(--text-dark);
+    border: 1.5px solid var(--border);
+  }
+
+  .btn-continue:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .notification {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    z-index: 9999;
+  }
+
+  .notification.show {
+    transform: translateX(0);
+  }
+
+  .notification.success {
+    background: var(--success);
+  }
+
+  .notification.error {
+    background: var(--error);
+  }
+</style>
+
+<%- include('./components/end.ejs') %>

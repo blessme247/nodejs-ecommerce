@@ -6,8 +6,8 @@
 <body>
 
    <% 
-         <!-- console.log(data, "cart in cart page") -->
-         console.log(data.items, "cart items in cart page")
+         console.log(data, "cart in cart page")
+         console.log(data?.items, "cart items in cart page")
           <!-- console.log(csrfToken, "csrfToken") -->
       %>
 
@@ -37,9 +37,17 @@
               <div class="item-header">
                 <div class="item-info">
                   <div class="item-seller">Sold by <%= item.sellerName || 'EvoMart Seller' %></div>
-                  <h3 class="item-name" onclick="window.location.href='/product/<%= item.productId %>'">
-                    <%= item.productId.name || 'product' %>
-                  </h3>
+                  <!-- <h3 class="item-name" onclick="window.location.href='/product/<%= item.productId %>'"> -->
+                    <div class="item-name-group">
+
+                      <h3 class="item-name" >
+                        <%= item.productId.name || 'product' %>
+                      </h3>
+                      <!-- Out of stock chip -->
+                      <% if (!item.productId.inStock) { %>
+                        <span class="out-of-stock-chip">Out of Stock</span>
+                      <% } %>
+                    </div>
                   <div class="item-category"><%= item.productId.categoryId.name || 'General' %></div>
                 </div>
                 <button class="remove-btn" onclick="removeItem('<%= item.productId._id %>')" title="Remove item">
@@ -47,11 +55,13 @@
                 </button>
               </div>
               <div class="item-controls">
+                 <% if (item.productId.inStock) { %>
                 <div class="quantity-controls">
                   <button class="qty-btn" onclick="updateQuantity(<%= item.productId._id %>, <%= item.quantity - 1 %>, '<%= csrfToken %>')">−</button>
                   <input type="number" class="qty-display" value="<%= item.quantity %>" readonly>
                   <button class="qty-btn" onclick="updateQuantity(<%= item.productId._id %>,<%= item.quantity + 1 %>, '<%= csrfToken %>')" >+</button>
                 </div>
+                <% } %>
                 <div class="item-price">
                   <div class="price-current">$<%= (item.productId.price * item.quantity).toFixed(2) %></div>
                   <div class="price-unit">$<%= item.productId.price %> each</div>
@@ -91,7 +101,9 @@
             </span>
           </div>
           
-          <button class="checkout-btn" onclick="proceedToCheckout()">
+          <!-- disabled if any item is out of stock -->
+          <button class="checkout-btn" onclick="proceedToCheckout()" <%= data?.items?.some(item => !item.productId.inStock) ? 'disabled' : '' %> 
+            >
             Proceed to Checkout
           </button>
           

@@ -7,6 +7,7 @@ import { validationResult } from "express-validator";
 import mongoose from "mongoose";
 import Seller from "../model/Seller.js";
 import Buyer from "../model/Buyer.js";
+import Cart from "../model/Cart.js";
 // import { handleSuccess } from "../utils/handleSuccess.js";
 
 const handleRegister = async (req, res) => {
@@ -123,7 +124,7 @@ const handleLogin = async (req, res) => {
   }
   try {
     const { email, password } = req.body;
-    // console.log(email, password, 'login details')
+    const {redirect} = req.query
 
     const foundUser = await User.findOne({ email: email.trim() }).exec();
     if (!foundUser)
@@ -166,6 +167,15 @@ const handleLogin = async (req, res) => {
     // await User.findOneAndUpdate({ email: foundUser.email }, { refreshToken }).exec();
     foundUser.refreshToken = refreshToken;
     await foundUser.save();
+      // check if there's a guest cart and merge with user cart
+    const sessionID = req.sessionID
+    const cart = await Cart.findOne({ sessionId: sessionID }).exec()
+    if(cart) {
+      cart.sessionId = null;
+      cart.buyerId = foundUser._id;
+      cart.expiresAt = null;
+      await cart.save()
+    }
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -181,11 +191,12 @@ const handleLogin = async (req, res) => {
       sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
       maxAge: 30 * 60 * 1000,
     });
-    // }
-    // return res.status(200).json({ accessToken })
 
-    // return handleSuccess(req, res, 200, {data: [], pageTitle: "EvoMart - Your Online Store", path: "index"});
-    res.redirect("/");
+    if (redirect) {
+      res.redirect(redirect);
+    } else {
+      res.redirect("/");
+    }
   } catch (error) {
     return handleError(req, res, 500, {
       message: error?.message || "Internal server error",

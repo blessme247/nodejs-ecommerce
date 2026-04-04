@@ -2,7 +2,7 @@
 import jwt from "jsonwebtoken";
 import { getRoleName } from "../config/rolesList.js";
 
-const optionalAuth = (req, res, next) => {
+export const useAuth = (req, res, next) => {
   // Try Authorization header first (for API clients)
   const authHeader = req.headers["authorization"] || req.headers["Authorization"];
   
@@ -45,12 +45,9 @@ const optionalAuth = (req, res, next) => {
       next();
     });
   } else {
-    req.user = null;
-    req.role = null;
-    res.locals.user = null;
-    res.locals.role = null;
+    // req.user = null;
+    // req.role = null;
+    res.locals.user = {role: "Guest"}
     next();
   }
 };
-
-export default optionalAuth;

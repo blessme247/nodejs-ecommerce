@@ -86,7 +86,6 @@ export const addProductToCart = async (req, res) => {
     });
   }
   try {
-    // console.log('getting to try block')
     const { productId } = req.body;
 
     if (!productId)
@@ -114,23 +113,14 @@ export const addProductToCart = async (req, res) => {
         paginator,
       });
 
-    // let cart
-
     if (req.user) {
-      // logged in user
-
       const username = req.user;
       const foundUser = await User.findOne({ username }).exec();
 
       await addItemToCart(req, product, { buyerId: foundUser._id });
     } else {
-      // Guest user
-
       await addItemToCart(req, product, { sessionId: req.sessionID });
     }
-    // return res
-    //   .status(201)
-    //   .json({ message: "Product added to cart", data: cart });
     res.redirect("/cart")
   } catch (error) {
     console.log('Unable to add product to cart', error)

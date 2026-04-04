@@ -7,6 +7,7 @@ import rolesRouter from "./roles.js"
 import ordersRouter from "./orders.js"
 import productsRouter from "./products.js"
 import cartRouter from "./cart.js"
+import checkoutRouter from "./checkout.js"
 // import path from "path"
 // import { fileURLToPath } from 'url';
 // import { dirname as pathDirname } from 'path';
@@ -49,6 +50,10 @@ const defaultRoutes = [
     path: '/cart',
     route: cartRouter,
   },
+   {
+    path: '/checkout',
+    route: checkoutRouter,
+  },
 ];
 
 defaultRoutes.forEach((route) => {
@@ -74,13 +79,5 @@ router.get(['/', '/index.html', '/index'], getHomepage)
 router.get("/signup", getSignupPage)
 
 router.get("/login", getLoginPage)
-
-// router.get("/shop/orders", (req, res) => {
-//   res.render("shop/orders")
-// })
-
-// router.get("/shop/products", (req, res)=> {
-
-// })
 
 export default router;

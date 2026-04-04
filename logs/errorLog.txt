@@ -821,3 +821,15 @@ Or, if you meant to create an async function, pass `async: true` as an option.
 
 Cannot read properties of undefined (reading 'name')
 20260322	17:28:17	0f4a490c-a5e8-4753-93dc-c6bbfa90891b	ForbiddenError: invalid csrf token
+20260404	13:39:44	4047de3e-ca45-4a89-8146-d67aabfc95db	TypeError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/cart.ejs:8
+    6| <body>
+    7| 
+ >> 8|    <% 
+    9|          console.log(data, "cart in cart page")
+    10|          console.log(data.items, "cart items in cart page")
+    11|           <!-- console.log(csrfToken, "csrfToken") -->
+
+Cannot read properties of null (reading 'items')
+20260404	13:54:24	ea6273f3-ab7c-44e7-82a1-3e02404aaef9	ForbiddenError: invalid csrf token
+20260404	13:59:20	e9e2e43b-0aba-4020-98c9-37e4ac159620	ReferenceError: getRoleName is not defined
+20260404	14:00:00	b26921e7-bd3c-43cc-8fce-8d5448f5e25e	TypeError: The "path" argument must be of type string. Received undefined
