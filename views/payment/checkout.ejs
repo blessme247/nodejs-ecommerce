@@ -1,8 +1,8 @@
-<%- include('./components/head.ejs') %>
+<%- include('../components/head.ejs') %>
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/checkout.css">
 </head>
-<%- include('./components/navigation.ejs') %>
+<%- include('../components/navigation.ejs') %>
 <body>
 
 <div class="checkout-container">
@@ -16,12 +16,12 @@
 
       <!-- Order Items -->
       <div class="order-items">
-        <h3 class="section-title">Order Items (<%= cart.items.length %>)</h3>
-        <% cart.items.forEach(item => { %>
+        <h3 class="section-title">Order Items (<%= data.items.length %>)</h3>
+        <% data.items.forEach(item => { %>
           <div class="order-item">
             <div class="item-image">
-              <% if (item.productId && item.productId.assetId && item.productId.assetId.url) { %>
-                <img src="<%= item.productId.assetId.url %>" alt="<%= item.productId.name %>">
+              <% if (item.productId && item.productId.assetId && item.productId.assetId.secure_url) { %>
+                <img src="<%= item.productId.assetId.secure_url %>" alt="<%= item.productId.name %>">
               <% } else { %>
                 <div class="item-placeholder">📦</div>
               <% } %>
@@ -41,13 +41,13 @@
       <div class="price-breakdown">
         <div class="price-row">
           <span class="price-label">Subtotal</span>
-          <span class="price-value">$<%= cart.totalPrice.toFixed(2) %></span>
+          <span class="price-value">$<%= data.totalAmount.toFixed(2) %></span>
         </div>
         
         <div class="price-row">
           <span class="price-label">Shipping</span>
           <span class="price-value">
-            <% if (cart.totalPrice >= 50) { %>
+            <% if (data.totalAmount >= 50) { %>
               <span class="free-tag">FREE</span>
             <% } else { %>
               $5.00
@@ -60,20 +60,23 @@
         <div class="price-row total-row">
           <span class="price-label">Total Amount</span>
           <span class="price-value total-amount">
-            $<%= (cart.totalPrice + (cart.totalPrice >= 50 ? 0 : 5)).toFixed(2) %>
+            $<%= (data.totalAmount + (data.totalAmount >= 50 ? 0 : 5)).toFixed(2) %>
           </span>
         </div>
       </div>
 
       <!-- Payment Button -->
-      <button 
-        class="btn-pay" 
-        id="paystackBtn"
-        onclick="initializePayment()"
-      >
-        <span class="btn-icon">💳</span>
-        <span class="btn-text">Pay Now</span>
-      </button>
+       <form action="/payment/initiate" method="post">
+        <input type="hidden" name="amount" value="<%= data.totalAmount  %>">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <button 
+          class="btn-pay" 
+          id="paystackBtn"
+        >
+          <span class="btn-icon">💳</span>
+          <span class="btn-text">Pay Now</span>
+        </button>
+       </form>
 
       <!-- Back to Cart -->
       <a href="/cart" class="btn-back-link">
@@ -124,113 +127,9 @@
   </div>
 </div>
 
-<script src="https://js.paystack.co/v1/inline.js"></script>
-<script nonce="<%= nonce %>">
-  // Calculate total in kobo (Paystack uses smallest currency unit)
-  const totalInDollars = <%= (cart.totalPrice + (cart.totalPrice >= 50 ? 0 : 5)).toFixed(2) %>;
-  const totalInCents = Math.round(totalInDollars * 100); // Convert to cents
 
-  function initializePayment() {
-    const paystackBtn = document.getElementById('paystackBtn');
-    paystackBtn.disabled = true;
-    paystackBtn.innerHTML = '<span class="spinner"></span> Processing...';
 
-    // Initialize Paystack payment
-    const handler = PaystackPop.setup({
-      key: '<%= process.env.PAYSTACK_PUBLIC_KEY %>', // Your Paystack public key
-      email: '<%= user.email %>',
-      amount: totalInCents, // Amount in cents
-      currency: 'USD', // or 'NGN' for Naira
-      ref: 'ORDER_' + Date.now(), // Generate unique reference
-      
-      // Callback when payment is successful
-      callback: function(response) {
-        // Send reference to your server to verify
-        verifyPayment(response.reference);
-      },
-      
-      // Callback when payment window is closed
-      onClose: function() {
-        paystackBtn.disabled = false;
-        paystackBtn.innerHTML = '<span class="btn-icon">💳</span><span class="btn-text">Pay Now</span>';
-        showNotification('Payment cancelled', 'error');
-      }
-    });
-
-    handler.openIframe();
-  }
-
-  async function verifyPayment(reference) {
-    try {
-      const response = await fetch('/api/payment/verify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': '<%= csrfToken %>'
-        },
-        body: JSON.stringify({ reference })
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        // Payment verified successfully
-        showSuccessModal(data.orderId);
-      } else {
-        showNotification(data.message || 'Payment verification failed', 'error');
-        const paystackBtn = document.getElementById('paystackBtn');
-        paystackBtn.disabled = false;
-        paystackBtn.innerHTML = '<span class="btn-icon">💳</span><span class="btn-text">Pay Now</span>';
-      }
-    } catch (error) {
-      console.error('Verification error:', error);
-      showNotification('Failed to verify payment. Please contact support.', 'error');
-      const paystackBtn = document.getElementById('paystackBtn');
-      paystackBtn.disabled = false;
-      paystackBtn.innerHTML = '<span class="btn-icon">💳</span><span class="btn-text">Pay Now</span>';
-    }
-  }
-
-  function showSuccessModal(orderId) {
-    // Create success modal
-    const modal = document.createElement('div');
-    modal.className = 'success-modal';
-    modal.innerHTML = `
-      <div class="modal-overlay"></div>
-      <div class="modal-content">
-        <div class="success-icon">✓</div>
-        <h2 class="success-title">Payment Successful!</h2>
-        <p class="success-message">Your order has been placed successfully.</p>
-        <p class="order-ref">Order ID: ${orderId}</p>
-        <button class="btn-view-order" onclick="window.location.href='/orders/${orderId}'">
-          View Order
-        </button>
-        <button class="btn-continue" onclick="window.location.href='/products'">
-          Continue Shopping
-        </button>
-      </div>
-    `;
-    document.body.appendChild(modal);
-    
-    // Animate in
-    setTimeout(() => modal.classList.add('show'), 10);
-  }
-
-  function showNotification(message, type = 'success') {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-    document.body.appendChild(notification);
-    
-    setTimeout(() => notification.classList.add('show'), 10);
-    setTimeout(() => {
-      notification.classList.remove('show');
-      setTimeout(() => notification.remove(), 300);
-    }, 3000);
-  }
-</script>
-
-<style nonce="<%= nonce %>">
+<style >
   .spinner {
     display: inline-block;
     width: 16px;
@@ -382,4 +281,4 @@
   }
 </style>
 
-<%- include('./components/end.ejs') %>
+<%- include('../components/end.ejs') %>

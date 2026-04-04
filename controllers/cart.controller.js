@@ -44,7 +44,7 @@ export const getCartPage = async (req, res) => {
           { path: "assetId", select: "secure_url" },
         ]
       }).exec()
-      return handleSuccess(req, res, 400, {
+      return handleSuccess(req, res, 200, {
       filePath: "shop/cart",
       data: cart,
       pageTitle: `Cart (${cart?.items?.length || 0})`
@@ -60,7 +60,7 @@ export const getCartPage = async (req, res) => {
         ]
       }).exec()
       
-      return handleSuccess(req, res, 400, {
+      return handleSuccess(req, res, 200, {
       filePath: "shop/cart",
       data: cart,
       pageTitle: `Cart (${cart?.items?.length || 0})`

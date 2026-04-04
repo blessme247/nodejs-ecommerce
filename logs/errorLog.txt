@@ -833,3 +833,87 @@ Cannot read properties of null (reading 'items')
 20260404	13:54:24	ea6273f3-ab7c-44e7-82a1-3e02404aaef9	ForbiddenError: invalid csrf token
 20260404	13:59:20	e9e2e43b-0aba-4020-98c9-37e4ac159620	ReferenceError: getRoleName is not defined
 20260404	14:00:00	b26921e7-bd3c-43cc-8fce-8d5448f5e25e	TypeError: The "path" argument must be of type string. Received undefined
+20260404	17:30:13	9b408869-8593-4afd-b1d2-a505161fb967	ForbiddenError: invalid csrf token
+20260404	17:41:32	67fa506b-77ac-46c0-9a6a-7734c82ab799	Error: Failed to lookup view "cart" in views directory "/Users/guess/Desktop/Work/nodejs-ecommerce/views"
+20260404	17:44:17	58a33e78-4c8e-412f-9663-f27894dce13d	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/shop/cart.ejs:8
+    6| <body>
+    7| 
+ >> 8|    <% 
+    9|          console.log(data, "cart in cart page")
+    10|          console.log(data?.items, "cart items in cart page")
+    11|           <!-- console.log(csrfToken, "csrfToken") -->
+
+data is not defined
+20260404	17:46:48	9965b92a-0577-4fcc-9942-9f750f34fc24	Error: /Users/guess/Desktop/Work/nodejs-ecommerce/views/payment/checkout.ejs:1
+ >> 1| <%- include('./components/head.ejs') %>
+    2|     <link rel="stylesheet" href="/css/index.css">
+    3|     <link rel="stylesheet" href="/css/checkout.css">
+    4| </head>
+
+Could not find the include file "./components/head.ejs"
+20260404	17:51:38	c59b7799-170f-4ce3-b0ab-103b38e0719d	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/payment/checkout.ejs:19
+    17|       <!-- Order Items -->
+    18|       <div class="order-items">
+ >> 19|         <h3 class="section-title">Order Items (<%= data.items.length %>)</h3>
+    20|         <% data.items.forEach(item => { %>
+    21|           <div class="order-item">
+    22|             <div class="item-image">
+
+data is not defined
+20260404	17:53:38	33386bb0-76b3-4465-90b8-63a5c96ce283	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/payment/checkout.ejs:19
+    17|       <!-- Order Items -->
+    18|       <div class="order-items">
+ >> 19|         <h3 class="section-title">Order Items (<%= data.items.length %>)</h3>
+    20|         <% data.items.forEach(item => { %>
+    21|           <div class="order-item">
+    22|             <div class="item-image">
+
+data is not defined
+20260404	17:59:26	db88dceb-702e-4c13-8474-a297378687e2	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/payment/checkout.ejs:19
+    17|       <!-- Order Items -->
+    18|       <div class="order-items">
+ >> 19|         <h3 class="section-title">Order Items (<%= data.items.length %>)</h3>
+    20|         <% data.items.forEach(item => { %>
+    21|           <div class="order-item">
+    22|             <div class="item-image">
+
+data is not defined
+20260404	18:00:21	f19f6ef9-c82f-437c-98ea-7f190eef9bc6	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/payment/checkout.ejs:128
+    126| 
+    127| <!-- <script src="https://js.paystack.co/v1/inline.js"></script>
+ >> 128| <script nonce="<%= nonce %>">
+    129|   // Calculate total in kobo (Paystack uses smallest currency unit)
+    130|   const totalInDollars = <%= (cart.totalAmount + (cart.totalAmount >= 50 ? 0 : 5)).toFixed(2) %>;
+    131|   const totalInCents = Math.round(totalInDollars * 100); // Convert to cents
+
+nonce is not defined
+20260404	18:02:14	c7895820-a8bf-4968-82c9-dd2b03a02fdb	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/payment/checkout.ejs:128
+    126| 
+    127| <!-- <script src="https://js.paystack.co/v1/inline.js"></script>
+ >> 128| <script nonce="<%= nonce %>">
+    129|   // Calculate total in kobo (Paystack uses smallest currency unit)
+    130|   const totalInDollars = <%= (cart.totalAmount + (cart.totalAmount >= 50 ? 0 : 5)).toFixed(2) %>;
+    131|   const totalInCents = Math.round(totalInDollars * 100); // Convert to cents
+
+nonce is not defined
+20260404	18:02:33	dad12c15-f445-4a46-b5c5-090943f6af01	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/payment/checkout.ejs:128
+    126| 
+    127| <!-- <script src="https://js.paystack.co/v1/inline.js"></script>
+ >> 128| <script nonce="<%= nonce %>">
+    129|   // Calculate total in kobo (Paystack uses smallest currency unit)
+    130|   const totalInDollars = <%= (cart.totalAmount + (cart.totalAmount >= 50 ? 0 : 5)).toFixed(2) %>;
+    131|   const totalInCents = Math.round(totalInDollars * 100); // Convert to cents
+
+nonce is not defined
+20260404	18:10:39	bc23c03d-80a3-45fb-80da-59fd5b48cfb8	ReferenceError: /Users/guess/Desktop/Work/nodejs-ecommerce/views/payment/checkout.ejs:127
+    125| </div>
+    126| 
+ >> 127| <!-- <script nonce="<%= nonce %>">
+    128|   // Calculate total in kobo (Paystack uses smallest currency unit)
+    129|   const totalInDollars = <%= (data.totalAmount + (data.totalAmount >= 50 ? 0 : 5)).toFixed(2) %>;
+    130|   const totalInCents = Math.round(totalInDollars * 100); // Convert to cents
+
+nonce is not defined
+20260404	19:17:34	e19f1651-5f71-4c1f-a07f-95871f3f28b9	Error: Cannot set headers after they are sent to the client
+20260404	20:48:16	11ca0c82-2132-4ef1-97aa-39c1972f3f95	MongoServerSelectionError: 406C140302000000:error:0A000438:SSL routines:ssl3_read_bytes:tlsv1 alert internal error:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert number 80
+

@@ -7,13 +7,11 @@ export const loadCart = async (req, res, next) => {
       if(role !== "Seller"){
 
          if(req.userId){
-            console.log('check cart for user')
             cart = await Cart.findOne({buyerId: req.userId}).exec()
          }
    
          // guest with session
          else if(req.sessionID) {
-            console.log('check cart for guest')
             cart = await Cart.findOne({sessionId: req.sessionID}).exec()
             // res.locals.user = {role: "Guest"}
          }

@@ -1,18 +1,28 @@
 import User from "../model/User.js";
 import { convertCartToOrder } from "../services/order/convertCartToOrder.js";
 import { handleError } from "../utils/handleError.js";
+import { validationResult } from "express-validator";
 
 export const initiatePayment = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return handleError(req, res, 400, {
+        message: "Invalid amount",
+        filePath: "payment/checkout",
+        formValues: {},
+      })}
+
   try {
     const { amount } = req.body;
-    if (!amount || typeof amount !== "number") {
-      // return res.status(400).json({ message: "Amount is required and must be a number" });
-      return handleError(req, res, 400, {
-        message: "Amount is required and must be a number",
-        filePath: "auth/signin",
-        formValues: {},
-      });
-    }
+    
+    // if (!amount || typeof amount !== "number") {
+    //   // return res.status(400).json({ message: "Amount is required and must be a number" });
+    //   return handleError(req, res, 400, {
+    //     message: "Amount is required and must be a number",
+    //     filePath: "auth/signin",
+    //     formValues: {},
+    //   });
+    // }
     const userId = req.userId;
     const user = await User.findById(userId).exec();
     if (!user) {
@@ -30,7 +40,7 @@ export const initiatePayment = async (req, res) => {
         body: JSON.stringify({
           email: user.email,
           amount: amount * 100,
-          callback_url: "http://localhost:3500/callback"
+          callback_url: `http://localhost:3500/payment/callback?userId=${userId}`
         }),
         headers: {
           Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
@@ -58,8 +68,10 @@ export const initiatePayment = async (req, res) => {
 };
 
 export const verifyPayment = async (req, res) => {
+    // console.log(req.sessionID, 'request session id')
+    // console.log(req.userId, 'request user id')
     try {
-        const { reference } = req.query;
+        const { reference, userId } = req.query;
         if (!reference) {
           return res.status(400).json({ message: "Reference is required" });
         }
@@ -78,8 +90,8 @@ export const verifyPayment = async (req, res) => {
           if (responseData.data.status === "success") {
             // payment successful, create order and clear cart
             // console.log("Payment successful");
-            await convertCartToOrder()
-            return res.redirect("/buyer/orders");
+            await convertCartToOrder(userId)
+            return res.redirect("/");
           } else {
             // payment failed
             // console.log("Payment failed");

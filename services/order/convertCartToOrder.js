@@ -13,9 +13,9 @@ export const convertCartToOrder = async (userId) => {
     const session = await mongoose.startSession();
       session.startTransaction();
     try {
-        const orderItems = cart.items.map((productId, ...rest) => ({
+        const orderItems = cart.items.map(({productId, quantity}) => ({
             productId: productId._id.toString(),
-            quantity: rest.quantity,
+            quantity,
             price: productId.price,
             sellerId: productId.sellerId.toString(),
             statusId: paidStatus._id.toString()

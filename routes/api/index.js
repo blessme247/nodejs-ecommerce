@@ -8,6 +8,7 @@ import ordersRouter from "./orders.js"
 import productsRouter from "./products.js"
 import cartRouter from "./cart.js"
 import checkoutRouter from "./checkout.js"
+import paymentRouter from "./payment.js"
 // import path from "path"
 // import { fileURLToPath } from 'url';
 // import { dirname as pathDirname } from 'path';
@@ -53,6 +54,10 @@ const defaultRoutes = [
    {
     path: '/checkout',
     route: checkoutRouter,
+  },
+  {
+    path: '/payment',
+    route: paymentRouter,
   },
 ];
 

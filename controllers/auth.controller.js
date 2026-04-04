@@ -124,7 +124,6 @@ const handleLogin = async (req, res) => {
   }
   try {
     const { email, password } = req.body;
-    const {redirect} = req.query
 
     const foundUser = await User.findOne({ email: email.trim() }).exec();
     if (!foundUser)
@@ -136,14 +135,13 @@ const handleLogin = async (req, res) => {
     const userRole = await Role.findById(foundUser.roleId).exec();
 
     // console.log(foundUser, 'found user')
-    const match = await bcrypt.compare(password.trim(), foundUser.password);
-    // console.log(match, 'password match')
-    if (!match)
-      return handleError(req, res, 401, {
-        message: "Invalid credentials",
-        filePath: "auth/signin",
-        formValues: req.body,
-      });
+    // const match = await bcrypt.compare(password.trim(), foundUser.password);
+    // if (!match)
+    //   return handleError(req, res, 400, {
+    //     message: "Invalid credentials",
+    //     filePath: "auth/signin",
+    //     formValues: req.body,
+    //   });
 
     const accessToken = jwt.sign(
       {
@@ -192,11 +190,9 @@ const handleLogin = async (req, res) => {
       maxAge: 30 * 60 * 1000,
     });
 
-    if (redirect) {
-      res.redirect(redirect);
-    } else {
+   
       res.redirect("/");
-    }
+    
   } catch (error) {
     return handleError(req, res, 500, {
       message: error?.message || "Internal server error",

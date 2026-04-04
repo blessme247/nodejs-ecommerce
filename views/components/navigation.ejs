@@ -30,7 +30,7 @@
         const isGuest = activeSession && user.role === 'Guest';
         const cartCount = typeof cart !== 'undefined' ? cart.items.length : 0;
         <!-- console.log(cart, 'cart') -->
-        console.log('User in navigation:', user);
+        <!-- console.log('User in navigation:', user); -->
          <!-- console.log(csrfToken, "csrfToken in nav") -->
       %>
 
@@ -81,7 +81,7 @@
                 <a href="/seller/settings" class="dropdown-item">⚙️ Settings</a>
               <% } %>
               <form  action="/auth/logout" method="POST" class="dropdown-item logout">
-
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                 <button type="submit" class="logout-button">🚪 Logout</button>
               </form>
             </div>
