@@ -3234,3 +3234,14 @@
 20260404	20:47:46	b40a2fdc-40bd-4d18-b673-8d7fe1c128ea	GET	/css/header.css	undefined
 20260404	20:47:46	50b82a29-36dc-4a60-b40d-9f80f4f2eed0	GET	/css/index.css	undefined
 20260404	20:47:46	29520104-dcd1-453e-a946-e37cc4e0c30e	GET	/.well-known/appspecific/com.chrome.devtools.json	undefined
+20260411	08:28:55	afcb4f52-1b14-46ca-9848-0394082440b7	GET	/	undefined
+20260411	08:28:56	0f3534d3-be8b-41c6-98b7-ebfc563b048a	GET	/css/index.css	undefined
+20260411	08:28:56	48a92482-4b61-4f92-86fe-0d8e313f2023	GET	/js/main.js	undefined
+20260411	08:28:56	4c4b1737-5bcf-4d77-8698-28a81afbfcdc	GET	/css/header.css	undefined
+20260411	08:29:17	6363c41a-beb6-4d7b-931c-f316c4a0f7b3	GET	/product/69a7d7b94616ab86c541f1c1	undefined
+20260411	08:29:17	8b7ff4da-6651-4222-a7bc-8e092674cf62	POST	/cart	http://localhost:3500
+20260411	08:29:19	401e830d-b96c-4ad1-b05d-c7759d114eaf	GET	/cart	undefined
+20260411	08:29:20	b129d67a-f88f-4896-916a-85c5f5834326	GET	/css/index.css	undefined
+20260411	08:29:20	a5244a79-c3c3-4dd1-8132-3860c3f4a5a1	GET	/js/main.js	undefined
+20260411	08:29:20	b5a104f7-7c9f-4928-b1c3-59c1c79a165a	GET	/css/cart.css	undefined
+20260411	08:29:20	5fa40e4c-d569-4074-8cff-3e378e03a29f	GET	/css/header.css	undefined
