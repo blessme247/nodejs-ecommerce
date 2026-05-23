@@ -135,13 +135,13 @@ const handleLogin = async (req, res) => {
     const userRole = await Role.findById(foundUser.roleId).exec();
 
     // console.log(foundUser, 'found user')
-    // const match = await bcrypt.compare(password.trim(), foundUser.password);
-    // if (!match)
-    //   return handleError(req, res, 400, {
-    //     message: "Invalid credentials",
-    //     filePath: "auth/signin",
-    //     formValues: req.body,
-    //   });
+    const match = await bcrypt.compare(password.trim(), foundUser.password);
+    if (!match)
+      return handleError(req, res, 400, {
+        message: "Invalid credentials",
+        filePath: "auth/signin",
+        formValues: req.body,
+      });
 
     const accessToken = jwt.sign(
       {

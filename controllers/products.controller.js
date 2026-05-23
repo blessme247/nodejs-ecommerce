@@ -143,8 +143,7 @@ export const addProduct = async (req, res) => {
 
       const { error, asset } = await uploadToCloud(req);
       if (asset) {
-        const { name, price, description, quantityAvailable, categoryId } =
-          req.body;
+        const { name, price, description, quantityAvailable, categoryId } = req.body;
 
       //   if (quantityAvailable == 0 || typeof quantityAvailable !== "number")
       //    return handleError(req, res, 400, {

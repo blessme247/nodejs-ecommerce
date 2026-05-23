@@ -13,7 +13,7 @@ const verifyRoles = (...allowedRoles) => {
     const roleName = getRoleName(req.role);
 
     if (!roleName) {
-      console.error(`Invalid role detected: ${req.role}`);
+      console.log(`Invalid role detected: ${req.role}`);
       return handleError(req, res, 403, { message: "Forbidden" });
     }
     const rolesArray = [...allowedRoles];
